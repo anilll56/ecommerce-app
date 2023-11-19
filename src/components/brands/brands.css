@@ -1,3 +1,10 @@
+.brands {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
 .Bigger {
   z-index: 0;
   margin-top: 1rem;

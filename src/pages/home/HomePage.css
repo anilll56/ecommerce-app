@@ -1,0 +1,10 @@
+.home-card-cont {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

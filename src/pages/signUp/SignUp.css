@@ -23,3 +23,36 @@
   display: flex;
   justify-content: space-around;
 }
+.signUp-back {
+  margin-top: 1rem;
+  display: flex;
+  margin-left: 15px;
+  justify-content: flex-start;
+  height: 30px;
+}
+.signUp-back-icon {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 20px;
+  transition-duration: 500ms;
+}
+.signUp-back-icon:hover {
+  color: #f27a1a;
+  font-size: 25px;
+}
+.signUp-btn {
+  margin-top: 1rem;
+  width: 40%;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f27a1a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+.signUp-btn:hover {
+  background-color: #e37318 !important;
+  color: #fff;
+}

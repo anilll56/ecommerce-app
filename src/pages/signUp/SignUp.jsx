@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./SignUp.css";
 import { Form, Input, Button, Checkbox } from "antd";
+import { DoubleLeftOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { SignUpEcommerce } from "../../api/HandleApi";
 import {
   UserOutlined,
   LockOutlined,
@@ -9,11 +12,20 @@ import {
   DollarCircleOutlined,
 } from "@ant-design/icons";
 function SignUp() {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
-  const [userType, setUserType] = useState("client");
+  const [signUpInputs, setSignUpInputs] = useState({
+    userType: "seller",
+    username: "",
+    email: "",
+    password: "",
+    address: "",
+    phone: "",
+    balance: "",
+  });
   const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
+    setSignUpInputs({ userType: e.target.value });
   };
 
   useEffect(() => {
@@ -21,6 +33,29 @@ function SignUp() {
   }, []);
   const onFinish = (values) => {
     console.log("Finish:", values);
+  };
+  console.log(signUpInputs, "signUpInputs");
+  const handleSignUp = () => {
+    if (
+      signUpInputs.userType === "seller" ||
+      signUpInputs.userType === "buyer"
+    ) {
+      SignUpEcommerce(
+        signUpInputs.username,
+        signUpInputs.email,
+        signUpInputs.password,
+        signUpInputs.userType,
+        signUpInputs.phone,
+        signUpInputs.balance,
+        signUpInputs.address,
+        signUpInputs.phone
+      ).then((res) => {
+        if (res.status === 200) {
+          navigate("/login");
+          console.log(res, "res111111111111111");
+        }
+      });
+    }
   };
   return (
     <div className="signUp-page">
@@ -30,21 +65,21 @@ function SignUp() {
             <Checkbox
               type="radio"
               name="userType"
-              value="client"
+              value="seller"
               onChange={handleUserTypeChange}
-              checked={userType === "client"}
+              checked={signUpInputs.userType === "seller"}
             />
-            <div>Client</div>
+            <div>Seller</div>
           </div>
           <div>
             <Checkbox
               type="radio"
               name="userType"
-              value="freelancer"
+              value="buyer"
               onChange={handleUserTypeChange}
-              checked={userType === "freelancer"}
+              checked={signUpInputs.userType === "buyer"}
             />
-            <div>Freelancer</div>
+            <div>Buyer</div>
           </div>
         </div>
         <div className="signUp-form">
@@ -73,6 +108,12 @@ function SignUp() {
                 placeholder="Username"
                 size="large"
                 className="login-input"
+                onChange={(e) => {
+                  setSignUpInputs({
+                    ...signUpInputs,
+                    username: e.target.value,
+                  });
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -89,6 +130,9 @@ function SignUp() {
                 placeholder="Email"
                 size="large"
                 className="login-input"
+                onChange={(e) => {
+                  setSignUpInputs({ ...signUpInputs, email: e.target.value });
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -106,9 +150,15 @@ function SignUp() {
                 placeholder="Password"
                 size="large"
                 className="login-input"
+                onChange={(e) => {
+                  setSignUpInputs({
+                    ...signUpInputs,
+                    password: e.target.value,
+                  });
+                }}
               />
             </Form.Item>
-            {userType === "freelancer" && (
+            {signUpInputs.userType === "buyer" && (
               <Form.Item
                 name="address"
                 rules={[
@@ -125,10 +175,16 @@ function SignUp() {
                   placeholder="Address"
                   size="large"
                   className="login-input"
+                  onChange={(e) => {
+                    setSignUpInputs({
+                      ...signUpInputs,
+                      address: e.target.value,
+                    });
+                  }}
                 />
               </Form.Item>
             )}
-            {userType === "freelancer" && (
+            {signUpInputs.userType === "buyer" && (
               <Form.Item
                 name="phone"
                 rules={[
@@ -143,10 +199,16 @@ function SignUp() {
                   placeholder="Phone"
                   size="large"
                   className="login-input"
+                  onChange={(e) => {
+                    setSignUpInputs({
+                      ...signUpInputs,
+                      phone: e.target.value,
+                    });
+                  }}
                 />
               </Form.Item>
             )}
-            {userType === "freelancer" && (
+            {signUpInputs.userType === "buyer" && (
               <Form.Item
                 name="balance"
                 rules={[
@@ -164,13 +226,19 @@ function SignUp() {
                   placeholder="Balance"
                   size="large"
                   className="login-input"
+                  onChange={(e) => {
+                    setSignUpInputs({
+                      ...signUpInputs,
+                      balance: e.target.value,
+                    });
+                  }}
                 />
               </Form.Item>
             )}
             <Form.Item shouldUpdate>
               {() => (
                 <Button
-                  className="login-btn"
+                  className="signUp-btn"
                   type="primary"
                   size="large"
                   htmlType="submit"
@@ -181,12 +249,23 @@ function SignUp() {
                       .getFieldsError()
                       .filter(({ errors }) => errors.length).length
                   }
+                  onClick={() => {
+                    handleSignUp();
+                  }}
                 >
-                  Log in
+                  Sign Up
                 </Button>
               )}
             </Form.Item>
           </Form>
+        </div>
+        <div className="signUp-back">
+          <DoubleLeftOutlined
+            className="signUp-back-icon"
+            onClick={() => {
+              navigate("/login");
+            }}
+          />
         </div>
       </div>
     </div>

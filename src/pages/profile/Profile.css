@@ -1,0 +1,157 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+}
+.profile-left-side {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 2rem;
+}
+.profile-name-cont {
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 15px 8px 15px;
+  margin-bottom: 10px;
+}
+.profile-name {
+  font-size: large;
+  font-weight: 600;
+  color: #333;
+}
+.profile-left-side-settings {
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  padding: 12px 15px 8px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.profile-left-side-settings-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  transition-duration: 300ms;
+  padding: 4px 0px 4px 0px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.profile-left-side-settings-item:hover {
+  color: #f27a1a;
+  cursor: pointer;
+}
+.profile-right-side {
+  width: 85%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 2rem;
+}
+.change-password-input {
+  margin: 5px;
+}
+.change-password-input:hover {
+  border-color: #f27a1a;
+}
+.change-password-input:focus {
+  border-color: #f27a1a;
+}
+.profile-change-password {
+  color: #f27a1a !important;
+}
+.change-password-btn {
+  margin: 5px;
+  background-color: #f27a1a !important;
+}
+.profile-info {
+  width: 100%;
+}
+.profile-info-container {
+  width: 100%;
+  margin-left: 25px;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+}
+.personel-info-title {
+  display: flex;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+.profile-avatar {
+  display: flex;
+  margin-left: 20px;
+}
+.profile-info-items {
+  width: 100%;
+}
+.profile-info-item {
+  display: flex;
+  margin-bottom: 10px;
+  width: 25%;
+  align-items: center;
+  justify-content: space-between;
+}
+.profile-info-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  word-wrap: break-word;
+  width: 50%;
+}
+.profile-info-item-value {
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  word-wrap: break-word;
+  width: 50%;
+  display: flex;
+}
+.add-product {
+  width: 80%;
+}
+.add-product-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.add-product-input {
+  width: 90%;
+}
+.add-product-input:hover {
+  border-color: #f27a1a;
+}
+.add-product-input:focus {
+  border-color: #f27a1a;
+}
+.add-product-btn {
+  justify-content: end;
+  margin-top: 10px;
+  transition-duration: 300ms;
+  background-color: #f27a1a !important;
+}
+.add-product-btn:hover {
+  background-color: #db7017 !important;
+}
+.my-producks {
+  width: 80%;
+}
+.my-producks-container {
+  width: 100%;
+}
+.my-producks-items {
+  width: 100%;
+  display: flex;
+}

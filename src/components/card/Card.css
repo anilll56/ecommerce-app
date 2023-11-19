@@ -1,0 +1,138 @@
+.biggest {
+  background-color: aquamarine;
+  margin-top: 1rem;
+  overflow-x: hidden;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
+  background-color: #fffaf6;
+  border: 1px solid #f2e5da;
+}
+.bear {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-family: "source_sans_prosemibold", sans-serif;
+  font-size: 18px;
+}
+.overfloww {
+  display: flex;
+  justify-content: space-evenly;
+  overflow-x: auto;
+}
+.elementscss {
+  background-color: blueviolet;
+  width: 200px;
+  height: 250px;
+  margin-top: 5px;
+  margin: 1px 15px 1px 1px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
+  border: solid 1px #e6e6e6;
+  background-color: #fff;
+}
+.aa {
+  height: 140px;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.aa2 {
+  width: 120px;
+  height: 150px;
+  overflow: hidden;
+  display: block;
+  transition: transform 0.5s;
+}
+.aa2:hover {
+  transform: scale(1.05);
+}
+.Price {
+  color: #f27a1a;
+  font-weight: 500;
+  font-size: large;
+  margin-top: 1rem;
+}
+.Dr {
+  margin-left: 1rem;
+}
+.iconCss {
+  width: 22px;
+  height: 22px;
+  padding: 6.5px;
+  color: #f27a1a;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.iconCss2 {
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+}
+.FavİconCss1 {
+  display: flex;
+  justify-content: flex-end;
+}
+.FavİconCss2 {
+  display: inline-flex;
+  border: solid 2px #e6e6e6;
+  border-radius: 50%;
+  margin: 5px;
+}
+.FavİconCss2:hover {
+  color: #f27a1a;
+}
+.card {
+  width: 200px;
+  height: 250px;
+  margin-top: 5px;
+  margin: 1px 15px 1px 1px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
+  border: solid 1px #e6e6e6;
+  background-color: #fff;
+}
+.card_img_cont {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  display: block;
+  transition: transform 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_img {
+  width: 90%;
+  height: 90%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.card_img_cont:hover {
+}
+.card__title {
+  display: flex;
+  font-size: 15px;
+  margin-left: 8px;
+  font-weight: 500;
+}
+.card__price {
+  display: flex;
+  font-size: 15px;
+  margin-left: 8px;
+  font-weight: 500;
+  color: #f27a1a;
+}
+.card__colors {
+  display: flex;
+  font-size: 15px;
+  margin-left: 8px;
+  font-weight: 500;
+  word-wrap: break-word;
+}

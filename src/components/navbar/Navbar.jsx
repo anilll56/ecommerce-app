@@ -3,11 +3,44 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import "./Navbar.css";
-
+import { Dropdown, Space } from "antd";
+import {
+  SettingOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+  UserOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 function Navbar() {
   const menuRef = useRef(null);
   const [search, setSearch] = useState(false);
-
+  const info = useSelector((state) => state.user?.info);
+  const items = [
+    {
+      key: "1",
+      label: <Link to="/home/profile">Profile</Link>,
+      icon: <ProfileOutlined />,
+    },
+    {
+      key: "2",
+      label: <Link to="/home/settings">Settings</Link>,
+      icon: <SettingOutlined />,
+    },
+    {
+      key: "3",
+      label: (
+        <a
+          onClick={() => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          }}
+        >
+          Log out
+        </a>
+      ),
+      icon: <LogoutOutlined />,
+    },
+  ];
   return (
     <div className="navbar">
       <nav className="sticky">
@@ -18,7 +51,7 @@ function Navbar() {
         </div>
         <div className="navbarMain">
           <div className="imgcss">
-            <Link to="/">
+            <Link to="/home">
               <img
                 alt="s"
                 src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"
@@ -44,9 +77,19 @@ function Navbar() {
           <div className="leftMain">
             <div className="ss">
               <div>
-                <Link to="/home/profile" className="hoverr1">
-                  <div>Profile</div>
-                </Link>
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <UserOutlined />
+                      {info?.user?.name}
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
               </div>
             </div>
             <div className="ss">
