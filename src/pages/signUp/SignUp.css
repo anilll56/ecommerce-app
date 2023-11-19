@@ -1,0 +1,25 @@
+.signUp-page {
+  display: flex;
+  justify-content: center;
+}
+.signUp-container {
+  margin-top: 7rem;
+  background-color: #fff; /* Form container rengi */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.signUp-form {
+  display: flex;
+  justify-content: center;
+}
+.sign-up-checkboxs {
+  margin: 10px;
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
