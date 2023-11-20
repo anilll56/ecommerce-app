@@ -10,7 +10,7 @@ import Card from "../../components/card/Card";
 function Profile() {
   const navigate = useNavigate();
   const reduxUser = useSelector((state) => state.user.info);
-  const [activeSide, setActiveSide] = useState("");
+  const [activeSide, setActiveSide] = useState("userInfo");
   const [openModal, setOpenModal] = useState(false);
   const [modalInputValue, setModalInputValue] = useState({
     oldPassword: "",
@@ -72,7 +72,7 @@ function Profile() {
             {reduxUser?.user?.userType === "seller" ? (
               <div
                 className="profile-left-side-settings-item"
-                onClick={() => handleTabClick("pendingOrders")}
+                onClick={() => handleTabClick("orderHistory")}
               >
                 Bekleyen Siparişler
               </div>
@@ -393,6 +393,7 @@ function AddProduck() {
             <Form.Item label="Produck Price">
               <Input
                 className="add-product-input"
+                type="number"
                 onChange={(e) =>
                   setAddProduckInputs({
                     ...AddProduckInputs,
@@ -415,6 +416,7 @@ function AddProduck() {
             <Form.Item label="Produck Stock">
               <Input
                 className="add-product-input"
+                type="number"
                 onChange={(e) =>
                   setAddProduckInputs({
                     ...AddProduckInputs,
@@ -450,6 +452,8 @@ function MyOrders(params) {
   );
 }
 function OrderHistory(params) {
+  const [orderHistory, setOrderHistory] = useState([]);
+  const reduxUser = useSelector((state) => state.user.info);
   return (
     <div className="order-history">
       <div className="order-history-container">

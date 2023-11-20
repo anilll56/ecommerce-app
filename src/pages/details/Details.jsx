@@ -6,15 +6,29 @@ import { FiHeart } from "react-icons/fi";
 import ReactImageMagnify from "react-image-magnify";
 import { AddBuyOrder, getAllProducks } from "../../api/HandleApi";
 import { useSelector } from "react-redux";
+import { Modal, Input, Button } from "antd";
+import { RingLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { addFavorite } from "../../redux/UserSlice";
 
 function Details() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const userRedux = useSelector((state) => state.user.info);
   const [orderSelected, setOrderSelected] = useState({
-    produckColor: "",
-    produckPieces: 0,
+    produckColor: "red",
+    produckPieces: 20,
   });
+
   const [produck, setProduck] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(() => {
     getAllProducks().then((res) => {
       const data = res.data.sellerProduck;
@@ -38,6 +52,7 @@ function Details() {
       orderSelected.produckColor,
       orderSelected.produckPieces
     ).then((res) => {
+      setOpenModal(false);
       console.log(res, "res");
     });
   };
@@ -47,20 +62,39 @@ function Details() {
       <div className="CardLeft">
         <div className="CardPics">
           <div className="Cardİmg">
-            <ReactImageMagnify
-              {...{
-                smallImage: {
-                  src: "https://picsum.photos/1200/1800",
-                  alt: "Wristwatch by Ted Baker London",
-                  isFluidWidth: true,
-                },
-                largeImage: {
-                  src: "https://picsum.photos/1200/1800",
-                  width: 2000,
-                  height: 2000,
-                },
-              }}
-            />
+            {loading ? (
+              <div
+                className="sweet-loading"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <RingLoader
+                  color="#f27a1a"
+                  loading={loading}
+                  size={150}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            ) : (
+              <ReactImageMagnify
+                {...{
+                  smallImage: {
+                    src: "https://picsum.photos/1200/1800",
+                    alt: "Wristwatch by Ted Baker London",
+                    isFluidWidth: true,
+                  },
+                  largeImage: {
+                    src: "https://picsum.photos/1200/1800",
+                    width: 2000,
+                    height: 2000,
+                  },
+                }}
+              />
+            )}
           </div>
         </div>
         <div className="CardAbout">
@@ -71,17 +105,20 @@ function Details() {
           </div>
           <h4 className="CardPrice">{produck.price} TL</h4>
           <div className="CardAddTo">
-            <button className="AddBasket" onClick={() => BuyProduck()}>
+            <button className="AddBasket" onClick={() => setOpenModal(true)}>
               Satın Al
             </button>
             <div
               className="AddFavorite"
-              //  onClick={() => dispatch(addFavorite({ id: id }))}
+              onClick={() => {
+                dispatch(addFavorite(produck));
+              }}
             >
               <FiHeart className="Cardİcon"></FiHeart>
             </div>
           </div>
-          <div className="Carddd">renk Seçenekleri : {produck.colors}</div>
+          <div className="Carddd">Renk Seçenekleri : {produck.colors}</div>
+          <div className="Carddd">Ürün Adedi : {produck.stock}</div>
           <div className="CardSp">
             <div>Öne Çıkan Bilgiler :</div>
             <div className="CardPLC">
@@ -123,6 +160,49 @@ function Details() {
           <div className="c1css">Ürün Soruları (155)</div>
         </div>
       </div>
+      <Modal
+        title="Ürünü Al"
+        open={openModal}
+        onOk={() => {
+          setOpenModal(false);
+        }}
+        onCancel={() => {
+          setOpenModal(false);
+        }}
+        okButtonProps={{ style: { display: "none" } }}
+        cancelButtonProps={{ style: { display: "none" } }}
+      >
+        <Input
+          placeholder="Ürün Adedeini Giriniz"
+          className="buy-order-input"
+          type="number"
+          onChange={(e) => {
+            setOrderSelected({
+              ...orderSelected,
+              produckPieces: e.target.value,
+            });
+          }}
+        />
+        <Input
+          placeholder="Ürün Rengini seçiniz"
+          className="buy-order-input"
+          onChange={(e) => {
+            setOrderSelected({
+              ...orderSelected,
+              produckColor: e.target.value,
+            });
+          }}
+        />
+        <Button
+          type="primary"
+          className="buy-order-button"
+          onClick={() => {
+            BuyProduck();
+          }}
+        >
+          Update
+        </Button>
+      </Modal>
     </div>
   );
 }

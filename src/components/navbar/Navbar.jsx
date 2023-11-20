@@ -11,7 +11,10 @@ import {
   UserOutlined,
   DownOutlined,
 } from "@ant-design/icons";
+import { logout } from "../../redux/UserSlice";
+import { useDispatch } from "react-redux";
 function Navbar() {
+  const dispath = useDispatch();
   const menuRef = useRef(null);
   const [search, setSearch] = useState(false);
   const info = useSelector((state) => state.user?.info);
@@ -32,6 +35,7 @@ function Navbar() {
         <a
           onClick={() => {
             localStorage.removeItem("user");
+            dispath(logout());
             window.location.reload();
           }}
         >
@@ -94,7 +98,7 @@ function Navbar() {
             </div>
             <div className="ss">
               <div>
-                <Link to="/Favorites" className="hoverr1">
+                <Link to="/home/favorites" className="hoverr1">
                   <div>Favorilerim</div>
                   <div className="hoverr11">0 </div>
                 </Link>

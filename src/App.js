@@ -3,9 +3,11 @@ import RoutePage from "./route/RoutePage";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setMyJobs } from "./redux/UserSlice";
-import { setAuthenticated } from "./redux/UserSlice"; // 'path/to/redux' kısmı dosyanızın yerini belirtmelidir
+import { setAuthenticated } from "./redux/UserSlice";
+import { ToastContainer } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const navigate = useNavigate();
@@ -15,29 +17,11 @@ function App() {
   const userRole = JSON.parse(user)?.role;
   const authenticated = useSelector((state) => state.user.authenticated);
   console.log(authenticated, "authenticated");
-  const fetchJobs = async () => {
-    try {
-      if (userRole === "freelancer") {
-        // const response = await getTheFreelancerJobByEmail(userEmail);
-        // console.log(response, "response.data");
-        // localStorage.setItem("Myjobs", JSON.stringify(response.data));
-      } else if (userRole === "client") {
-        // const response = await getTheClientJobByEmail(userEmail);
-        // localStorage.setItem("Myjobs", JSON.stringify(response.data));
-        // dispatch(setMyJobs(response.data));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    fetchJobs();
     if (user) {
-      // getClientByEmail(user.email).then((res) => {
-      // localStorage.setItem("user", JSON.stringify(res));
-      // });
+      navigate("/home");
       dispatch(setUser({ user: user }));
       dispatch(setAuthenticated(true));
     } else {
@@ -51,6 +35,9 @@ function App() {
     <div className="App">
       <div className="container">
         <RoutePage />
+      </div>
+      <div className="toast">
+        <ToastContainer />
       </div>
     </div>
   );

@@ -110,3 +110,10 @@
   border-radius: 5px;
   margin-top: 2rem;
 }
+.buy-order-input {
+  margin: 5px;
+}
+.buy-order-button {
+  margin: 5px;
+  background-color: #f27a1a !important;
+}

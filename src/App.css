@@ -6,3 +6,10 @@
 .container {
   width: 80%;
 }
+.toast {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  padding: 15px;
+}

@@ -129,12 +129,13 @@ const AddBuyOrder = async (
       produckPrice: produckPrice,
       produckImage: produckImage,
       produckColor: produckColor,
-      produckStock: produckStock,
+      produckPieces: produckStock,
+      status: "order-sended",
     });
     if (res.status === 200) {
-      console.log("Ürünler getirildi", res);
+      console.log("Şipariş verildi", res);
     } else {
-      console.log("Ürünler getirilemedi. Hata:", res);
+      console.log("Şipariş verilemedi. Hata:", res);
     }
     return res;
   } catch (error) {
