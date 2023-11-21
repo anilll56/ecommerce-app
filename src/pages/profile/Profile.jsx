@@ -4,7 +4,13 @@ import { Avatar, Form, Input, Button, Select, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { AddProduckEcommerce, GetUserProducts } from "../../api/HandleApi";
+import {
+  AddProduckEcommerce,
+  GetUserProducts,
+  GetSellerOrders,
+  GetBuyerOrders,
+  UpdateOrderStatus,
+} from "../../api/HandleApi";
 import Card from "../../components/card/Card";
 
 function Profile() {
@@ -72,7 +78,7 @@ function Profile() {
             {reduxUser?.user?.userType === "seller" ? (
               <div
                 className="profile-left-side-settings-item"
-                onClick={() => handleTabClick("orderHistory")}
+                onClick={() => handleTabClick("waitingOrders")}
               >
                 Bekleyen Siparişler
               </div>
@@ -106,6 +112,7 @@ function Profile() {
           {activeSide === "addProduct" && <AddProduck />}
           {activeSide === "MyProducts" && <MyProducks />}
           {activeSide === "orders" && <MyOrders />}
+          {activeSide === "waitingOrders" && <WaitingOrders />}
           {activeSide === "orderHistory" && <OrderHistory />}
         </div>
       </div>
@@ -312,11 +319,9 @@ function MyProducks(params) {
   const [producks, setProducks] = useState([]);
   const reduxUser = useSelector((state) => state.user.info);
   useEffect(() => {
-    console.log(reduxUser?.user?.id, "222");
     GetUserProducts(reduxUser?.user?.id).then((res) => {
       setProducks(res.data);
     });
-    console.log(producks, "producks11111");
   }, [reduxUser?.user?.id]);
   return (
     <div className="my-producks">
@@ -333,6 +338,7 @@ function MyProducks(params) {
 }
 
 function AddProduck() {
+  const navigate = useNavigate();
   const reduxUser = useSelector((state) => state.user.info);
   const [AddProduckInputs, setAddProduckInputs] = useState({
     name: "",
@@ -354,9 +360,11 @@ function AddProduck() {
       AddProduckInputs.colors,
       AddProduckInputs.productImage
     ).then((res) => {
-      console.log(res);
+      window.location.reload();
     });
   };
+  console.log(reduxUser?.user?.id, "reduxUser");
+  console.log(AddProduckInputs, "AddProduckInputs");
   return (
     <div className="add-product">
       <div className="add-product-container">
@@ -443,21 +451,212 @@ function AddProduck() {
   );
 }
 function MyOrders(params) {
+  const reduxUser = useSelector((state) => state.user.info);
+  const [myOrders, setMyOrders] = useState([]);
+  useEffect(() => {
+    GetBuyerOrders(reduxUser.user.id).then((res) => {
+      let data = res.data.filter((item) => item.status !== "cancelled");
+      setMyOrders(data);
+    });
+  }, []);
   return (
     <div className="my-orders">
       <div className="my-orders-container">
         <div className="my-orders-title">Siparişlerim</div>
+        <div className="waiting-orders-items">
+          {myOrders?.map((item) => {
+            return (
+              <div className="waiting-orders-item">
+                <div className="waiting-orders-item-cont">
+                  <div className="waiting-orders-item-img-cont">
+                    <img
+                      className="waiting-orders-item-img"
+                      src={item.produckImage}
+                      alt="s"
+                    />
+                  </div>
+                  <div className="waiting-orders-item-name">
+                    {item.produckName}
+                  </div>
+                  <div className="waiting-orders-item-price">
+                    {item.produckPieces * item.produckPrice} TL
+                  </div>
+                  <div className="waiting-orders-item-color">
+                    {item.produckColor}
+                  </div>
+                  <div className="waiting-orders-item-pieces">
+                    {item.produckPieces}
+                  </div>
+                  <div className="waiting-orders-item-status">
+                    {item.status}
+                  </div>
+                  <div className="waiting-orders-item-buttons">
+                    <Button
+                      onClick={() => {
+                        UpdateOrderStatus(item.id, "cancelled");
+                      }}
+                    >
+                      İptal Et
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
-function OrderHistory(params) {
-  const [orderHistory, setOrderHistory] = useState([]);
+function WaitingOrders(params) {
   const reduxUser = useSelector((state) => state.user.info);
+  const [waitingOrders, setWaitingHistory] = useState([]);
+  useEffect(() => {
+    GetSellerOrders(reduxUser.user.id).then((res) => {
+      let data = res.data.filter(
+        (item) => item.status !== "cancelled" && item.status !== "delivered"
+      );
+      setWaitingHistory(data);
+    });
+  }, []);
+  return (
+    <div className="waiting-orders">
+      <div className="waiting-orders-container">
+        <div className="waiting-orders-title">Bekleyen Siparişler</div>
+        <div className="waiting-orders-items">
+          {waitingOrders?.map((item) => {
+            return (
+              <div className="waiting-orders-item">
+                <div className="waiting-orders-item-cont">
+                  <div className="waiting-orders-item-img-cont">
+                    <img
+                      className="waiting-orders-item-img"
+                      src={item.produckImage}
+                      alt="s"
+                    />
+                  </div>
+                  <div className="waiting-orders-item-name">
+                    {item.produckName}
+                  </div>
+                  <div className="waiting-orders-item-price">
+                    {item.produckPrice} TL
+                  </div>
+                  <div className="waiting-orders-item-color">
+                    {item.produckColor}
+                  </div>
+                  <div className="waiting-orders-item-pieces">
+                    {item.produckPieces}
+                  </div>
+                  <div className="waiting-orders-item-status">
+                    {item.status}
+                  </div>
+                  <div className="waiting-orders-item-buttons">
+                    {item.status === "shipped" ? (
+                      <Button
+                        onClick={() => {
+                          UpdateOrderStatus(item.id, "delivered").then(
+                            (res) => {
+                              GetSellerOrders(reduxUser.user.id).then((res) => {
+                                let data = res.data.filter(
+                                  (item) => item.status !== "cancelled"
+                                );
+                                setWaitingHistory(data);
+                              });
+                            }
+                          );
+                        }}
+                      >
+                        Teslim Et
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          UpdateOrderStatus(item.id, "shipped").then((res) => {
+                            GetSellerOrders(reduxUser.user.id).then((res) => {
+                              let data = res.data.filter(
+                                (item) => item.status !== "cancelled"
+                              );
+                              setWaitingHistory(data);
+                            });
+                          });
+                        }}
+                      >
+                        Kargoya ver
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => {
+                        UpdateOrderStatus(item.id, "cancelled").then((res) => {
+                          GetSellerOrders(reduxUser.user.id).then((res) => {
+                            let data = res.data.filter(
+                              (item) => item.status !== "cancelled"
+                            );
+                            setWaitingHistory(data);
+                          });
+                        });
+                      }}
+                    >
+                      İptal Et
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OrderHistory(params) {
+  const reduxUser = useSelector((state) => state.user.info);
+  const [orderHistory, setOrderHistory] = useState([]);
+  useEffect(() => {
+    GetBuyerOrders(reduxUser.user.id).then((res) => {
+      setOrderHistory(res.data);
+    });
+  }, []);
+
   return (
     <div className="order-history">
       <div className="order-history-container">
         <div className="order-history-title">Geçmiş Siparişlerim</div>
+        <div className="waiting-orders-items">
+          {orderHistory?.map((item) => {
+            return (
+              <div className="waiting-orders-item">
+                <div className="waiting-orders-item-cont">
+                  <div className="waiting-orders-item-img-cont">
+                    <img
+                      className="waiting-orders-item-img"
+                      src={item.produckImage}
+                      alt="s"
+                    />
+                  </div>
+                  <div className="waiting-orders-item-name">
+                    {item.produckName}
+                  </div>
+                  <div className="waiting-orders-item-price">
+                    {item.produckPrice} TL
+                  </div>
+                  <div className="waiting-orders-item-color">
+                    {item.produckColor}
+                  </div>
+                  <div className="waiting-orders-item-pieces">
+                    {item.produckPieces}
+                  </div>
+                  <div className="waiting-orders-item-status">
+                    {item.status}
+                  </div>
+                  <div className="waiting-orders-item-buttons">
+                    <Button>Tekrar Satın Al</Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const LoginPage = () => {
     <div className="login-page">
       <div className="login-container">
         <div>
-          <h1>Sign In</h1>
+          <h1>Log In</h1>
         </div>
         <div className="signUp-form">
           <Form

@@ -5,6 +5,8 @@ const initialState = {
   authenticated: false,
   info: null,
   favorites: [],
+  searchValue: "Ürün Adı",
+  searchInput: "",
 };
 export const userSlice = createSlice({
   name: "user",
@@ -30,6 +32,12 @@ export const userSlice = createSlice({
       );
       toast.error(" Ürün Favorilerden çıkarıldı");
     },
+    setSearchInput: (state, action) => {
+      state.searchInput = action.payload;
+    },
+    setSearchValue: (state, action) => {
+      state.searchValue = action.payload;
+    },
   },
 });
 
@@ -39,6 +47,8 @@ export const {
   setAuthenticated,
   addFavorite,
   removeFavorite,
+  setSearchInput,
+  setSearchValue,
 } = userSlice.actions;
 
 export default userSlice.reducer;

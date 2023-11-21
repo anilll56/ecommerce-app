@@ -1,6 +1,5 @@
 .home-card-cont {
   display: flex;
-  flex-direction: column;
   overflow: hidden;
   margin: 1rem;
   padding: 1rem;

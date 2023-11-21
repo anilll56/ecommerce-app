@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import "./Navbar.css";
-import { Dropdown, Space } from "antd";
+import { Dropdown, Input, Select, Space } from "antd";
+import { setSearchInput, setSearchValue } from "../../redux/UserSlice";
+import { Tooltip } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   SettingOutlined,
   LogoutOutlined,
@@ -18,6 +21,21 @@ function Navbar() {
   const menuRef = useRef(null);
   const [search, setSearch] = useState(false);
   const info = useSelector((state) => state.user?.info);
+  const favItems = useSelector((state) => state.user?.favorites);
+  const options = [
+    {
+      value: "Ürün Adı",
+      label: "Ürün Adı",
+    },
+    {
+      value: "Renk",
+      label: "Renk",
+    },
+    {
+      value: "Fiyat",
+      label: "Fiyat",
+    },
+  ];
   const items = [
     {
       key: "1",
@@ -64,17 +82,34 @@ function Navbar() {
           </div>
           <div ref={menuRef}>
             <div
+              className="searchInputContainer"
               onClick={() => {
                 setSearch(!search);
               }}
             >
               <div className="inputdiv">
-                <input
-                  className={search === true ? "inputcss1" : "inputcss"}
+                <Select
+                  options={options}
+                  defaultValue={"Ürün Adı"}
+                  className="search-input-select"
+                  size="large"
+                  onChange={(e) => {
+                    dispath(setSearchValue(e));
+                  }}
+                />
+                <Input
                   placeholder="Aradığınız ürün , kategori veya markayı yazınız"
+                  className="navbar-search-input"
                   type="text"
-                ></input>
-                <div className="gg-search"></div>
+                  onChange={(e) => {
+                    dispath(setSearchInput(e.target.value));
+                  }}
+                  suffix={
+                    <Tooltip title="Extra information">
+                      <SearchOutlined className="navbar-search-input-icon" />
+                    </Tooltip>
+                  }
+                />
               </div>
             </div>
           </div>
@@ -100,7 +135,7 @@ function Navbar() {
               <div>
                 <Link to="/home/favorites" className="hoverr1">
                   <div>Favorilerim</div>
-                  <div className="hoverr11">0 </div>
+                  <div className="hoverr11">{favItems.length}</div>
                 </Link>
               </div>
             </div>

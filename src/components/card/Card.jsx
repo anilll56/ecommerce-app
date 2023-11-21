@@ -9,15 +9,15 @@ import { addFavorite, removeFavorite } from "../../redux/UserSlice";
 import { HeartFilled } from "@ant-design/icons";
 
 import "swiper/swiper-bundle.css";
+import { DeleteProduck } from "../../api/HandleApi";
 
 function Card({ Item }) {
   const navigate = useNavigate();
   const userRedux = useSelector((state) => state.user.info);
   const favItem = useSelector((state) => state.user.favorites);
-  console.log(Item);
   const isFav = favItem?.find((fav) => fav.id === Item?.id);
-  console.log(favItem, "favItem");
   const dispatch = useDispatch();
+  console.log(Item, "Item", Item.id);
   return (
     <div className="card">
       <div className="card__container">
@@ -25,7 +25,15 @@ function Card({ Item }) {
           <div className="FavİconCss1">
             <div className="FavİconCss2">
               {userRedux?.user.userType === "seller" ? (
-                <DeleteOutlined size={20} />
+                <DeleteOutlined
+                  size={20}
+                  onClick={() => {
+                    DeleteProduck(Item?.id).then((res) => {
+                      console.log(res, "res");
+                      window.location.reload();
+                    });
+                  }}
+                />
               ) : isFav ? (
                 <HeartFilled
                   onClick={() => {
@@ -52,7 +60,9 @@ function Card({ Item }) {
           </div>
           <div
             onClick={() => {
-              navigate(`/home/details/${Item?.id}`);
+              if (userRedux?.user.userType !== "seller") {
+                navigate(`/home/details/${Item?.id}`);
+              }
             }}
           >
             <div className="card_img_cont">

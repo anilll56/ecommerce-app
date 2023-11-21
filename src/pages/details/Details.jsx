@@ -10,6 +10,7 @@ import { Modal, Input, Button } from "antd";
 import { RingLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { addFavorite } from "../../redux/UserSlice";
+import { FaHeart } from "react-icons/fa";
 
 function Details() {
   const dispatch = useDispatch();
@@ -19,14 +20,13 @@ function Details() {
     produckColor: "red",
     produckPieces: 20,
   });
-
   const [produck, setProduck] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
@@ -56,7 +56,8 @@ function Details() {
       console.log(res, "res");
     });
   };
-  console.log(produck, "produck");
+  const favItem = useSelector((state) => state.user.favorites);
+  const isFav = favItem?.find((fav) => fav.id === produck?.id);
   return (
     <div className="CardContent">
       <div className="CardLeft">
@@ -83,12 +84,12 @@ function Details() {
               <ReactImageMagnify
                 {...{
                   smallImage: {
-                    src: "https://picsum.photos/1200/1800",
+                    src: produck.pruduckImage,
                     alt: "Wristwatch by Ted Baker London",
                     isFluidWidth: true,
                   },
                   largeImage: {
-                    src: "https://picsum.photos/1200/1800",
+                    src: produck.pruduckImage,
                     width: 2000,
                     height: 2000,
                   },
@@ -108,13 +109,22 @@ function Details() {
             <button className="AddBasket" onClick={() => setOpenModal(true)}>
               Satın Al
             </button>
-            <div
-              className="AddFavorite"
-              onClick={() => {
-                dispatch(addFavorite(produck));
-              }}
-            >
-              <FiHeart className="Cardİcon"></FiHeart>
+            <div className="AddFavorite">
+              {isFav ? (
+                <FaHeart
+                  size={30}
+                  style={{
+                    color: "#f27a1a",
+                  }}
+                />
+              ) : (
+                <FiHeart
+                  size={30}
+                  onClick={() => {
+                    dispatch(addFavorite(produck));
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className="Carddd">Renk Seçenekleri : {produck.colors}</div>
@@ -200,7 +210,7 @@ function Details() {
             BuyProduck();
           }}
         >
-          Update
+          Satın Al
         </Button>
       </Modal>
     </div>

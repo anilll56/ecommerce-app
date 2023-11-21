@@ -34,7 +34,6 @@ function SignUp() {
   const onFinish = (values) => {
     console.log("Finish:", values);
   };
-  console.log(signUpInputs, "signUpInputs");
   const handleSignUp = () => {
     if (
       signUpInputs.userType === "seller" ||
@@ -52,7 +51,6 @@ function SignUp() {
       ).then((res) => {
         if (res.status === 200) {
           navigate("/login");
-          console.log(res, "res111111111111111");
         }
       });
     }

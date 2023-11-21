@@ -12,7 +12,6 @@ function Brands() {
         slidesPerView={8}
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
-        navigation={true}
       >
         <SwiperSlide>
           <div className="marks1">
