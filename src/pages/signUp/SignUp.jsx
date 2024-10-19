@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./SignUp.css";
-import { Form, Input, Button, Checkbox } from "antd";
-import { DoubleLeftOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Radio } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SignUpEcommerce } from "../../api/HandleApi";
 import {
@@ -16,7 +15,7 @@ function SignUp() {
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
-    userType: "seller",
+    userType: "buyer",
     username: "",
     email: "",
     password: "",
@@ -31,9 +30,11 @@ function SignUp() {
   useEffect(() => {
     setClientReady(true);
   }, []);
+
   const onFinish = (values) => {
     console.log("Finish:", values);
   };
+
   const handleSignUp = () => {
     if (
       signUpInputs.userType === "seller" ||
@@ -58,41 +59,39 @@ function SignUp() {
   return (
     <div className="signUp-page">
       <div className="signUp-container">
-        <div className="sign-up-checkboxs">
-          <div>
-            <Checkbox
-              type="radio"
-              name="userType"
-              value="seller"
-              onChange={handleUserTypeChange}
-              checked={signUpInputs.userType === "seller"}
-            />
-            <div>Seller</div>
-          </div>
-          <div>
-            <Checkbox
-              type="radio"
-              name="userType"
-              value="buyer"
-              onChange={handleUserTypeChange}
-              checked={signUpInputs.userType === "buyer"}
-            />
-            <div>Buyer</div>
-          </div>
-        </div>
+        <h1 className="signUp-header">Kayıt Ol</h1>
         <div className="signUp-form">
           <Form
             style={{
-              width: "80%",
               display: "flex",
               flexDirection: "column",
+              width: "100%",
+              gap: "1rem",
             }}
             form={form}
             name="horizontal_login"
+            initialValues={{ userType: "buyer" }}
             layout="inline"
             onFinish={onFinish}
           >
             <Form.Item
+              name="userType"
+              style={{ margin: "0" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select user type!",
+                },
+              ]}
+            >
+              <Radio.Group onChange={handleUserTypeChange}>
+                <Radio value="buyer">Alıcı</Radio>
+                <Radio value="seller">Satıcı</Radio>
+              </Radio.Group>
+            </Form.Item>
+              
+            <Form.Item
+              style={{ margin: "0" }}
               name="username"
               rules={[
                 {
@@ -116,6 +115,7 @@ function SignUp() {
             </Form.Item>
             <Form.Item
               name="email"
+              style={{ margin: "0" }} 
               rules={[
                 {
                   required: true,
@@ -134,6 +134,7 @@ function SignUp() {
               />
             </Form.Item>
             <Form.Item
+              style={{ margin: "0" }}
               name="password"
               rules={[
                 {
@@ -158,6 +159,7 @@ function SignUp() {
             </Form.Item>
             {signUpInputs.userType === "buyer" && (
               <Form.Item
+                style={{ margin: "0" }}
                 name="address"
                 rules={[
                   {
@@ -183,7 +185,8 @@ function SignUp() {
               </Form.Item>
             )}
             {signUpInputs.userType === "buyer" && (
-              <Form.Item
+              <Form.Item  
+                style={{ margin: "0" }}
                 name="phone"
                 rules={[
                   {
@@ -208,6 +211,7 @@ function SignUp() {
             )}
             {signUpInputs.userType === "buyer" && (
               <Form.Item
+                style={{ margin: "0" }}
                 name="balance"
                 rules={[
                   {
@@ -233,7 +237,7 @@ function SignUp() {
                 />
               </Form.Item>
             )}
-            <Form.Item shouldUpdate>
+            <Form.Item shouldUpdate style={{ margin: "0" }}>
               {() => (
                 <Button
                   className="signUp-btn"
@@ -251,19 +255,23 @@ function SignUp() {
                     handleSignUp();
                   }}
                 >
-                  Sign Up
+                  Kayıt Ol
                 </Button>
               )}
             </Form.Item>
           </Form>
         </div>
-        <div className="signUp-back">
-          <DoubleLeftOutlined
-            className="signUp-back-icon"
+        <div className="signUp-footer">
+          <div>Zaten bir hesabınız var mı?</div>
+          <Button
+            type="link"
+            size="large"
             onClick={() => {
               navigate("/login");
             }}
-          />
+          >
+            Giriş Yap
+          </Button>
         </div>
       </div>
     </div>

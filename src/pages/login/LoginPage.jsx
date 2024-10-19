@@ -31,15 +31,14 @@ const LoginPage = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <div>
-          <h1>Log In</h1>
-        </div>
+        <h1 className="login-header">Giriş Yap</h1>
         <div className="signUp-form">
           <Form
             style={{
-              width: "80%",
               display: "flex",
               flexDirection: "column",
+              width: "100%",
+              gap: "1rem",
             }}
             form={form}
             name="horizontal_login"
@@ -47,6 +46,7 @@ const LoginPage = () => {
             onFinish={onFinish}
           >
             <Form.Item
+             style={{ margin: "0" }}
               name="username"
               rules={[
                 {
@@ -66,6 +66,7 @@ const LoginPage = () => {
               />
             </Form.Item>
             <Form.Item
+              style={{ margin: "0" }}
               name="password"
               rules={[
                 {
@@ -85,7 +86,7 @@ const LoginPage = () => {
                 }}
               />
             </Form.Item>
-            <Form.Item shouldUpdate>
+            <Form.Item shouldUpdate style={{ width: "100%", margin: "0" }}>
               {() => (
                 <Button
                   className="login-btn"
@@ -103,14 +104,14 @@ const LoginPage = () => {
                     login();
                   }}
                 >
-                  Log in
+                  Giriş
                 </Button>
               )}
             </Form.Item>
           </Form>
         </div>
         <div className="login-footer">
-          <div>Dont have an account?</div>
+          <div>Hesabınız yok mu?</div>
           <div>
             <Button
               type="link"
@@ -119,7 +120,7 @@ const LoginPage = () => {
                 navigate("/signup");
               }}
             >
-              Sign Up
+              Kayıt Ol
             </Button>
           </div>
         </div>

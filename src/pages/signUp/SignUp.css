@@ -1,14 +1,21 @@
 .signUp-page {
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
+
+.signUp-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
 .signUp-container {
-  margin-top: 7rem;
   background-color: #fff; /* Form container rengi */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  padding: 20px;
+  width: 400px;
+  padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
@@ -17,7 +24,6 @@
   justify-content: center;
 }
 .sign-up-checkboxs {
-  margin: 10px;
   width: 50%;
   margin: auto;
   display: flex;
@@ -40,19 +46,18 @@
   color: #f27a1a;
   font-size: 25px;
 }
+
 .signUp-btn {
-  margin-top: 1rem;
-  width: 40%;
-  height: 40px;
   border-radius: 5px;
-  border: none;
-  background-color: #f27a1a;
-  color: #fff;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-}
-.signUp-btn:hover {
   background-color: #e37318 !important;
-  color: #fff;
+  width: 100%;
+  color: #fff !important;
+}
+
+.signUp-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 1rem;
 }
