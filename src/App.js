@@ -1,10 +1,13 @@
-import "./App.css";
+
 import RoutePage from "./route/RoutePage";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setMyJobs } from "./redux/UserSlice";
 import { setAuthenticated } from "./redux/UserSlice";
 import { ToastContainer } from "react-toastify";
+
+import "./reset.css";
+import "./App.css";
 
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +23,10 @@ function App() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const ignoredRoutes = ["/login", "/signup"];
+
+    if (ignoredRoutes.includes(window.location.pathname)) return;
+
     if (user) {
       navigate("/home");
       dispatch(setUser({ user: user }));
