@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import "./Details.css";
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
-import ReactImageMagnify from "react-image-magnify";
 import { AddBuyOrder, getAllProducks } from "../../api/HandleApi";
 import { useSelector } from "react-redux";
 import { Modal, Input, Button } from "antd";
@@ -81,20 +80,7 @@ function Details() {
                 />
               </div>
             ) : (
-              <ReactImageMagnify
-                {...{
-                  smallImage: {
-                    src: produck.pruduckImage,
-                    alt: "Wristwatch by Ted Baker London",
-                    isFluidWidth: true,
-                  },
-                  largeImage: {
-                    src: produck.pruduckImage,
-                    width: 2000,
-                    height: 2000,
-                  },
-                }}
-              />
+              <div>ss</div>
             )}
           </div>
         </div>

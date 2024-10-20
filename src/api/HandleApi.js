@@ -4,29 +4,66 @@ const url = "http://127.0.0.1:8000/api";
 
 const Login = async (email, password) => {
   try {
-    const res = await axios.post(`${url}/login`, {
+    const res = await axios.post(`${url}/auth/login`, {
       email: email,
       password: password,
     });
 
     if (res.data.success) {
-      const user = res.data.user;
-      console.log("Giriş başarılı. Kullanıcı bilgileri:", user);
-      localStorage.setItem("user", JSON.stringify(user));
+      // const user = res.data.user;
+      const token = res.data.token;
+
+      // localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
     } else {
       console.log("Giriş başarısız. Hata:", res.data.message);
     }
+
     return res;
   } catch (error) {
     console.error("Axios isteği sırasında hata:", error);
     throw error;
   }
 };
+
+const getUserInfo = async () => {
+  console.log("çalıştı");
+
+  try {
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    if (!token) {
+      console.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.get(`${url}/user/info`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.data.success) {
+      const userInfo = res.data.user;
+      console.log("Kullanıcı bilgileri alındı:", userInfo);
+      return userInfo;
+    } else {
+      toast.error("tekrar giriş yapınız");
+      console.log("Kullanıcı bilgileri alınamadı:", res.data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Kullanıcı bilgileri alınırken hata oluştu:", error);
+    return null;
+  }
+};
+
 const SignUpEcommerce = async (name, email, password, userType, phone) => {
   let res;
 
   if (userType === "seller") {
-    res = await axios.post(`${url}/register`, {
+    res = await axios.post(`${url}/auth/register`, {
       name: name,
       email: email,
       password: password,
@@ -53,7 +90,7 @@ const SignUpEcommerce = async (name, email, password, userType, phone) => {
 };
 const ChangePassword = async (id, password, newPassword) => {
   try {
-    const res = await axios.post(`${url}/changePassword`, {
+    const res = await axios.post(`${url}/auth/changePassword`, {
       id: id,
       password: password,
       newPassword: newPassword,
@@ -79,14 +116,23 @@ const AddProduckEcommerce = async (
   pruduckImage
 ) => {
   try {
-    const res = await axios.post(`${url}/addProduck`, {
-      name: name,
-      sellerId: sellerId,
-      stock: stock,
-      price: price,
-      colors: colors,
-      pruduckImage: pruduckImage,
-    });
+    const token = localStorage.getItem("token");
+    const res = await axios.post(
+      `${url}/product/add`,
+      {
+        name: name,
+        seller_id: sellerId,
+        stock: stock,
+        price: price,
+        colors: colors,
+        pruduckImage: pruduckImage,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.data.success) {
       console.log("Ürün ekleme başarılı. Ürün bilgileri:", res);
@@ -102,7 +148,11 @@ const AddProduckEcommerce = async (
 
 const GetUserProducts = async (id) => {
   try {
-    const res = await axios.post(`${url}/getUserProducts`, {
+    const token = localStorage.getItem("token");
+    const res = await axios.post(`${url}/user/getUserProducts`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       userId: id,
     });
     if (res.status === 200) {
@@ -118,7 +168,12 @@ const GetUserProducts = async (id) => {
 };
 const getAllProducks = async () => {
   try {
-    const res = await axios.get(`${url}/getAllProduck`);
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${url}/product/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (res.status === 200) {
       console.log("Ürünler getirildi", res);
     } else {
@@ -141,7 +196,7 @@ const AddBuyOrder = async (
   produckStock
 ) => {
   try {
-    const res = await axios.post(`${url}/addBuyOrder`, {
+    const res = await axios.post(`${url}/order/add`, {
       buyerId: buyerId,
       sellerId: sellerId,
       produckId: produckId,
@@ -166,7 +221,7 @@ const AddBuyOrder = async (
 };
 const GetSellerOrders = async (id) => {
   try {
-    const res = await axios.post(`${url}/getSellerOrders`, {
+    const res = await axios.post(`${url}/user/getSellerOrders`, {
       userId: id,
     });
     if (res.status === 200) {
@@ -182,7 +237,7 @@ const GetSellerOrders = async (id) => {
 };
 const GetBuyerOrders = async (id) => {
   try {
-    const res = await axios.post(`${url}/getBuyerOrders`, {
+    const res = await axios.post(`${url}/user/getBuyerOrders`, {
       userId: id,
     });
     if (res.status === 200) {
@@ -198,7 +253,7 @@ const GetBuyerOrders = async (id) => {
 };
 const UpdateOrderStatus = async (id, status) => {
   try {
-    const res = await axios.post(`${url}/updateOrderStatus`, {
+    const res = await axios.post(`${url}/order/updateStatus`, {
       id: id,
       status: status,
     });
@@ -217,9 +272,18 @@ const UpdateOrderStatus = async (id, status) => {
 
 const DeleteProduck = async (id) => {
   try {
-    const res = await axios.post(`${url}/deleteProduck`, {
-      id: id,
-    });
+    const token = localStorage.getItem("token");
+    const res = await axios.post(
+      `${url}/product/delete`,
+      {
+        id: id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (res.status === 200) {
       console.log("başarıyla silindi", res);
       toast.success("Ürün başarıyla silindi.");
@@ -235,6 +299,7 @@ const DeleteProduck = async (id) => {
 
 export {
   Login,
+  getUserInfo,
   SignUpEcommerce,
   AddProduckEcommerce,
   GetUserProducts,

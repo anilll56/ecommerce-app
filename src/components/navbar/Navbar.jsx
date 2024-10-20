@@ -52,7 +52,7 @@ function Navbar() {
       label: (
         <a
           onClick={() => {
-            localStorage.removeItem("user");
+            localStorage.removeItem("token");
             dispath(logout());
             window.location.reload();
           }}

@@ -347,10 +347,12 @@ function AddProduck() {
     colors: [],
     productImage: "",
   });
+
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
   };
+
   const addProduck = () => {
     AddProduckEcommerce(
       AddProduckInputs.name,
