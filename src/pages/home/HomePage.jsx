@@ -9,27 +9,30 @@ function Home() {
   const searchInput = useSelector((state) => state.user.searchInput);
   const searchInputValue = useSelector((state) => state.user.searchValue);
   const [producks, setProducks] = useState([]);
+
   useEffect(() => {
     getAllProducks().then((res) => {
-      if (searchInput) {
-        if (searchInputValue === "Ürün Adı") {
-          const data = res.data.sellerProduck.filter((item) =>
-            item.name.toLowerCase().includes(searchInput.toLowerCase())
-          );
-          setProducks(data);
-        } else if (searchInputValue === "Renk") {
-          const data = res.data.sellerProduck.filter((item) =>
-            item.colors.toLowerCase().includes(searchInput.toLowerCase())
-          );
-          setProducks(data);
-        } else if (searchInputValue === "Fiyat") {
-          const data = res.data.sellerProduck.filter((item) =>
-            String(item.price).includes(searchInput)
-          );
-          setProducks(data);
+      if (res && res) {
+        if (searchInput) {
+          if (searchInputValue === "Ürün Adı") {
+            const data = res.filter((item) =>
+              item.name.toLowerCase().includes(searchInput.toLowerCase())
+            );
+            setProducks(data);
+          } else if (searchInputValue === "Renk") {
+            const data = res.filter((item) =>
+              item.colors.toLowerCase().includes(searchInput.toLowerCase())
+            );
+            setProducks(data);
+          } else if (searchInputValue === "Fiyat") {
+            const data = res.filter((item) =>
+              String(item.price).includes(searchInput)
+            );
+            setProducks(data);
+          }
+        } else {
+          setProducks(res);
         }
-      } else {
-        setProducks(res.data.sellerProduck);
       }
     });
   }, [searchInputValue, searchInput]);
@@ -46,7 +49,7 @@ function Home() {
           </div>
         ) : (
           producks.map((item) => (
-            <div>
+            <div key={item.id}>
               <Card Item={item} />
             </div>
           ))

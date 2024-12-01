@@ -338,6 +338,10 @@ function MyProducks(params) {
 }
 
 function AddProduck() {
+  const formItemLayout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 14 },
+  };
   const navigate = useNavigate();
   const reduxUser = useSelector((state) => state.user.info);
   const [AddProduckInputs, setAddProduckInputs] = useState({
@@ -346,27 +350,28 @@ function AddProduck() {
     price: 0,
     colors: [],
     productImage: "",
+    productDescription: "",
+    productCategory: "",
   });
-
-  const formItemLayout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 14 },
-  };
 
   const addProduck = () => {
     AddProduckEcommerce(
       AddProduckInputs.name,
-      reduxUser?.user?.id,
+      reduxUser?.user?._id,
       AddProduckInputs.stock,
       AddProduckInputs.price,
       AddProduckInputs.colors,
-      AddProduckInputs.productImage
+      AddProduckInputs.productImage,
+      AddProduckInputs.productDescription,
+      AddProduckInputs.productCategory
     ).then((res) => {
       window.location.reload();
     });
   };
-  console.log(reduxUser?.user?.id, "reduxUser");
+
+  console.log(reduxUser?.user?._id, "reduxUser");
   console.log(AddProduckInputs, "AddProduckInputs");
+
   return (
     <div className="add-product">
       <div className="add-product-container">
@@ -435,6 +440,28 @@ function AddProduck() {
                 }
               />
             </Form.Item>
+            <Form.Item label="Produck Description">
+              <Input
+                className="add-product-input"
+                onChange={(e) =>
+                  setAddProduckInputs({
+                    ...AddProduckInputs,
+                    productDescription: e.target.value,
+                  })
+                }
+              />
+            </Form.Item>
+            <Form.Item label="Produck Category">
+              <Input
+                className="add-product-input"
+                onChange={(e) =>
+                  setAddProduckInputs({
+                    ...AddProduckInputs,
+                    productCategory: e.target.value,
+                  })
+                }
+              />
+            </Form.Item>
             <Form.Item>
               <Button
                 type="primary"
@@ -452,6 +479,7 @@ function AddProduck() {
     </div>
   );
 }
+
 function MyOrders(params) {
   const reduxUser = useSelector((state) => state.user.info);
   const [myOrders, setMyOrders] = useState([]);

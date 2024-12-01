@@ -17,7 +17,7 @@ function Card({ Item }) {
   const favItem = useSelector((state) => state.user.favorites);
   const isFav = favItem?.find((fav) => fav.id === Item?.id);
   const dispatch = useDispatch();
-  console.log(Item, "Item", Item.id);
+  console.log(Item, "Item", Item._id);
   return (
     <div className="card">
       <div className="card__container">
@@ -61,7 +61,7 @@ function Card({ Item }) {
           <div
             onClick={() => {
               if (userRedux?.user.userType !== "seller") {
-                navigate(`/home/details/${Item?.id}`);
+                navigate(`/home/details/${Item?._id}`);
               }
             }}
           >

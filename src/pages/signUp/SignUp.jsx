@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./SignUp.css";
-import { Form, Input, Button, Radio } from "antd";
+import { Form, Input, Button, Radio, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SignUpEcommerce } from "../../api/HandleApi";
 import {
@@ -10,12 +10,13 @@ import {
   PhoneOutlined,
   DollarCircleOutlined,
 } from "@ant-design/icons";
+
 function SignUp() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
-    userType: "buyer",
+    userType: "customer",
     username: "",
     email: "",
     password: "",
@@ -23,39 +24,68 @@ function SignUp() {
     phone: "",
     balance: "",
   });
-  const handleUserTypeChange = (e) => {
-    setSignUpInputs({ userType: e.target.value });
-  };
 
   useEffect(() => {
     setClientReady(true);
   }, []);
 
-  const onFinish = (values) => {
-    console.log("Finish:", values);
+  const handleUserTypeChange = (e) => {
+    const userType = e.target.value;
+    setSignUpInputs({
+      ...signUpInputs,
+      userType,
+      address: userType === "customer" ? signUpInputs.address : "",
+      balance: userType === "customer" ? signUpInputs.balance : "",
+    });
   };
 
-  const handleSignUp = () => {
-    if (
-      signUpInputs.userType === "seller" ||
-      signUpInputs.userType === "buyer"
-    ) {
-      SignUpEcommerce(
-        signUpInputs.username,
-        signUpInputs.email,
-        signUpInputs.password,
-        signUpInputs.userType,
-        signUpInputs.phone,
-        signUpInputs.balance,
-        signUpInputs.address,
-        signUpInputs.phone
-      ).then((res) => {
-        if (res.status === 200) {
-          navigate("/login");
-        }
-      });
+  const handleInputChange = (field, value) => {
+    setSignUpInputs({ ...signUpInputs, [field]: value });
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const { username, email, password, userType, phone, address, balance } =
+        signUpInputs;
+
+      if (!username || !email || !password || !userType || !phone) {
+        message.error("Please fill in all required fields!");
+        return;
+      }
+
+      // Additional validations for customer
+      if (
+        userType === "customer" &&
+        (!address || balance === "" || isNaN(balance))
+      ) {
+        message.error(
+          "Please provide a valid address and balance for customers!"
+        );
+        return;
+      }
+
+      const response = await SignUpEcommerce(
+        username,
+        email,
+        password,
+        userType,
+        phone,
+        address,
+        parseFloat(balance) // Ensure balance is a number
+      );
+
+      if (response.success) {
+        message.success("Registration successful! Redirecting to login...");
+        navigate("/login");
+      } else {
+        message.error(response.message || "Registration failed.");
+      }
+    } catch (error) {
+      message.error("An error occurred during registration.");
+      console.error("Sign-up error:", error);
     }
   };
+
   return (
     <div className="signUp-page">
       <div className="signUp-container">
@@ -69,207 +99,129 @@ function SignUp() {
               gap: "1rem",
             }}
             form={form}
-            name="horizontal_login"
-            initialValues={{ userType: "buyer" }}
-            layout="inline"
-            onFinish={onFinish}
+            name="sign_up_form"
+            initialValues={{ userType: "customer" }}
+            layout="vertical"
+            onFinish={handleSignUp}
           >
-            <Form.Item
-              name="userType"
-              style={{ margin: "0" }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please select user type!",
-                },
-              ]}
-            >
-              <Radio.Group onChange={handleUserTypeChange}>
-                <Radio value="buyer">Alıcı</Radio>
+            <Form.Item name="userType" rules={[{ required: true }]}>
+              <Radio.Group
+                onChange={handleUserTypeChange}
+                value={signUpInputs.userType}
+              >
+                <Radio value="customer">Alıcı</Radio>
                 <Radio value="seller">Satıcı</Radio>
               </Radio.Group>
             </Form.Item>
-              
+
             <Form.Item
-              style={{ margin: "0" }}
               name="username"
               rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
+                { required: true, message: "Please input your username!" },
               ]}
             >
               <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<UserOutlined />}
                 placeholder="Username"
                 size="large"
-                className="login-input"
-                onChange={(e) => {
-                  setSignUpInputs({
-                    ...signUpInputs,
-                    username: e.target.value,
-                  });
-                }}
+                onChange={(e) => handleInputChange("username", e.target.value)}
               />
             </Form.Item>
+
             <Form.Item
               name="email"
-              style={{ margin: "0" }} 
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your email!",
-                },
-              ]}
+              rules={[{ required: true, message: "Please input your email!" }]}
             >
               <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<UserOutlined />}
                 placeholder="Email"
                 size="large"
-                className="login-input"
-                onChange={(e) => {
-                  setSignUpInputs({ ...signUpInputs, email: e.target.value });
-                }}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+                size="large"
+                onChange={(e) => handleInputChange("password", e.target.value)}
               />
             </Form.Item>
             <Form.Item
-              style={{ margin: "0" }}
-              name="password"
+              name="phone"
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: "Please input your phone number!",
                 },
               ]}
             >
               <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
+                prefix={<PhoneOutlined />}
+                placeholder="Phone"
                 size="large"
-                className="login-input"
-                onChange={(e) => {
-                  setSignUpInputs({
-                    ...signUpInputs,
-                    password: e.target.value,
-                  });
-                }}
+                onChange={(e) => handleInputChange("phone", e.target.value)}
               />
             </Form.Item>
-            {signUpInputs.userType === "buyer" && (
-              <Form.Item
-                style={{ margin: "0" }}
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your address!",
-                  },
-                ]}
-              >
-                <Input
-                  prefix={
-                    <EnvironmentOutlined className="site-form-item-icon" />
-                  }
-                  placeholder="Address"
-                  size="large"
-                  className="login-input"
-                  onChange={(e) => {
-                    setSignUpInputs({
-                      ...signUpInputs,
-                      address: e.target.value,
-                    });
-                  }}
-                />
-              </Form.Item>
-            )}
-            {signUpInputs.userType === "buyer" && (
-              <Form.Item  
-                style={{ margin: "0" }}
-                name="phone"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your phone number!",
-                  },
-                ]}
-              >
-                <Input
-                  prefix={<PhoneOutlined className="site-form-item-icon" />}
-                  placeholder="Phone"
-                  size="large"
-                  className="login-input"
-                  onChange={(e) => {
-                    setSignUpInputs({
-                      ...signUpInputs,
-                      phone: e.target.value,
-                    });
-                  }}
-                />
-              </Form.Item>
-            )}
-            {signUpInputs.userType === "buyer" && (
-              <Form.Item
-                style={{ margin: "0" }}
-                name="balance"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your balance!",
-                  },
-                ]}
-              >
-                <Input
-                  type="number"
-                  prefix={
-                    <DollarCircleOutlined className="site-form-item-icon" />
-                  }
-                  placeholder="Balance"
-                  size="large"
-                  className="login-input"
-                  onChange={(e) => {
-                    setSignUpInputs({
-                      ...signUpInputs,
-                      balance: e.target.value,
-                    });
-                  }}
-                />
-              </Form.Item>
-            )}
-            <Form.Item shouldUpdate style={{ margin: "0" }}>
-              {() => (
-                <Button
-                  className="signUp-btn"
-                  type="primary"
-                  size="large"
-                  htmlType="submit"
-                  disabled={
-                    !clientReady ||
-                    !form.isFieldsTouched(true) ||
-                    !!form
-                      .getFieldsError()
-                      .filter(({ errors }) => errors.length).length
-                  }
-                  onClick={() => {
-                    handleSignUp();
-                  }}
+
+            {signUpInputs.userType === "customer" && (
+              <>
+                <Form.Item
+                  name="address"
+                  rules={[
+                    { required: true, message: "Please input your address!" },
+                  ]}
                 >
-                  Kayıt Ol
-                </Button>
-              )}
+                  <Input
+                    prefix={<EnvironmentOutlined />}
+                    placeholder="Address"
+                    size="large"
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
+                    }
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="balance"
+                  rules={[
+                    { required: true, message: "Please input your balance!" },
+                  ]}
+                >
+                  <Input
+                    type="number"
+                    prefix={<DollarCircleOutlined />}
+                    placeholder="Balance"
+                    size="large"
+                    onChange={(e) =>
+                      handleInputChange("balance", e.target.value)
+                    }
+                  />
+                </Form.Item>
+              </>
+            )}
+
+            <Form.Item>
+              <Button
+                type="primary"
+                size="large"
+                htmlType="submit"
+                disabled={!clientReady}
+              >
+                Kayıt Ol
+              </Button>
             </Form.Item>
           </Form>
         </div>
         <div className="signUp-footer">
           <div>Zaten bir hesabınız var mı?</div>
-          <Button
-            type="link"
-            size="large"
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
+          <Button type="link" size="large" onClick={() => navigate("/login")}>
             Giriş Yap
           </Button>
         </div>

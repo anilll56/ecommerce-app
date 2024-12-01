@@ -22,6 +22,8 @@ function Details() {
   const [produck, setProduck] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  console.log(produck, "produck");
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -30,9 +32,12 @@ function Details() {
   }, []);
   useEffect(() => {
     getAllProducks().then((res) => {
-      const data = res.data.sellerProduck;
-      const selectedProduck = data.find((item) => item.id.toString() === id);
+      const data = res;
+      console.log(data, "data");
+      console.log(id, "id");
 
+      const selectedProduck = data.find((item) => item._id === id);
+      console.log(selectedProduck, "selectedProduck");
       if (selectedProduck) {
         setProduck(selectedProduck);
       } else {
@@ -42,7 +47,7 @@ function Details() {
   }, [id]);
   const BuyProduck = () => {
     AddBuyOrder(
-      userRedux.user.id,
+      userRedux.user._id,
       produck.sellerId,
       id,
       produck.name,
