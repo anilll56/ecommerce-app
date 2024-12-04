@@ -46,16 +46,18 @@ function Details() {
     });
   }, [id]);
   const BuyProduck = () => {
-    AddBuyOrder(
-      userRedux.user._id,
-      produck.sellerId,
-      id,
-      produck.name,
-      produck.price,
-      produck.pruduckImage,
-      orderSelected.produckColor,
-      orderSelected.produckPieces
-    ).then((res) => {
+    const products = [
+      {
+        product: id,
+        name: produck.name,
+        price: produck.price,
+        image: produck.pruduckImage,
+        color: orderSelected.produckColor,
+        quantity: orderSelected.produckPieces,
+      },
+    ];
+
+    AddBuyOrder(userRedux.user._id, produck.seller_id, products).then((res) => {
       setOpenModal(false);
       console.log(res, "res");
     });

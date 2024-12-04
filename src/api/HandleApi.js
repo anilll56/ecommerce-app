@@ -188,14 +188,13 @@ const AddProduckEcommerce = async (
   }
 };
 
-const GetUserProducts = async (id) => {
+const GetUserProducts = async () => {
   try {
     const token = localStorage.getItem("token");
-    const res = await axios.post(`${url}/user/getUserProducts`, {
+    const res = await axios.get(`${url}/product/seller`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      userId: id,
     });
     if (res.status === 200) {
       console.log("Ürünler getirildi", res);
@@ -228,73 +227,55 @@ const getAllProducks = async () => {
     throw error;
   }
 };
-const AddBuyOrder = async (
-  buyerId,
-  sellerId,
-  produckId,
-  produckName,
-  produckPrice,
-  produckImage,
-  produckColor,
-  produckStock
-) => {
-  try {
-    const res = await axios.post(`${url}/order/add`, {
-      buyerId: buyerId,
-      sellerId: sellerId,
-      produckId: produckId,
-      produckName: produckName,
-      produckPrice: produckPrice,
-      produckImage: produckImage,
-      produckColor: produckColor,
-      produckPieces: produckStock,
-      status: "order-sended",
-    });
-    if (res.status === 200) {
-      console.log("Şipariş verildi", res);
-      toast.success("Ürün  satın alındı.");
-    } else {
-      console.log("Şipariş verilemedi. Hata:", res);
-    }
-    return res;
-  } catch (error) {
-    console.error("Axios isteği sırasında hata:", error);
-    throw error;
-  }
-};
-const GetSellerOrders = async (id) => {
-  try {
-    const res = await axios.post(`${url}/user/getSellerOrders`, {
-      userId: id,
-    });
-    if (res.status === 200) {
-      console.log("Ürünler getirildi", res);
-    } else {
-      console.log("Ürünler getirilemedi. Hata:", res);
-    }
-    return res;
-  } catch (error) {
-    console.error("Axios isteği sırasında hata:", error);
-    throw error;
-  }
-};
-const GetBuyerOrders = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token bulunamadı, lütfen giriş yapın.");
-      return null;
-    }
 
+const AddBuyOrder = async (buyerId, sellerId, products) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
+  try {
     const res = await axios.post(
-      `${url}/order/customer`,
-      { userId: id },
+      `${url}/order/create`,
+      {
+        customer_id: buyerId,
+        seller_id: sellerId,
+        products: products,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
+
+    if (res.status === 201) {
+      console.log("Şipariş verildi", res);
+      toast.success("Ürün satın alındı.");
+    } else {
+      console.log("Şipariş verilemedi. Hata:", res.data.message);
+    }
+    return res;
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+};
+
+const GetSellerOrders = async (id) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
+  try {
+    const res = await axios.get(`${url}/order/seller`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (res.status === 200) {
       const orders = res.data;
@@ -309,18 +290,58 @@ const GetBuyerOrders = async (id) => {
     throw error;
   }
 };
+const GetBuyerOrders = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.get(`${url}/order/customer`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 200) {
+      const orders = res.data;
+
+      console.log("Ürünler getirildi", orders);
+      return orders;
+    } else {
+      console.log("Ürünler getirilemedi. Hata:", res.data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+};
 
 const UpdateOrderStatus = async (id, status) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
   try {
-    const res = await axios.post(`${url}/order/updateStatus`, {
-      id: id,
-      status: status,
-    });
+    const res = await axios.put(
+      `${url}/order/update/${id}`,
+      { status: status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     if (res.status === 200) {
       console.log("başarıyla güncellendi", res);
       toast.success("Sipariş durumu güncellendi.");
     } else {
-      console.log("güncellenemedi. Hata:", res);
+      console.log("güncellenemedi. Hata:", res.data.message);
     }
     return res;
   } catch (error) {

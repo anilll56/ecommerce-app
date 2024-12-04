@@ -319,8 +319,9 @@ function MyProducks(params) {
   const [producks, setProducks] = useState([]);
   const reduxUser = useSelector((state) => state.user.info);
   useEffect(() => {
-    GetUserProducts(reduxUser?.user?.id).then((res) => {
-      setProducks(res.data);
+    GetUserProducts().then((res) => {
+      setProducks(res.data.products);
+      console.log(res.data.products, "res.products");
     });
   }, [reduxUser?.user?.id]);
   return (
@@ -484,10 +485,18 @@ function MyOrders(params) {
   const reduxUser = useSelector((state) => state.user.info);
   const [myOrders, setMyOrders] = useState([]);
   useEffect(() => {
-    GetBuyerOrders(reduxUser.user.id).then((res) => {
-      let data = res.data.filter((item) => item.status !== "cancelled");
-      setMyOrders(data);
-    });
+    GetBuyerOrders()
+      .then((orders) => {
+        console.log("orders", orders);
+
+        if (orders) {
+          let data = orders.filter((item) => item.status !== "cancelled");
+          setMyOrders(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching buyer orders:", error);
+      });
   }, []);
   return (
     <div className="my-orders">
@@ -523,7 +532,7 @@ function MyOrders(params) {
                   <div className="waiting-orders-item-buttons">
                     <Button
                       onClick={() => {
-                        UpdateOrderStatus(item.id, "cancelled");
+                        UpdateOrderStatus(item.id, "Cancelled");
                       }}
                     >
                       İptal Et
@@ -538,101 +547,166 @@ function MyOrders(params) {
     </div>
   );
 }
-function WaitingOrders(params) {
+function WaitingOrders() {
   const reduxUser = useSelector((state) => state.user.info);
   const [waitingOrders, setWaitingHistory] = useState([]);
+
   useEffect(() => {
-    GetSellerOrders(reduxUser.user.id).then((res) => {
-      let data = res.data.filter(
-        (item) => item.status !== "cancelled" && item.status !== "delivered"
-      );
-      setWaitingHistory(data);
-    });
-  }, []);
+    GetSellerOrders(reduxUser.user.id)
+      .then((res) => {
+        console.log(res, "eewew");
+        let data = res;
+        let filteredData = data.filter(
+          (item) => item.status !== "Cancelled" && item.status !== "Delivered"
+        );
+        setWaitingHistory(filteredData);
+        console.log("filteredData", filteredData);
+      })
+      .catch((error) => {
+        console.error("Error fetching seller orders:", error);
+        setWaitingHistory([]);
+      });
+  }, [reduxUser.user.id]);
+
   return (
     <div className="waiting-orders">
       <div className="waiting-orders-container">
         <div className="waiting-orders-title">Bekleyen Siparişler</div>
         <div className="waiting-orders-items">
-          {waitingOrders?.map((item) => {
-            return (
-              <div className="waiting-orders-item">
-                <div className="waiting-orders-item-cont">
-                  <div className="waiting-orders-item-img-cont">
-                    <img
-                      className="waiting-orders-item-img"
-                      src={item.produckImage}
-                      alt="s"
-                    />
-                  </div>
-                  <div className="waiting-orders-item-name">
-                    {item.produckName}
-                  </div>
-                  <div className="waiting-orders-item-price">
-                    {item.produckPrice} TL
-                  </div>
-                  <div className="waiting-orders-item-color">
-                    {item.produckColor}
-                  </div>
-                  <div className="waiting-orders-item-pieces">
-                    {item.produckPieces}
-                  </div>
-                  <div className="waiting-orders-item-status">
-                    {item.status}
-                  </div>
-                  <div className="waiting-orders-item-buttons">
-                    {item.status === "shipped" ? (
+          {waitingOrders?.map(
+            (item) => (
+              console.log("item", item),
+              (
+                <div className="waiting-orders-item" key={item.orderId}>
+                  <div className="waiting-orders-item-cont">
+                    <div className="waiting-orders-item-img-cont">
+                      <img
+                        className="waiting-orders-item-img"
+                        src={item.produckImage}
+                        alt="s"
+                      />
+                    </div>
+                    <div className="waiting-orders-item-name">
+                      {item.produckName}
+                    </div>
+                    <div className="waiting-orders-item-price">
+                      {item.produckPrice} TL
+                    </div>
+                    <div className="waiting-orders-item-color">
+                      {item.produckColor}
+                    </div>
+                    <div className="waiting-orders-item-pieces">
+                      {item.produckPieces}
+                    </div>
+                    <div className="waiting-orders-item-status">
+                      {item.status}
+                    </div>
+                    <div className="waiting-orders-item-buttons">
+                      {item.status === "Shipped" ? (
+                        <Button
+                          onClick={() => {
+                            UpdateOrderStatus(item._id, "Delivered").then(
+                              (res) => {
+                                GetSellerOrders(reduxUser.user.id).then(
+                                  (res) => {
+                                    let data = res
+                                      .map((order) =>
+                                        order.products.map((product) => ({
+                                          ...product,
+                                          orderId: order._id,
+                                          customer_id: order.customer_id,
+                                          orderDate: order.orderDate,
+                                          totalPrice: order.totalPrice,
+                                          status: order.status,
+                                        }))
+                                      )
+                                      .flat()
+                                      .filter(
+                                        (item) =>
+                                          item.status !== "Cancelled" &&
+                                          item.status !== "Delivered"
+                                      );
+                                    setWaitingHistory(data);
+                                  }
+                                );
+                              }
+                            );
+                          }}
+                        >
+                          Teslim Et
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            console.log("item.orderId", item._id);
+
+                            UpdateOrderStatus(item._id, "Shipped").then(
+                              (res) => {
+                                GetSellerOrders(reduxUser.user.id).then(
+                                  (res) => {
+                                    let data = res
+                                      .map((order) =>
+                                        order.products.map((product) => ({
+                                          ...product,
+                                          orderId: order._id,
+                                          customer_id: order.customer_id,
+                                          orderDate: order.orderDate,
+                                          totalPrice: order.totalPrice,
+                                          status: order.status,
+                                        }))
+                                      )
+                                      .flat()
+                                      .filter(
+                                        (item) =>
+                                          item.status !== "Cancelled" &&
+                                          item.status !== "Delivered"
+                                      );
+                                    setWaitingHistory(data);
+                                  }
+                                );
+                              }
+                            );
+                          }}
+                        >
+                          Kargoya ver
+                        </Button>
+                      )}
                       <Button
                         onClick={() => {
-                          UpdateOrderStatus(item.id, "delivered").then(
+                          UpdateOrderStatus(item.orderId, "Cancelled").then(
                             (res) => {
                               GetSellerOrders(reduxUser.user.id).then((res) => {
-                                let data = res.data.filter(
-                                  (item) => item.status !== "cancelled"
-                                );
+                                let data = res
+                                  .map((order) =>
+                                    order.products.map((product) => ({
+                                      ...product,
+                                      orderId: order._id,
+                                      customer_id: order.customer_id,
+                                      orderDate: order.orderDate,
+                                      totalPrice: order.totalPrice,
+                                      status: order.status,
+                                    }))
+                                  )
+                                  .flat()
+                                  .filter(
+                                    (item) =>
+                                      item.status !== "Cancelled" &&
+                                      item.status !== "Delivered"
+                                  );
                                 setWaitingHistory(data);
                               });
                             }
                           );
                         }}
                       >
-                        Teslim Et
+                        İptal Et
                       </Button>
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          UpdateOrderStatus(item.id, "shipped").then((res) => {
-                            GetSellerOrders(reduxUser.user.id).then((res) => {
-                              let data = res.data.filter(
-                                (item) => item.status !== "cancelled"
-                              );
-                              setWaitingHistory(data);
-                            });
-                          });
-                        }}
-                      >
-                        Kargoya ver
-                      </Button>
-                    )}
-                    <Button
-                      onClick={() => {
-                        UpdateOrderStatus(item.id, "cancelled").then((res) => {
-                          GetSellerOrders(reduxUser.user.id).then((res) => {
-                            let data = res.data.filter(
-                              (item) => item.status !== "cancelled"
-                            );
-                            setWaitingHistory(data);
-                          });
-                        });
-                      }}
-                    >
-                      İptal Et
-                    </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              )
+            )
+          )}
         </div>
       </div>
     </div>
@@ -643,7 +717,7 @@ function OrderHistory(params) {
   const reduxUser = useSelector((state) => state.user.info);
   const [orderHistory, setOrderHistory] = useState([]);
   useEffect(() => {
-    GetBuyerOrders(reduxUser.user.id).then((res) => {
+    GetBuyerOrders().then((res) => {
       setOrderHistory(res.data);
     });
   }, []);
