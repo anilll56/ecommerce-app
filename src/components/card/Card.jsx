@@ -24,7 +24,7 @@ function Card({ Item }) {
         <div>
           <div className="FavİconCss1">
             <div className="FavİconCss2">
-              {userRedux?.user.userType === "seller" ? (
+              {userRedux?.user?.userType === "seller" ? (
                 <DeleteOutlined
                   size={20}
                   onClick={() => {

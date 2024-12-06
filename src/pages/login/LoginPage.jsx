@@ -3,9 +3,12 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import "./loginPage.css";
 import { useNavigate } from "react-router-dom";
-import { Login } from "../../api/HandleApi";
+import { getUserInfo, Login } from "../../api/HandleApi";
+import { setUser } from "../../redux/UserSlice";
+import { useDispatch } from "react-redux";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
@@ -23,6 +26,13 @@ const LoginPage = () => {
   const login = () => {
     Login(loginInputs.email, loginInputs.password).then((response) => {
       if (response.status === 200) {
+        getUserInfo().then((res) => {
+          if (res) {
+            const user = res;
+            dispatch(setUser({ user }));
+          } else {
+          }
+        });
         navigate("/home");
       }
     });
@@ -46,7 +56,7 @@ const LoginPage = () => {
             onFinish={onFinish}
           >
             <Form.Item
-             style={{ margin: "0" }}
+              style={{ margin: "0" }}
               name="username"
               rules={[
                 {

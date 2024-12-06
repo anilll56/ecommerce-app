@@ -140,19 +140,6 @@ const AddProduckEcommerce = async (
       console.error("Token bulunamadı, lütfen giriş yapın.");
       return null;
     }
-
-    // Log the data being sent
-    console.log("Sending data:", {
-      name,
-      seller_id: sellerId,
-      stock,
-      price,
-      colors,
-      productImage,
-      productDescription,
-      productCategory,
-    });
-
     const res = await axios.post(
       `${url}/product/add`,
       {
