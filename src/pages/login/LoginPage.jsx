@@ -103,13 +103,7 @@ const LoginPage = () => {
                   type="primary"
                   size="large"
                   htmlType="submit"
-                  disabled={
-                    !clientReady ||
-                    !form.isFieldsTouched(true) ||
-                    !!form
-                      .getFieldsError()
-                      .filter(({ errors }) => errors.length).length
-                  }
+                  disabled={!clientReady || !form.isFieldsTouched(true) || !!form.getFieldsError().filter(({ errors }) => errors.length).length}
                   onClick={() => {
                     login();
                   }}

@@ -62,15 +62,7 @@ const getUserInfo = async () => {
   }
 };
 
-const SignUpEcommerce = async (
-  name,
-  email,
-  password,
-  userType,
-  phone,
-  address,
-  balance
-) => {
+const SignUpEcommerce = async (name, email, password, userType, phone, address, balance) => {
   try {
     const payload = {
       name,
@@ -124,16 +116,7 @@ const ChangePassword = async (id, password, newPassword) => {
     throw error;
   }
 };
-const AddProduckEcommerce = async (
-  name,
-  sellerId,
-  stock,
-  price,
-  colors,
-  productImage,
-  productDescription,
-  productCategory
-) => {
+const AddProduckEcommerce = async (name, sellerId, stock, price, colors, productImage, productDescription, productCategory) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -160,10 +143,7 @@ const AddProduckEcommerce = async (
     );
 
     if (res.status === 201 && res.data.success) {
-      console.log(
-        "Ürün ekleme başarılı. Ürün bilgileri:",
-        res.data.sellerProduct
-      );
+      console.log("Ürün ekleme başarılı. Ürün bilgileri:", res.data.sellerProduct);
       return res.data.sellerProduct;
     } else {
       console.log("Ürün ekleme başarısız. Hata:", res.data.message);
@@ -364,6 +344,228 @@ const DeleteProduck = async (id) => {
   }
 };
 
+const GetFavorites = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.get(`${url}/favorites`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 200) {
+      console.log("Favoriler getirildi:", res.data);
+      return res.data;
+    } else {
+      console.log("Favoriler getirilemedi. Hata:", res.data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Favoriler alınırken hata oluştu:", error);
+    throw error;
+  }
+};
+const addFavorite = async (productId) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
+  try {
+    const response = await axios.post(
+      `${url}/favorite/add`,
+      {
+        productId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      console.log("Favori başarıyla eklendi:", response.data);
+      toast.success("Favoriye eklendi.");
+      return response.data;
+    } else {
+      console.error("Favori eklenemedi. Hata:", response.data.message);
+      toast.error(response.data.message || "Favori eklenemedi.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Favori eklerken hata oluştu:", error);
+    toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+    throw error;
+  }
+};
+
+const removeFavorite = async (productId) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
+  try {
+    const response = await axios.delete(`${url}/favorite/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      console.log("Favori başarıyla kaldırıldı:", response.data);
+      toast.success("Favoriden kaldırıldı.");
+      return response.data;
+    } else {
+      console.error("Favori kaldırılamadı. Hata:", response.data.message);
+      toast.error(response.data.message || "Favori kaldırılamadı.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Favori kaldırırken hata oluştu:", error);
+    toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+    throw error;
+  }
+};
+
+const getBasketItems = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.get(`${url}/basket`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 200) {
+      console.log("Sepet öğeleri getirildi:", res.data);
+      return res.data;
+    } else {
+      toast.error("Sepet öğeleri alınamadı.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Sepet öğeleri alınırken hata oluştu:", error);
+    toast.error("Bir hata oluştu.");
+    throw error;
+  }
+};
+
+const addItemToBasket = async (productId, quantity) => {
+  console.log("productId:", productId);
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.post(
+      `${url}/basket/add`,
+      {
+        productId,
+        quantity,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (res.status === 201) {
+      console.log("Ürün sepete eklendi:", res.data);
+      toast.success("Ürün sepete eklendi.");
+      return res.data;
+    } else {
+      toast.error("Ürün sepete eklenemedi.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Ürün eklerken hata oluştu:", error);
+    toast.error("Bir hata oluştu.");
+    throw error;
+  }
+};
+
+const removeItemFromBasket = async (productId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.delete(`${url}/basket/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 200) {
+      console.log("Ürün sepetten kaldırıldı:", res.data);
+      toast.success("Ürün sepetten kaldırıldı.");
+      return res.data;
+    } else {
+      toast.error("Ürün sepetten kaldırılamadı.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Ürün kaldırılırken hata oluştu:", error);
+    toast.error("Bir hata oluştu.");
+    throw error;
+  }
+};
+
+const updateBasketItem = async (productId, quantity) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+
+    const res = await axios.put(
+      `${url}/basket`,
+      {
+        productId,
+        quantity,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      console.log("Sepet öğesi güncellendi:", res.data);
+      toast.success("Sepet güncellendi.");
+      return res.data;
+    } else {
+      toast.error("Sepet öğesi güncellenemedi.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Sepet güncellenirken hata oluştu:", error);
+    toast.error("Bir hata oluştu.");
+    throw error;
+  }
+};
+
 export {
   Login,
   getUserInfo,
@@ -377,4 +579,11 @@ export {
   GetBuyerOrders,
   UpdateOrderStatus,
   DeleteProduck,
+  GetFavorites,
+  addFavorite,
+  removeFavorite,
+  getBasketItems,
+  addItemToBasket,
+  removeItemFromBasket,
+  updateBasketItem,
 };

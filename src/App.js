@@ -41,12 +41,12 @@ function App() {
         })
         .catch((err) => {
           console.error("UserInfo alınırken hata oluştu:", err);
-          navigate("/login");
+          //navigate("/login");
         });
     } else {
       dispatch(setUser({ user: null }));
       dispatch(setAuthenticated(false));
-      navigate("/login");
+      //navigate("/login");
     }
   }, [authenticated]);
   return (

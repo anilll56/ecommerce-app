@@ -7,13 +7,7 @@ import { Dropdown, Input, Select, Space } from "antd";
 import { setSearchInput, setSearchValue } from "../../redux/UserSlice";
 import { Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import {
-  SettingOutlined,
-  LogoutOutlined,
-  ProfileOutlined,
-  UserOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+import { SettingOutlined, LogoutOutlined, ProfileOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { logout } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
 function Navbar() {
@@ -74,10 +68,7 @@ function Navbar() {
         <div className="navbarMain">
           <div className="imgcss">
             <Link to="/home">
-              <img
-                alt="s"
-                src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"
-              ></img>
+              <img alt="s" src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"></img>
             </Link>
           </div>
           <div ref={menuRef}>
@@ -117,6 +108,7 @@ function Navbar() {
             <div className="ss">
               <div>
                 <Dropdown
+                  local
                   menu={{
                     items,
                   }}
@@ -133,10 +125,12 @@ function Navbar() {
             </div>
             <div className="ss">
               <div>
-                <Link to="/home/favorites" className="hoverr1">
-                  <div>Favorilerim</div>
-                  <div className="hoverr11">{favItems.length}</div>
-                </Link>
+                {
+                  <Link to={localStorage.getItem("token") ? "/home/favorites" : "/login"} className="hoverr1">
+                    <div>Favorilerim</div>
+                    <div className="hoverr11">{favItems.length}</div>
+                  </Link>
+                }
               </div>
             </div>
             <div className="ss">

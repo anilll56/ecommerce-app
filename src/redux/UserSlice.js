@@ -27,9 +27,7 @@ export const userSlice = createSlice({
       toast.success(" Ürün Favorilere eklendi");
     },
     removeFavorite: (state, action) => {
-      state.favorites.splice(
-        state.favorites.findIndex((item) => item.id === action.payload)
-      );
+      state.favorites.splice(state.favorites.findIndex((item) => item.id === action.payload));
       toast.error(" Ürün Favorilerden çıkarıldı");
     },
     setSearchInput: (state, action) => {
@@ -41,14 +39,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {
-  setUser,
-  logout,
-  setAuthenticated,
-  addFavorite,
-  removeFavorite,
-  setSearchInput,
-  setSearchValue,
-} = userSlice.actions;
+export const { setUser, logout, setAuthenticated, addFavorite, removeFavorite, setSearchInput, setSearchValue } = userSlice.actions;
 
 export default userSlice.reducer;

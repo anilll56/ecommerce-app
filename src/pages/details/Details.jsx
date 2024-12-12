@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "./Details.css";
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
-import { AddBuyOrder, getAllProducks } from "../../api/HandleApi";
+import { addItemToBasket, AddBuyOrder, getAllProducks } from "../../api/HandleApi";
 import { useSelector } from "react-redux";
 import { Modal, Input, Button } from "antd";
 import { RingLoader } from "react-spinners";
@@ -22,7 +22,6 @@ function Details() {
   const [produck, setProduck] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  console.log(produck, "produck");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,14 +29,11 @@ function Details() {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
+
   useEffect(() => {
     getAllProducks().then((res) => {
       const data = res;
-      console.log(data, "data");
-      console.log(id, "id");
-
       const selectedProduck = data.find((item) => item._id === id);
-      console.log(selectedProduck, "selectedProduck");
       if (selectedProduck) {
         setProduck(selectedProduck);
       } else {
@@ -45,6 +41,7 @@ function Details() {
       }
     });
   }, [id]);
+
   const BuyProduck = () => {
     const products = [
       {
@@ -62,8 +59,25 @@ function Details() {
       console.log(res, "res");
     });
   };
+
+  const addToBasket = () => {
+    const quantity = 1;
+    const productId = id;
+
+    addItemToBasket(productId, quantity)
+      .then((res) => {
+        console.log("Ürün sepete eklendi:", res);
+        alert("Ürün sepete başarıyla eklendi!");
+      })
+      .catch((error) => {
+        console.error("Sepete ekleme hatası:", error);
+        alert("Bir hata oluştu, lütfen tekrar deneyin.");
+      });
+  };
+
   const favItem = useSelector((state) => state.user.favorites);
   const isFav = favItem?.find((fav) => fav.id === produck?.id);
+
   return (
     <div className="CardContent">
       <div className="CardLeft">
@@ -78,13 +92,7 @@ function Details() {
                   alignItems: "center",
                 }}
               >
-                <RingLoader
-                  color="#f27a1a"
-                  loading={loading}
-                  size={150}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
+                <RingLoader color="#f27a1a" loading={loading} size={150} aria-label="Loading Spinner" data-testid="loader" />
               </div>
             ) : (
               <div>ss</div>
@@ -101,6 +109,9 @@ function Details() {
           <div className="CardAddTo">
             <button className="AddBasket" onClick={() => setOpenModal(true)}>
               Satın Al
+            </button>
+            <button className="AddBasket" onClick={addToBasket}>
+              Sepete Ekle
             </button>
             <div className="AddFavorite">
               {isFav ? (
@@ -136,16 +147,10 @@ function Details() {
           <div className="CardPLC2">
             <li>15 gün içinde ücretsiz iade. Detaylı bilgi için tıklayız</li>
             <li>Bu ürün Trendyol tarafından gönderilecektir.</li>
-            <li>
-              Xiaomi Mi Smart Air Fritöz, sağlıklı, çıtır ve az yağlı yemekler
-              pişirir
-            </li>
+            <li>Xiaomi Mi Smart Air Fritöz, sağlıklı, çıtır ve az yağlı yemekler pişirir</li>
           </div>
           <div>
-            <img
-              src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png"
-              alt="11"
-            ></img>
+            <img src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png" alt="11"></img>
           </div>
         </div>
       </div>
@@ -176,7 +181,7 @@ function Details() {
         cancelButtonProps={{ style: { display: "none" } }}
       >
         <Input
-          placeholder="Ürün Adedeini Giriniz"
+          placeholder="Ürün Adedini Giriniz"
           className="buy-order-input"
           type="number"
           onChange={(e) => {
@@ -196,13 +201,7 @@ function Details() {
             });
           }}
         />
-        <Button
-          type="primary"
-          className="buy-order-button"
-          onClick={() => {
-            BuyProduck();
-          }}
-        >
+        <Button type="primary" className="buy-order-button" onClick={BuyProduck}>
           Satın Al
         </Button>
       </Modal>

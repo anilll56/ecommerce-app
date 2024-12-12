@@ -8,6 +8,7 @@ import Brands from "../components/brands/Brands";
 import HomePage from "../pages/home/HomePage";
 import Details from "../pages/details/Details";
 import FavoritesPage from "../pages/favorite/FavoritesPage";
+import BasketPage from "../pages/basket/BasketPage";
 
 function RoutePage() {
   return (
@@ -36,6 +37,7 @@ function RoutePage() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home/profile" element={<Profile />} />
         <Route path="/home/favorites" element={<FavoritesPage />} />
+        <Route path="/BasketPage" element={<BasketPage />} />
       </Routes>
     </div>
   );

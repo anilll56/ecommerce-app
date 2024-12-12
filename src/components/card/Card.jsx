@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Card.css";
 import "swiper/css";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,18 @@ function Card({ Item }) {
   const favItem = useSelector((state) => state.user.favorites);
   const isFav = favItem?.find((fav) => fav.id === Item?.id);
   const dispatch = useDispatch();
-  console.log(Item, "Item", Item._id);
+  const [favorites, setFavorites] = useState([]);
+
+  // const addFavorite = async () => {
+  //   try {
+  //     console.log(userRedux.user._id, Item._id);
+  //     await addFavorite(userRedux.user._id, Item._id);
+  //   } catch (error) {
+  //     console.error("Failed to fetch basket data:", error);
+  //   } finally {
+  //   }
+  // };
+
   return (
     <div className="card">
       <div className="card__container">
