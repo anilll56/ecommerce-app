@@ -38,22 +38,25 @@ function Home() {
   }, [searchInputValue, searchInput]);
 
   return (
-    <div>
-      <div>
-        <h1>Producks</h1>
-      </div>
-      <div className="home-card-cont">
-        {searchInputValue && producks.length === 0 ? (
-          <div>
-            Aradığınız ürün bulunamadı. Lütfen farklı bir ürün arayınız.
-          </div>
-        ) : (
-          producks.map((item) => (
-            <div key={item.id}>
-              <Card Item={item} />
+    <div className="home-page">
+      <div className="container">
+        <div>
+          <h1>Ürünler</h1>
+        </div>
+        <div className="home-card-cont">
+          {searchInputValue && producks.length === 0 ? (
+            <div>
+              Aradığınız ürün bulunamadı. Lütfen farklı bir ürün arayınız.
             </div>
-          ))
-        )}
+          ) : (
+            <div className="product-cards">
+              {producks.map((product, index) => (
+                <Card key={index} Item={product} />
+              ))}
+            </div>
+          )
+          }
+        </div>
       </div>
     </div>
   );

@@ -75,7 +75,6 @@ function SignUp() {
       );
 
       if (response.success) {
-        message.success("Registration successful! Redirecting to login...");
         navigate("/login");
       } else {
         message.error(response.message || "Registration failed.");
@@ -96,7 +95,6 @@ function SignUp() {
               display: "flex",
               flexDirection: "column",
               width: "100%",
-              gap: "1rem",
             }}
             form={form}
             name="sign_up_form"
@@ -108,6 +106,7 @@ function SignUp() {
               <Radio.Group
                 onChange={handleUserTypeChange}
                 value={signUpInputs.userType}
+                style={{ display: "flex", justifyContent: "center" }}
               >
                 <Radio value="customer">Alıcı</Radio>
                 <Radio value="seller">Satıcı</Radio>
@@ -209,6 +208,7 @@ function SignUp() {
 
             <Form.Item>
               <Button
+                className="signUp-btn"
                 type="primary"
                 size="large"
                 htmlType="submit"

@@ -1,49 +1,51 @@
 .brands {
+  padding: 20px 0;
+}
+
+.brands a {
+  padding: 10px;
+}
+
+.brand {
   display: flex;
-  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  transition: all .2s ease;
+}
+
+.brand:hover {
+  transform: scale(1.05);
+  border: 1px solid orange;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.brand p {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: all .2s ease;
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+  transition: all .2s ease;
+  color: #333;
+}
+
+.brand:hover .brand-icon,
+.brand:hover p {
+  color: orange;
+}
+
+.swiper-slide {
+  display: flex;
   justify-content: center;
   align-items: center;
-  user-select: none;
-}
-.Bigger {
-  z-index: 0;
-  margin-top: 1rem;
-}
-.marks1 {
-  width: 6rem;
-  text-align: center;
-  justify-content: center;
-  margin: 1rem;
-}
-.pictureCss {
-  border: 1px solid #e6e6e6;
-  border-radius: 50%;
-  box-sizing: border-box;
-  width: 75px;
-  height: 75px;
-}
-.pictureCss2 {
-  border: 1px solid #e6e6e6;
-  border-radius: 50%;
-  box-sizing: border-box;
-  width: 75px;
-  height: 75px;
-}
-.centerPic {
-  display: flex;
-  justify-content: center;
-}
-.pictureCss:hover {
-  border-color: #f27a1a;
-}
-.pictureCss2:hover {
-  border-color: #f27a1a;
-}
-.marks1:hover {
-  color: #f27a1a;
-  border-color: #f27a1a;
-}
-.PicName {
-  margin-top: 10px;
-  font-weight: 500;
+  width: fit-content;
 }

@@ -6,10 +6,11 @@ import "./Navbar.css";
 import { Dropdown, Input, Select, Space } from "antd";
 import { setSearchInput, setSearchValue } from "../../redux/UserSlice";
 import { Tooltip } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, BookOutlined, HomeOutlined, LaptopOutlined, SearchOutlined, SkinOutlined } from "@ant-design/icons";
 import { SettingOutlined, LogoutOutlined, ProfileOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { logout } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
+
 function Navbar() {
   const dispath = useDispatch();
   const menuRef = useRef(null);
@@ -57,29 +58,59 @@ function Navbar() {
       icon: <LogoutOutlined />,
     },
   ];
+
+  const categories = [
+    {
+      key: "electronics",
+      label: "Elektronik",
+      icon: <LaptopOutlined />,
+    },
+    {
+      key: "clothing",
+      label: "Giyim",
+      icon: <SkinOutlined />,
+    },
+    {
+      key: "furniture",
+      label: "Mobilya",
+      icon: <HomeOutlined />,
+    },
+    {
+      key: "books",
+      label: "Kitap",
+      icon: <BookOutlined />,
+    },
+    {
+      key: "other",
+      label: "Diğer",
+      icon: <AppstoreOutlined />,
+    },
+  ];
+
   return (
     <div className="navbar">
-      <nav className="sticky">
-        <div className="navbarTop">
-          <li className="liNoBullets">İndirim Kuponlarım </li>
-          <li className="liNoBullets">Trendyolda Satış yap</li>
-          <li className="liNoBullets">Yardım&Destek </li>
-        </div>
-        <div className="navbarMain">
-          <div className="imgcss">
-            <Link to="/home">
-              <img alt="s" src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"></img>
-            </Link>
+      <div className="container navbar-container">
+        <nav className="sticky">
+          <div className="navbarTop">
+            <li className="liNoBullets">İndirim Kuponlarım </li>
+            <li className="liNoBullets">Trendyolda Satış yap</li>
+            <li className="liNoBullets">Yardım&Destek </li>
           </div>
-          <div ref={menuRef}>
-            <div
-              className="searchInputContainer"
-              onClick={() => {
-                setSearch(!search);
-              }}
-            >
-              <div className="inputdiv">
-                <Select
+          <div className="navbarMain">
+            <div className="imgcss">
+              <Link to="/home">
+                <img alt="s" src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"></img>
+              </Link>
+            </div>
+            <div ref={menuRef}>
+              <div
+                className="searchInputContainer"
+                onClick={() => {
+                  setSearch(!search);
+                }}
+              >
+                <div className="inputdiv">
+                  {/* <Select
                   options={options}
                   defaultValue={"Ürün Adı"}
                   className="search-input-select"
@@ -87,61 +118,74 @@ function Navbar() {
                   onChange={(e) => {
                     dispath(setSearchValue(e));
                   }}
-                />
-                <Input
-                  placeholder="Aradığınız ürün , kategori veya markayı yazınız"
-                  className="navbar-search-input"
-                  type="text"
-                  onChange={(e) => {
-                    dispath(setSearchInput(e.target.value));
-                  }}
-                  suffix={
-                    <Tooltip title="Extra information">
-                      <SearchOutlined className="navbar-search-input-icon" />
-                    </Tooltip>
+                /> */}
+                  <Input
+                    placeholder="Aradığınız ürünü yazınız"
+                    className="navbar-search-input"
+                    type="text"
+                    onChange={(e) => {
+                      dispath(setSearchInput(e.target.value));
+                    }}
+                    suffix={
+                      <Tooltip title="Ara">
+                        <SearchOutlined className="navbar-search-input-icon" />
+                      </Tooltip>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="leftMain">
+              <div className="ss">
+                <div>
+                  <Dropdown
+                    local
+                    menu={{
+                      items,
+                    }}
+                  >
+                    <a onClick={(e) => e.preventDefault()}>
+                      <Space>
+                        <UserOutlined />
+                        {info?.user?.name}
+                        <DownOutlined />
+                      </Space>
+                    </a>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="ss">
+                <div>
+                  {
+                    <Link to={localStorage.getItem("token") ? "/home/favorites" : "/login"} className="hoverr1">
+                      <div>Favorilerim</div>
+                      <div className="hoverr11">{favItems.length}</div>
+                    </Link>
                   }
-                />
+                </div>
+              </div>
+              <div className="ss">
+                <Link to="/BasketPage" className="hoverr1">
+                  <div>Sepetim</div>
+                  <div className="hoverr11">0</div>
+                </Link>
               </div>
             </div>
           </div>
-          <div className="leftMain">
-            <div className="ss">
-              <div>
-                <Dropdown
-                  local
-                  menu={{
-                    items,
-                  }}
-                >
-                  <a onClick={(e) => e.preventDefault()}>
-                    <Space>
-                      <UserOutlined />
-                      {info?.user?.name}
-                      <DownOutlined />
-                    </Space>
-                  </a>
-                </Dropdown>
-              </div>
-            </div>
-            <div className="ss">
-              <div>
-                {
-                  <Link to={localStorage.getItem("token") ? "/home/favorites" : "/login"} className="hoverr1">
-                    <div>Favorilerim</div>
-                    <div className="hoverr11">{favItems.length}</div>
+          <div className="navbarBottom categories">
+            <ul>
+              {categories.map((category) => (
+                <li key={category.key}>
+                  <Link to={`/categories/${category.key}`}>
+                    {category.icon}
+                    {category.label}
                   </Link>
-                }
-              </div>
-            </div>
-            <div className="ss">
-              <Link to="/BasketPage" className="hoverr1">
-                <div>Sepetim</div>
-                <div className="hoverr11">0</div>
-              </Link>
-            </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </div>
   );
 }

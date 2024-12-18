@@ -23,19 +23,20 @@ const LoginPage = () => {
   const onFinish = (values) => {
     console.log("Finish:", values);
   };
-  const login = () => {
-    Login(loginInputs.email, loginInputs.password).then((response) => {
+  const login = async () => {
+    try {
+      const response = await Login(loginInputs.email, loginInputs.password);
       if (response.status === 200) {
-        getUserInfo().then((res) => {
-          if (res) {
-            const user = res;
-            dispatch(setUser({ user }));
-          } else {
-          }
-        });
-        navigate("/home");
+        const res = await getUserInfo();
+        if (res) {
+          const user = res;
+          dispatch(setUser({ user }));
+          navigate("/home");
+        }
       }
-    });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (

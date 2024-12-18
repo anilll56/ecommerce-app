@@ -1,16 +1,28 @@
 .profile-container {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  width: 100%;
+  height: 100%;
+  margin-top: 2rem !important;
+  gap: 1.5rem;
 }
+
+@media (max-width: 768px) {
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .profile-left-side {
-  width: 15%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 2rem;
 }
+
 .profile-name-cont {
   width: 100%;
   border: 1px solid #e6e6e6;
@@ -20,11 +32,13 @@
   padding: 12px 15px 8px 15px;
   margin-bottom: 10px;
 }
+
 .profile-name {
   font-size: large;
   font-weight: 600;
   color: #333;
 }
+
 .profile-left-side-settings {
   width: 100%;
   border: 1px solid #e6e6e6;
@@ -32,6 +46,7 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
+
 .profile-left-side-settings-item {
   display: flex;
   align-items: center;
@@ -41,45 +56,72 @@
   border-radius: 8px;
   font-size: 14px;
 }
+
 .profile-left-side-settings-item:hover {
   color: #f27a1a;
   cursor: pointer;
 }
+
 .profile-right-side {
-  width: 85%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 2rem;
 }
+
 .change-password-input {
-  margin: 5px;
+  margin-bottom: 10px;
 }
+
 .change-password-input:hover {
   border-color: #f27a1a;
 }
+
 .change-password-input:focus {
   border-color: #f27a1a;
 }
+
 .profile-change-password {
   color: #f27a1a !important;
 }
-.change-password-btn {
-  margin: 5px;
+
+.change-password-btn,
+.update-profile-btn {
   background-color: #f27a1a !important;
+  transition-duration: 300ms;
 }
+
+.change-password-btn:hover,
+.update-profile-btn:hover {
+  background-color: #db7017 !important;
+}
+
+.profile-info-form {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  margin-top: 1rem;
+}
+
 .profile-info {
   width: 100%;
 }
-.profile-info-container {
+
+.profile-info-container,
+.add-product-container,
+.my-orders-container,
+.waiting-orders-container,
+.order-history-container,
+.my-products-container {
   width: 100%;
-  margin-left: 25px;
-  padding: 10px;
+  padding: 1rem;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
 }
+
 .personel-info-title {
   display: flex;
   font-size: 20px;
@@ -87,13 +129,16 @@
   color: #333;
   margin-bottom: 10px;
 }
+
 .profile-avatar {
   display: flex;
   margin-left: 20px;
 }
+
 .profile-info-items {
   width: 100%;
 }
+
 .profile-info-item {
   display: flex;
   margin-bottom: 10px;
@@ -101,6 +146,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
 .profile-info-item-title {
   font-size: 14px;
   font-weight: 600;
@@ -108,6 +154,7 @@
   word-wrap: break-word;
   width: 50%;
 }
+
 .profile-info-item-value {
   font-size: 14px;
   font-weight: 400;
@@ -116,9 +163,7 @@
   width: 50%;
   display: flex;
 }
-.add-product {
-  width: 80%;
-}
+
 .add-product-form {
   width: 100%;
   display: flex;
@@ -127,41 +172,43 @@
   align-items: center;
   padding: 20px;
 }
+
 .add-product-input {
   width: 90%;
 }
+
 .add-product-input:hover {
   border-color: #f27a1a;
 }
+
 .add-product-input:focus {
   border-color: #f27a1a;
 }
+
 .add-product-btn {
   justify-content: end;
   margin-top: 10px;
   transition-duration: 300ms;
   background-color: #f27a1a !important;
 }
+
 .add-product-btn:hover {
   background-color: #db7017 !important;
 }
-.my-producks {
-  width: 80%;
+
+.my-producks-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
 }
-.my-producks-container {
-  width: 100%;
-}
+
 .my-producks-items {
   width: 100%;
   display: flex;
 }
-.my-orders {
-  width: 80%;
-}
 
-.waiting-orders {
-  width: 80%;
-}
 .waiting-orders-items {
   display: flex;
   flex-direction: column;
@@ -193,16 +240,19 @@
   width: 100%;
   justify-content: space-between;
 }
+
 .waiting-orders-item-img-cont {
   width: 150px;
   height: 100%;
   border: 1px solid #e6e6e6;
 }
+
 .waiting-orders-item-img {
   width: 100%;
   height: 100%;
   border-radius: 8px;
 }
+
 .waiting-orders-item-name {
   font-size: 20px;
   font-weight: bold;
@@ -226,24 +276,24 @@
   font-size: 16px;
   color: #555;
 }
+
 .waiting-orders-item-buttons {
   width: 200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .waiting-orders-item-buttons button {
   transition-duration: 300ms;
 }
+
 .waiting-orders-item-buttons button:hover {
   color: #f27a1a !important;
   border-color: #f27a1a !important;
 }
-.order-history {
-  width: 80%;
-}
+
 .order-history-items {
-  width: 80%;
   display: flex;
   padding: 20px;
 }

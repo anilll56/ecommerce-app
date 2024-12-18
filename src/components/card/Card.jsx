@@ -1,90 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import "./Card.css";
 import "swiper/css";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
+import { DeleteOutlined, HeartOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
 import { addFavorite, removeFavorite } from "../../redux/UserSlice";
 import { HeartFilled } from "@ant-design/icons";
+import Rating from 'react-rating';
 
 import "swiper/swiper-bundle.css";
 import { DeleteProduck } from "../../api/HandleApi";
 
 function Card({ Item }) {
-  const navigate = useNavigate();
   const userRedux = useSelector((state) => state.user.info);
   const favItem = useSelector((state) => state.user.favorites);
   const isFav = favItem?.find((fav) => fav.id === Item?.id);
   const dispatch = useDispatch();
-  const [favorites, setFavorites] = useState([]);
 
-  // const addFavorite = async () => {
-  //   try {
-  //     console.log(userRedux.user._id, Item._id);
-  //     await addFavorite(userRedux.user._id, Item._id);
-  //   } catch (error) {
-  //     console.error("Failed to fetch basket data:", error);
-  //   } finally {
-  //   }
-  // };
+  const handleDelete = async () => {
+    await DeleteProduck(Item?._id);
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    console.log("Item", Item);
+  }, [Item]);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("tr-TR", {
+      style: "currency",
+      currency: "TRY",
+    }).format(price);
+  }
 
   return (
-    <div className="card">
-      <div className="card__container">
-        <div>
-          <div className="FavİconCss1">
-            <div className="FavİconCss2">
-              {userRedux?.user?.userType === "seller" ? (
-                <DeleteOutlined
-                  size={20}
-                  onClick={() => {
-                    DeleteProduck(Item?.id).then((res) => {
-                      console.log(res, "res");
-                      window.location.reload();
-                    });
-                  }}
-                />
-              ) : isFav ? (
-                <HeartFilled
-                  onClick={() => {
-                    dispatch(removeFavorite(Item));
-                  }}
-                  style={{
-                    padding: "5px",
-                    fontSize: "16px",
-                    color: "#f27a1a",
-                  }}
-                />
-              ) : (
-                <HeartOutlined
-                  onClick={() => {
-                    dispatch(addFavorite(Item));
-                  }}
-                  style={{
-                    padding: "5px",
-                    fontSize: "16px",
-                  }}
-                />
-              )}
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              if (userRedux?.user.userType !== "seller") {
-                navigate(`/home/details/${Item?._id}`);
-              }
-            }}
-          >
-            <div className="card_img_cont">
-              <img className="card_img" src={Item?.pruduckImage} alt="" />
-            </div>
-            <div className="card__title">{Item?.name}</div>
-            <div className="card__price">{Item?.price} TL</div>
-            <div className="card__colors">Renk: {Item?.colors}</div>
-          </div>
-        </div>
+    <div className="product-card">
+      <div className={`product-card__wishlist ${isFav ? 'active' : ''}`} >
+        <HeartFilled onClick={() => {
+          isFav ? dispatch(removeFavorite(Item)) : dispatch(addFavorite(Item))
+        }} />
       </div>
+      <div className="product-card__img">
+        <Link to={userRedux?.user?.userType !== "seller" ? `/home/details/${Item?._id}` : "#"} className="product-card__link">
+          <img src={Item.productImage} alt={Item.name} title={Item.name} />
+        </Link>
+      </div>
+      <Link to={userRedux?.user?.userType !== "seller" ? `/home/details/${Item?._id}` : "#"} className="product-card__link">
+        <div className="product-card__content">
+          <h3 className="product-card__title" title={Item.name}><span>{Item.seller_id?.name}</span> {Item.name}</h3>
+          <div className="product-card__rating">
+            <Rating
+              initialRating={Item.productRating}
+              emptySymbol={<StarOutlined style={{ color: '#ccc' }} />}
+              fullSymbol={<StarFilled style={{ color: '#f39c12' }} />}
+              readonly />
+            <span>({Item.productRating})</span>
+          </div>
+          <p className="product-card__price" title={formatPrice(Item.price)}>{formatPrice(Item.price)}</p>
+        </div>
+      </Link>
+      <button className="product-card__add-to-cart" onClick={() => {
+        // dispatch(addItem(Item))
+      }}>Sepete Ekle</button>
     </div>
   );
 }

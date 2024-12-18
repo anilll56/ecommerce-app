@@ -1,9 +1,3 @@
-.App {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
 .toast {
   position: absolute;
   top: 0;
@@ -41,4 +35,12 @@
   .container {
       max-width: 1400px;
   }
+}
+
+
+.container-lg {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }

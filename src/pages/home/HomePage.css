@@ -1,9 +1,18 @@
-.home-card-cont {
-  display: flex;
-  overflow: hidden;
-  margin: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  padding-block: 20px;
+}
+
+@media (max-width: 1024px) {
+  .product-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

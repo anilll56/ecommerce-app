@@ -11,7 +11,8 @@
 }
 
 .signUp-container {
-  background-color: #fff; /* Form container rengi */
+  background-color: #fff;
+  /* Form container rengi */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 400px;
@@ -19,16 +20,19 @@
   border: 1px solid #ddd;
   border-radius: 10px;
 }
+
 .signUp-form {
   display: flex;
   justify-content: center;
 }
+
 .sign-up-checkboxs {
   width: 50%;
   margin: auto;
   display: flex;
   justify-content: space-around;
 }
+
 .signUp-back {
   margin-top: 1rem;
   display: flex;
@@ -36,12 +40,14 @@
   justify-content: flex-start;
   height: 30px;
 }
+
 .signUp-back-icon {
   text-decoration: none;
   font-weight: 600;
   font-size: 20px;
   transition-duration: 500ms;
 }
+
 .signUp-back-icon:hover {
   color: #f27a1a;
   font-size: 25px;
@@ -51,6 +57,12 @@
   border-radius: 5px;
   background-color: #e37318 !important;
   width: 100%;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.signUp-btn:hover {
+  background-color: #f27a1a !important;
   color: #fff !important;
 }
 

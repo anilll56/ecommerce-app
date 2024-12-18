@@ -38,7 +38,7 @@ function Profile() {
 
   return (
     <div className="profile">
-      <div className="profile-container">
+      <div className="container profile-container">
         <div className="profile-left-side">
           <div className="profile-name-cont">
             <div className="profile-name">{reduxUser?.user?.name}</div>
@@ -168,7 +168,7 @@ function Profile() {
             changePassword();
           }}
         >
-          Update
+          Güncelle
         </Button>
       </Modal>
     </div>
@@ -239,11 +239,9 @@ function ProfileInfo(params) {
         </div>
         <Form
           name="basic"
-          labelCol={{
-            span: 4,
-          }}
+          className="profile-info-form"
           wrapperCol={{
-            span: 16,
+            span: 8,
           }}
           initialValues={{
             remember: true,
@@ -294,20 +292,16 @@ function ProfileInfo(params) {
               </Form.Item>
             </>
           )}
-          <Form.Item
-            wrapperCol={{
-              offset: 4,
-              span: 16,
-            }}
-          >
+          <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
+              className="update-profile-btn"
               onClick={() => {
                 // updateProfile();
               }}
             >
-              Update
+              Güncelle
             </Button>
           </Form.Item>
         </Form>
@@ -325,14 +319,12 @@ function MyProducks(params) {
     });
   }, [reduxUser?.user?.id]);
   return (
-    <div className="my-producks">
-      <div className="my-producks-container">
-        <div className="my-producks-title">Ürünlerim</div>
-        <div className="my-producks-items">
-          {producks?.map((item) => {
-            return <Card Item={item} key={item.id} />;
-          })}
-        </div>
+    <div className="my-products-container">
+      <div className="my-producks-title">Ürünlerim</div>
+      <div className="my-producks-items">
+        {producks?.map((item) => {
+          return <Card Item={item} key={item.id} />;
+        })}
       </div>
     </div>
   );
@@ -374,108 +366,105 @@ function AddProduck() {
   console.log(AddProduckInputs, "AddProduckInputs");
 
   return (
-    <div className="add-product">
-      <div className="add-product-container">
-        <div className="add-product-title">Add Product</div>
-        <div className="add-product-form">
-          <Form
-            {...formItemLayout}
-            style={{
-              width: "100%",
-            }}
-          >
-            <Form.Item label="Produck Name">
-              <Input
-                className="add-product-input"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    name: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Image">
-              <Input
-                className="add-product-input"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    productImage: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Price">
-              <Input
-                className="add-product-input"
-                type="number"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    price: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Colors">
-              <Input
-                className="add-product-input"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    colors: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Stock">
-              <Input
-                className="add-product-input"
-                type="number"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    stock: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Description">
-              <Input
-                className="add-product-input"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    productDescription: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Produck Category">
-              <Input
-                className="add-product-input"
-                onChange={(e) =>
-                  setAddProduckInputs({
-                    ...AddProduckInputs,
-                    productCategory: e.target.value,
-                  })
-                }
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                className="add-product-btn"
-                onClick={() => {
-                  addProduck();
-                }}
-              >
-                Add Product
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+    <div className="add-product-container">
+      <div className="add-product-form">
+        <Form
+          {...formItemLayout}
+          style={{
+            width: "100%",
+          }}
+        >
+          <Form.Item label="Ürün Adı">
+            <Input
+              className="add-product-input"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  name: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Resmi(Url)">
+            <Input
+              className="add-product-input"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  productImage: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Fiyatı">
+            <Input
+              className="add-product-input"
+              type="number"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  price: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Renkler">
+            <Input
+              className="add-product-input"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  colors: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Stok">
+            <Input
+              className="add-product-input"
+              type="number"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  stock: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Açıklaması">
+            <Input
+              className="add-product-input"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  productDescription: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Ürün Kategorisi">
+            <Input
+              className="add-product-input"
+              onChange={(e) =>
+                setAddProduckInputs({
+                  ...AddProduckInputs,
+                  productCategory: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              className="add-product-btn"
+              onClick={() => {
+                addProduck();
+              }}
+            >
+              Ürün Ekle
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );
@@ -510,7 +499,7 @@ function MyOrders(params) {
                   <div className="waiting-orders-item-img-cont">
                     <img
                       className="waiting-orders-item-img"
-                      src={item.produckImage}
+                      src={item.productImage}
                       alt="s"
                     />
                   </div>
@@ -569,145 +558,143 @@ function WaitingOrders() {
   }, [reduxUser.user.id]);
 
   return (
-    <div className="waiting-orders">
-      <div className="waiting-orders-container">
-        <div className="waiting-orders-title">Bekleyen Siparişler</div>
-        <div className="waiting-orders-items">
-          {waitingOrders?.map(
-            (item) => (
-              console.log("item", item),
-              (
-                <div className="waiting-orders-item" key={item.orderId}>
-                  <div className="waiting-orders-item-cont">
-                    <div className="waiting-orders-item-img-cont">
-                      <img
-                        className="waiting-orders-item-img"
-                        src={item.produckImage}
-                        alt="s"
-                      />
-                    </div>
-                    <div className="waiting-orders-item-name">
-                      {item.produckName}
-                    </div>
-                    <div className="waiting-orders-item-price">
-                      {item.produckPrice} TL
-                    </div>
-                    <div className="waiting-orders-item-color">
-                      {item.produckColor}
-                    </div>
-                    <div className="waiting-orders-item-pieces">
-                      {item.produckPieces}
-                    </div>
-                    <div className="waiting-orders-item-status">
-                      {item.status}
-                    </div>
-                    <div className="waiting-orders-item-buttons">
-                      {item.status === "Shipped" ? (
-                        <Button
-                          onClick={() => {
-                            UpdateOrderStatus(item._id, "Delivered").then(
-                              (res) => {
-                                GetSellerOrders(reduxUser.user.id).then(
-                                  (res) => {
-                                    let data = res
-                                      .map((order) =>
-                                        order.products.map((product) => ({
-                                          ...product,
-                                          orderId: order._id,
-                                          customer_id: order.customer_id,
-                                          orderDate: order.orderDate,
-                                          totalPrice: order.totalPrice,
-                                          status: order.status,
-                                        }))
-                                      )
-                                      .flat()
-                                      .filter(
-                                        (item) =>
-                                          item.status !== "Cancelled" &&
-                                          item.status !== "Delivered"
-                                      );
-                                    setWaitingHistory(data);
-                                  }
-                                );
-                              }
-                            );
-                          }}
-                        >
-                          Teslim Et
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            console.log("item.orderId", item._id);
-
-                            UpdateOrderStatus(item._id, "Shipped").then(
-                              (res) => {
-                                GetSellerOrders(reduxUser.user.id).then(
-                                  (res) => {
-                                    let data = res
-                                      .map((order) =>
-                                        order.products.map((product) => ({
-                                          ...product,
-                                          orderId: order._id,
-                                          customer_id: order.customer_id,
-                                          orderDate: order.orderDate,
-                                          totalPrice: order.totalPrice,
-                                          status: order.status,
-                                        }))
-                                      )
-                                      .flat()
-                                      .filter(
-                                        (item) =>
-                                          item.status !== "Cancelled" &&
-                                          item.status !== "Delivered"
-                                      );
-                                    setWaitingHistory(data);
-                                  }
-                                );
-                              }
-                            );
-                          }}
-                        >
-                          Kargoya ver
-                        </Button>
-                      )}
+    <div className="waiting-orders-container">
+      <div className="waiting-orders-title">Bekleyen Siparişler</div>
+      <div className="waiting-orders-items">
+        {waitingOrders?.map(
+          (item) => (
+            console.log("item", item),
+            (
+              <div className="waiting-orders-item" key={item.orderId}>
+                <div className="waiting-orders-item-cont">
+                  <div className="waiting-orders-item-img-cont">
+                    <img
+                      className="waiting-orders-item-img"
+                      src={item.productImage}
+                      alt="s"
+                    />
+                  </div>
+                  <div className="waiting-orders-item-name">
+                    {item.produckName}
+                  </div>
+                  <div className="waiting-orders-item-price">
+                    {item.produckPrice} TL
+                  </div>
+                  <div className="waiting-orders-item-color">
+                    {item.produckColor}
+                  </div>
+                  <div className="waiting-orders-item-pieces">
+                    {item.produckPieces}
+                  </div>
+                  <div className="waiting-orders-item-status">
+                    {item.status}
+                  </div>
+                  <div className="waiting-orders-item-buttons">
+                    {item.status === "Shipped" ? (
                       <Button
                         onClick={() => {
-                          UpdateOrderStatus(item.orderId, "Cancelled").then(
+                          UpdateOrderStatus(item._id, "Delivered").then(
                             (res) => {
-                              GetSellerOrders(reduxUser.user.id).then((res) => {
-                                let data = res
-                                  .map((order) =>
-                                    order.products.map((product) => ({
-                                      ...product,
-                                      orderId: order._id,
-                                      customer_id: order.customer_id,
-                                      orderDate: order.orderDate,
-                                      totalPrice: order.totalPrice,
-                                      status: order.status,
-                                    }))
-                                  )
-                                  .flat()
-                                  .filter(
-                                    (item) =>
-                                      item.status !== "Cancelled" &&
-                                      item.status !== "Delivered"
-                                  );
-                                setWaitingHistory(data);
-                              });
+                              GetSellerOrders(reduxUser.user.id).then(
+                                (res) => {
+                                  let data = res
+                                    .map((order) =>
+                                      order.products.map((product) => ({
+                                        ...product,
+                                        orderId: order._id,
+                                        customer_id: order.customer_id,
+                                        orderDate: order.orderDate,
+                                        totalPrice: order.totalPrice,
+                                        status: order.status,
+                                      }))
+                                    )
+                                    .flat()
+                                    .filter(
+                                      (item) =>
+                                        item.status !== "Cancelled" &&
+                                        item.status !== "Delivered"
+                                    );
+                                  setWaitingHistory(data);
+                                }
+                              );
                             }
                           );
                         }}
                       >
-                        İptal Et
+                        Teslim Et
                       </Button>
-                    </div>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          console.log("item.orderId", item._id);
+
+                          UpdateOrderStatus(item._id, "Shipped").then(
+                            (res) => {
+                              GetSellerOrders(reduxUser.user.id).then(
+                                (res) => {
+                                  let data = res
+                                    .map((order) =>
+                                      order.products.map((product) => ({
+                                        ...product,
+                                        orderId: order._id,
+                                        customer_id: order.customer_id,
+                                        orderDate: order.orderDate,
+                                        totalPrice: order.totalPrice,
+                                        status: order.status,
+                                      }))
+                                    )
+                                    .flat()
+                                    .filter(
+                                      (item) =>
+                                        item.status !== "Cancelled" &&
+                                        item.status !== "Delivered"
+                                    );
+                                  setWaitingHistory(data);
+                                }
+                              );
+                            }
+                          );
+                        }}
+                      >
+                        Kargoya ver
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => {
+                        UpdateOrderStatus(item.orderId, "Cancelled").then(
+                          (res) => {
+                            GetSellerOrders(reduxUser.user.id).then((res) => {
+                              let data = res
+                                .map((order) =>
+                                  order.products.map((product) => ({
+                                    ...product,
+                                    orderId: order._id,
+                                    customer_id: order.customer_id,
+                                    orderDate: order.orderDate,
+                                    totalPrice: order.totalPrice,
+                                    status: order.status,
+                                  }))
+                                )
+                                .flat()
+                                .filter(
+                                  (item) =>
+                                    item.status !== "Cancelled" &&
+                                    item.status !== "Delivered"
+                                );
+                              setWaitingHistory(data);
+                            });
+                          }
+                        );
+                      }}
+                    >
+                      İptal Et
+                    </Button>
                   </div>
                 </div>
-              )
+              </div>
             )
-          )}
-        </div>
+          )
+        )}
       </div>
     </div>
   );
@@ -734,7 +721,7 @@ function OrderHistory(params) {
                   <div className="waiting-orders-item-img-cont">
                     <img
                       className="waiting-orders-item-img"
-                      src={item.produckImage}
+                      src={item.productImage}
                       alt="s"
                     />
                   </div>

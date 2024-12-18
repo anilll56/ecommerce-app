@@ -32,6 +32,7 @@ function RoutePage() {
 
       <Routes>
         <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/home/details/:id" element={<Details />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUp />} />

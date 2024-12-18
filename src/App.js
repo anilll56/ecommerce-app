@@ -34,7 +34,6 @@ function App() {
             const user = res;
             dispatch(setUser({ user }));
             dispatch(setAuthenticated(true));
-            navigate("/home");
           } else {
             navigate("/login");
           }
@@ -50,14 +49,12 @@ function App() {
     }
   }, [authenticated]);
   return (
-    <div className="App">
-      <div className="container">
-        <RoutePage />
-      </div>
+    <>
+      <RoutePage />
       <div className="toast">
         <ToastContainer />
       </div>
-    </div>
+    </>
   );
 }
 

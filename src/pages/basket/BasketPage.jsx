@@ -30,26 +30,28 @@ const BasketPage = () => {
   }
 
   return (
-    <div>
-      <h2>Your Basket</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
-        {basket.map((order) => (
-          <div key={order._id} style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "16px" }}>
-            <h3>Order ID: {order._id}</h3>
-            <p>Total Price: ${order.totalPrice}</p>
-            <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
-            <ul>
-              {order.products.map((product) => (
-                <li key={product._id}>
-                  <p>Product ID: {product.product}</p>
-                  <p>Quantity: {product.quantity}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+    <section className="basket">
+      <div className="container">
+        <h2>Your Basket</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
+          {basket.map((order) => (
+            <div key={order._id} style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "16px" }}>
+              <h3>Order ID: {order._id}</h3>
+              <p>Total Price: ${order.totalPrice}</p>
+              <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
+              <ul>
+                {order.products.map((product) => (
+                  <li key={product._id}>
+                    <p>Product ID: {product.product}</p>
+                    <p>Quantity: {product.quantity}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

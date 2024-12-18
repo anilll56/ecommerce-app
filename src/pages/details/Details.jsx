@@ -3,13 +3,16 @@ import { useParams } from "react-router-dom";
 import "./Details.css";
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
-import { addItemToBasket, AddBuyOrder, getAllProducks } from "../../api/HandleApi";
+import { addItemToBasket, AddBuyOrder, getProductById, createComment, getCommentsByProduct } from "../../api/HandleApi";
 import { useSelector } from "react-redux";
 import { Modal, Input, Button } from "antd";
 import { RingLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { addFavorite } from "../../redux/UserSlice";
 import { FaHeart } from "react-icons/fa";
+import { StarFilled, UserOutlined } from "@ant-design/icons";
+import Rating from 'react-rating'
+import { toast } from "react-toastify";
 
 function Details() {
   const dispatch = useDispatch();
@@ -19,42 +22,67 @@ function Details() {
     produckColor: "red",
     produckPieces: 20,
   });
-  const [produck, setProduck] = useState([]);
+  const [product, setProduct] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [comment, setComment] = useState({
+    comment: "",
+    rate: 0,
+  });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    getAllProducks().then((res) => {
-      const data = res;
-      const selectedProduck = data.find((item) => item._id === id);
-      if (selectedProduck) {
-        setProduck(selectedProduck);
-      } else {
-        console.error(`Product with id ${id} not found`);
-      }
+  const handleCommentChange = (e) => {
+    setComment({
+      ...comment,
+      [e.target.name]: e.target.value,
     });
+  };
+
+  const handleRatingChange = (rate) => {
+    console.log(rate);
+    setComment({
+      ...comment,
+      rate: rate,
+    });
+  };
+  const handleCommentSubmit = async () => {
+    try {
+      const response = await createComment(id, comment.comment, comment.rate);
+
+      if (response.status === 201) {
+        console.log("Yorum bağlanışı basarılı", response);
+      } else {
+        console.log("Yorum bağlanışı baise", response);
+      }
+    } catch (error) {
+      console.error("Yorum bağlanışı Başarısız. Hata:", error);
+    }
+  };
+
+  useEffect(() => {
+    getDetails()
   }, [id]);
+
+
+  const getDetails = async () => {
+    const res = await getProductById(id)
+    const commentRes = await getCommentsByProduct(id)
+    res.data.product.comments = commentRes.data
+    setProduct(res.data.product)
+  }
 
   const BuyProduck = () => {
     const products = [
       {
         product: id,
-        name: produck.name,
-        price: produck.price,
-        image: produck.pruduckImage,
+        name: product.name,
+        price: product.price,
+        image: product.productImage,
         color: orderSelected.produckColor,
         quantity: orderSelected.produckPieces,
       },
     ];
 
-    AddBuyOrder(userRedux.user._id, produck.seller_id, products).then((res) => {
+    AddBuyOrder(userRedux.user._id, product.seller_id, products).then((res) => {
       setOpenModal(false);
       console.log(res, "res");
     });
@@ -75,136 +103,111 @@ function Details() {
       });
   };
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("tr-TR", {
+      style: "currency",
+      currency: "TRY",
+    }).format(price);
+  }
+
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat('tr-TR').format(new Date(date));
+  };
+
   const favItem = useSelector((state) => state.user.favorites);
-  const isFav = favItem?.find((fav) => fav.id === produck?.id);
+  const isFav = favItem?.find((fav) => fav.id === product?.id);
+
 
   return (
-    <div className="CardContent">
-      <div className="CardLeft">
-        <div className="CardPics">
-          <div className="Cardİmg">
-            {loading ? (
-              <div
-                className="sweet-loading"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <RingLoader color="#f27a1a" loading={loading} size={150} aria-label="Loading Spinner" data-testid="loader" />
+    <div className="product-detail">
+      <div className="container-lg">
+        <section className="product-detail__container">
+          {/* <div className="product-detail__gallery">
+            {product.images.map((image, index) => (
+              <div className="product-detail__gallery--item" key={index} onClick={() => setActiveImage(image)}>
+                <img crossOrigin="anonymous" src={image} alt={product.title} key={index} />
               </div>
-            ) : (
-              <div>ss</div>
-            )}
+            ))}
+          </div> */}
+          <div className="product-detail__image">
+            <img src={product.productImage} alt={product.name} />
           </div>
-        </div>
-        <div className="CardAbout">
-          <div className="Cardss">En Çok Satan Ürün</div>
-          <div className="Carddd">{produck.name}</div>
-          <div className="Cardss">
-            Satıcı :<Link to="/">Trendyol</Link>
-          </div>
-          <h4 className="CardPrice">{produck.price} TL</h4>
-          <div className="CardAddTo">
-            <button className="AddBasket" onClick={() => setOpenModal(true)}>
-              Satın Al
-            </button>
-            <button className="AddBasket" onClick={addToBasket}>
-              Sepete Ekle
-            </button>
-            <div className="AddFavorite">
-              {isFav ? (
-                <FaHeart
-                  size={30}
-                  style={{
-                    color: "#f27a1a",
-                  }}
-                />
-              ) : (
-                <FiHeart
-                  size={30}
-                  onClick={() => {
-                    dispatch(addFavorite(produck));
-                  }}
-                />
-              )}
+          <div className="product-detail__content">
+            <h3 className="product-detail__content--title"><span>{product.seller_id?.name}</span> {product.name}</h3>
+            <div className="product-detail__content--rating">
+              <Rating
+                initialRating={product.productRating}
+                emptySymbol={<StarFilled style={{ color: '#ccc' }} />}
+                fullSymbol={<StarFilled style={{ color: '#f39c12' }} />}
+                readonly
+              />
+              <span>({product.productRating})</span>
+              <span className="product-detail__content--reviews">
+                {/* onClick={() => window.scrollTo({
+                  top: document.getElementById('comments').offsetTop,
+                  behavior: 'smooth'
+                })}>({product.reviews.length} reviews) */}
+              </span>
             </div>
-          </div>
-          <div className="Carddd">Renk Seçenekleri : {produck.colors}</div>
-          <div className="Carddd">Ürün Adedi : {produck.stock}</div>
-          <div className="CardSp">
-            <div>Öne Çıkan Bilgiler :</div>
-            <div className="CardPLC">
-              <div>Renk : Beyaz</div>
-              <div>Sıcaklık Kontrolü : Var</div>
+            <p className="product-detail__content--description">{product.productDescription}</p>
+            <p className="product-detail__content--price">{formatPrice(product.price)}</p>
+            <div className="product-detail__content--buttons">
+              <button className="product-detail__content--button button-favorite" onClick={() => { }}>Favorilere Ekle</button>
+              <button className="product-detail__content--button button-cart" onClick={() => {
+                // dispatch(addItem(product))
+              }}>Sepete Ekle</button>
             </div>
-            <div className="CardPLC">
-              <div>Zamanlayıcı : Var</div>
-              <div> Garanti Süresi : 2 Yıl</div>
-            </div>
+
           </div>
-          <div className="CardPLC2">
-            <li>15 gün içinde ücretsiz iade. Detaylı bilgi için tıklayız</li>
-            <li>Bu ürün Trendyol tarafından gönderilecektir.</li>
-            <li>Xiaomi Mi Smart Air Fritöz, sağlıklı, çıtır ve az yağlı yemekler pişirir</li>
+        </section>
+        {/* <ProductSlider title="Related products" products={relatedProducts} /> */}
+        <div className="comments" id="comments">
+          <h2 className="comments-title">Yorumlar</h2>
+          <div className="comment-form">
+            <form onSubmit={handleCommentSubmit}>
+              <div className="form-group">
+                <div className="form-header">
+                  <label htmlFor="comment">Yorumunuz</label>
+                  <div className="rating">
+                    <Rating
+                      initialRating={comment.rate}
+                      emptySymbol={<StarFilled style={{ color: '#ccc' }} />}
+                      fullSymbol={<StarFilled style={{ color: '#f39c12' }} />}
+                      onChange={handleRatingChange}
+                    />
+                  </div>
+                </div>
+                <textarea id="comment" name="comment" rows="2" placeholder="Yorumunuzu buraya yazın..." value={comment.comment} onChange={handleCommentChange}></textarea>
+              </div>
+              <button type="submit" className="comment-button">Yorum Yap</button>
+            </form>
           </div>
-          <div>
-            <img src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png" alt="11"></img>
-          </div>
+          <ul className="comments-list">
+            {product.comments?.map((comment) => (
+              <li key={comment._id}>
+                <div className="comment-user">
+                  <UserOutlined />
+                </div>
+                <div className="comment-content">
+                  <div className="comment-info">
+                    <Rating
+                      initialRating={comment.rate}
+                      emptySymbol={<StarFilled icon={StarFilled} style={{ color: '#ccc' }} />}
+                      fullSymbol={<StarFilled icon={StarFilled} style={{ color: '#f39c12' }} />}
+                      readonly
+                    />
+                    <p className='comment-date'>{formatDate(comment.date)}</p>
+                    <span className='comment-separator'></span>
+                    <p>{comment.user?.name}</p>
+                  </div>
+                  <p className='comment-text'>{comment.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
         </div>
       </div>
-      <div className="CardRight">
-        <div className="CardRightC1">
-          <div className="c1cs">Ürünün Kampanyaları</div>
-          <hr></hr>
-          <div className="c1css">Kargo Bedava</div>
-        </div>
-        <div className="CardRightC2">
-          <div className="c1cs">Trendyol</div>
-          <hr></hr>
-          <div className="c1css">Mağazayı Gör</div>
-          <hr></hr>
-          <div className="c1css">Ürün Soruları (155)</div>
-        </div>
-      </div>
-      <Modal
-        title="Ürünü Al"
-        open={openModal}
-        onOk={() => {
-          setOpenModal(false);
-        }}
-        onCancel={() => {
-          setOpenModal(false);
-        }}
-        okButtonProps={{ style: { display: "none" } }}
-        cancelButtonProps={{ style: { display: "none" } }}
-      >
-        <Input
-          placeholder="Ürün Adedini Giriniz"
-          className="buy-order-input"
-          type="number"
-          onChange={(e) => {
-            setOrderSelected({
-              ...orderSelected,
-              produckPieces: e.target.value,
-            });
-          }}
-        />
-        <Input
-          placeholder="Ürün Rengini seçiniz"
-          className="buy-order-input"
-          onChange={(e) => {
-            setOrderSelected({
-              ...orderSelected,
-              produckColor: e.target.value,
-            });
-          }}
-        />
-        <Button type="primary" className="buy-order-button" onClick={BuyProduck}>
-          Satın Al
-        </Button>
-      </Modal>
     </div>
   );
 }

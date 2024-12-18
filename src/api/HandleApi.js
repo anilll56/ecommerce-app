@@ -11,7 +11,7 @@ const Login = async (email, password) => {
 
     if (res.data.success) {
       const token = res.data.token;
-      alert("Giriş başarılı.");
+      toast.success("Giriş başarılı.");
 
       // Save token to localStorage
       localStorage.setItem("token", token);
@@ -20,14 +20,17 @@ const Login = async (email, password) => {
       // localStorage.setItem("user", JSON.stringify(res.data.user));
     } else {
       console.log("Giriş başarısız. Hata:", res.data.message);
-      alert(res.data.message);
+      alert(res.message);
     }
 
     return res;
   } catch (error) {
-    console.error("Axios isteği sırasında hata:", error);
-    alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-    throw error;
+    if (error?.response?.data?.message) {
+      toast.error(`Giriş başarısız: ${error.response.data.message}`);
+    } else {
+      toast.error("Giriş başarısız." + error);
+    }
+    console.error("Error during login:", error);
   }
 };
 
@@ -566,6 +569,70 @@ const updateBasketItem = async (productId, quantity) => {
   }
 };
 
+const getSellers = async () => {
+  try {
+    const res = await axios.get(`${url}/auth/sellers`);
+
+    if (res.status === 200) {
+      console.log("Satıcılar getirildi", res);
+    } else {
+      console.log("Satıcılar getirilemedi. Hata:", res);
+    }
+    return res;
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+}
+
+const createComment = async (productId, comment, rating) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token bulunamadı, lütfen giriş yapın.");
+      return null;
+    }
+    const res = await axios.post(`${url}/comment/create`, {
+      product: productId,
+      text: comment,
+      rate: rating
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 201) {
+      console.log("Yorum bağlanışı basarılı", res);
+    } else {
+      console.log("Yorum bağlanışı başarısız. Hata:", res);
+    }
+    return res;
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+}
+
+const getCommentsByProduct = async (productId) => {
+  try {
+    const res = await axios.get(`${url}/comment/${productId}`);
+    return res;
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+}
+
+const getProductById = async (id) => {
+  try {
+    const res = await axios.get(`${url}/product/${id}`);
+    return res;
+  } catch (error) {
+    console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+};
+
 export {
   Login,
   getUserInfo,
@@ -586,4 +653,8 @@ export {
   addItemToBasket,
   removeItemFromBasket,
   updateBasketItem,
+  getSellers,
+  createComment,
+  getCommentsByProduct,
+  getProductById
 };
