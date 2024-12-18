@@ -164,9 +164,9 @@ function Details() {
                 ))}
               </div>
             </div>
-            <div class="select-quantity">
+            <div className="select-quantity">
               <button onClick={() => orderSelected.produckPieces > 1 && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces - 1 })}>-</button>
-              <div class="quantity">{orderSelected.produckPieces}</div>
+              <div>{orderSelected.produckPieces}</div>
               <button onClick={() => orderSelected.produckPieces < product.stock && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces + 1 })}>+</button>
             </div>
             <p className="product-detail__content--price">{formatPrice(product.price)}</p>
