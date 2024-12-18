@@ -488,50 +488,48 @@ function MyOrders(params) {
       });
   }, []);
   return (
-    <div className="my-orders">
-      <div className="my-orders-container">
-        <div className="my-orders-title">Siparişlerim</div>
-        <div className="waiting-orders-items">
-          {myOrders?.map((item) => {
-            return (
-              <div className="waiting-orders-item">
-                <div className="waiting-orders-item-cont">
-                  <div className="waiting-orders-item-img-cont">
-                    <img
-                      className="waiting-orders-item-img"
-                      src={item.productImage}
-                      alt="s"
-                    />
-                  </div>
-                  <div className="waiting-orders-item-name">
-                    {item.produckName}
-                  </div>
-                  <div className="waiting-orders-item-price">
-                    {item.produckPieces * item.produckPrice} TL
-                  </div>
-                  <div className="waiting-orders-item-color">
-                    {item.produckColor}
-                  </div>
-                  <div className="waiting-orders-item-pieces">
-                    {item.produckPieces}
-                  </div>
-                  <div className="waiting-orders-item-status">
-                    {item.status}
-                  </div>
-                  <div className="waiting-orders-item-buttons">
-                    <Button
-                      onClick={() => {
-                        UpdateOrderStatus(item.id, "Cancelled");
-                      }}
-                    >
-                      İptal Et
-                    </Button>
-                  </div>
+    <div className="my-orders-container">
+      <div className="my-orders-title">Siparişlerim</div>
+      <div className="waiting-orders-items">
+        {myOrders?.map((item) => {
+          return (
+            <div className="waiting-orders-item">
+              <div className="waiting-orders-item-cont">
+                <div className="waiting-orders-item-img-cont">
+                  <img
+                    className="waiting-orders-item-img"
+                    src={item.productImage}
+                    alt="s"
+                  />
+                </div>
+                <div className="waiting-orders-item-name">
+                  {item.produckName}
+                </div>
+                <div className="waiting-orders-item-price">
+                  {item.produckPieces * item.produckPrice} TL
+                </div>
+                <div className="waiting-orders-item-color">
+                  {item.produckColor}
+                </div>
+                <div className="waiting-orders-item-pieces">
+                  {item.produckPieces}
+                </div>
+                <div className="waiting-orders-item-status">
+                  {item.status}
+                </div>
+                <div className="waiting-orders-item-buttons">
+                  <Button
+                    onClick={() => {
+                      UpdateOrderStatus(item.id, "Cancelled");
+                    }}
+                  >
+                    İptal Et
+                  </Button>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -710,44 +708,42 @@ function OrderHistory(params) {
   }, []);
 
   return (
-    <div className="order-history">
-      <div className="order-history-container">
-        <div className="order-history-title">Geçmiş Siparişlerim</div>
-        <div className="waiting-orders-items">
-          {orderHistory?.map((item) => {
-            return (
-              <div className="waiting-orders-item">
-                <div className="waiting-orders-item-cont">
-                  <div className="waiting-orders-item-img-cont">
-                    <img
-                      className="waiting-orders-item-img"
-                      src={item.productImage}
-                      alt="s"
-                    />
-                  </div>
-                  <div className="waiting-orders-item-name">
-                    {item.produckName}
-                  </div>
-                  <div className="waiting-orders-item-price">
-                    {item.produckPrice} TL
-                  </div>
-                  <div className="waiting-orders-item-color">
-                    {item.produckColor}
-                  </div>
-                  <div className="waiting-orders-item-pieces">
-                    {item.produckPieces}
-                  </div>
-                  <div className="waiting-orders-item-status">
-                    {item.status}
-                  </div>
-                  <div className="waiting-orders-item-buttons">
-                    <Button>Tekrar Satın Al</Button>
-                  </div>
+    <div className="order-history-container">
+      <div className="order-history-title">Geçmiş Siparişlerim</div>
+      <div className="waiting-orders-items">
+        {orderHistory?.map((item) => {
+          return (
+            <div className="waiting-orders-item">
+              <div className="waiting-orders-item-cont">
+                <div className="waiting-orders-item-img-cont">
+                  <img
+                    className="waiting-orders-item-img"
+                    src={item.productImage}
+                    alt="s"
+                  />
+                </div>
+                <div className="waiting-orders-item-name">
+                  {item.produckName}
+                </div>
+                <div className="waiting-orders-item-price">
+                  {item.produckPrice} TL
+                </div>
+                <div className="waiting-orders-item-color">
+                  {item.produckColor}
+                </div>
+                <div className="waiting-orders-item-pieces">
+                  {item.produckPieces}
+                </div>
+                <div className="waiting-orders-item-status">
+                  {item.status}
+                </div>
+                <div className="waiting-orders-item-buttons">
+                  <Button>Tekrar Satın Al</Button>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
