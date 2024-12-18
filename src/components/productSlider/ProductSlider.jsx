@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/scss';
-import 'swiper/scss/navigation';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
-import './style.scss'
+import './ProductSlider.css'
 import { Navigation } from 'swiper/modules';
-import { Link } from 'react-router-dom';
-import ProductCard from '../common/ProductCard';
-// fontawesome chevron icon
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import Card from '../card/Card';
 
 
 const ProductSlider = ({ title, products }) => {
-
     const editNavigation = () => {
         const navigation = document.querySelector('.swiper-button-next');
         navigation.innerHTML = '<FontAwesomeIcon icon={faChevronRight} />'
@@ -29,24 +24,24 @@ const ProductSlider = ({ title, products }) => {
                 <h2 className="product-slider__title">{title}</h2>
                 <Swiper
                     spaceBetween={20}
-                    slidesPerView={5.3}
+                    slidesPerView={2.3}
                     navigation={true}
                     breakpoints={{
                         576: {
-                            slidesPerView: 3.3,
+                            slidesPerView: 2.3,
                         },
                         768: {
-                            slidesPerView: 4.3,
+                            slidesPerView: 3.3,
                         },
                         992: {
-                            slidesPerView: 5.3,
+                            slidesPerView: 4.3,
                         },
                     }}
                     modules={[Navigation]}
                 >
-                    {products.map((product, index) => (
+                    {products && products.map((product, index) => (
                         <SwiperSlide key={index}>
-                            <ProductCard product={product} />
+                            <Card Item={product} />
                         </SwiperSlide>
                     ))}
                 </Swiper>

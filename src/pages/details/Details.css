@@ -12,8 +12,14 @@
   display: grid;
   /* grid-template-columns: 150px 1fr 1fr; */
   grid-template-columns: 1fr 1fr;
-  margin-top: 2rem;
+  margin-block: 2rem;
   gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .product-detail__container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .product-detail__gallery {
@@ -54,7 +60,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 1rem;
 }
 
@@ -80,7 +86,7 @@
   font-size: 1rem;
   font-weight: 400;
   color: #555;
-  min-height: 6rem;
+  min-height: 4rem;
 }
 
 .product-detail__content--rating {
@@ -103,6 +109,7 @@
 .product-detail__content--buttons {
   display: flex;
   gap: 1rem;
+  margin-block: 1rem;
 }
 
 .product-detail__content--button {
@@ -251,7 +258,80 @@
   margin-bottom: 1rem;
 }
 
-
 .comment-star {
   color: #ccc;
 }
+
+.product-colors-title {
+  font-size: 1.2rem;
+  margin-bottom: .5rem;
+  color: #333;
+  font-weight: 400;
+}
+
+.product-colors-list {
+  display: flex;
+  gap: .5rem;
+}
+
+.product-colors-item {
+  padding: .2rem .5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.product-colors-item:hover {
+  background-color: #ff8c00;
+  border-color: #ff8c00;
+  color: #fff;
+}
+/* 
+<div class="select-quantity">
+<button class="minus" onClick={() => setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces - 1 })}>-</button>
+<input type="number" value={orderSelected.produckPieces} onChange={(e) => setOrderSelected({ ...orderSelected, produckPieces: e.target.value })} />
+<button class="plus" onClick={() => setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces + 1 })}>+</button>
+</div> */
+
+.select-quantity {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.select-quantity button {
+  padding: .5rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select-quantity button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.select-quantity button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.select-quantity button:hover {
+  background-color: #ff8c00;
+  border-color: #ff8c00;
+  color: #fff;
+}
+
+.select-quantity button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.select-quantity div {
+  padding: .5rem;
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 50px;
+}
+

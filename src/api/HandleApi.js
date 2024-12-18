@@ -158,10 +158,10 @@ const AddProduckEcommerce = async (name, sellerId, stock, price, colors, product
   }
 };
 
-const GetUserProducts = async () => {
+const GetUserProducts = async (sellerId) => {
   try {
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${url}/product/seller`, {
+    const res = await axios.get(`${url}/product/seller?sellerId=${sellerId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

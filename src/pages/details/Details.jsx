@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "./Details.css";
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
-import { addItemToBasket, AddBuyOrder, getProductById, createComment, getCommentsByProduct } from "../../api/HandleApi";
+import { addItemToBasket, AddBuyOrder, getProductById, createComment, getCommentsByProduct, GetUserProducts } from "../../api/HandleApi";
 import { useSelector } from "react-redux";
 import { Modal, Input, Button } from "antd";
 import { RingLoader } from "react-spinners";
@@ -13,15 +13,17 @@ import { FaHeart } from "react-icons/fa";
 import { StarFilled, UserOutlined } from "@ant-design/icons";
 import Rating from 'react-rating'
 import { toast } from "react-toastify";
+import ProductSlider from "../../components/productSlider/ProductSlider";
 
 function Details() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const userRedux = useSelector((state) => state.user.info);
   const [orderSelected, setOrderSelected] = useState({
-    produckColor: "red",
-    produckPieces: 20,
+    produckColor: "",
+    produckPieces: 1,
   });
+  const [sellerProducts, setSellerProducts] = useState([]);
   const [product, setProduct] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,6 @@ function Details() {
   };
 
   const handleRatingChange = (rate) => {
-    console.log(rate);
     setComment({
       ...comment,
       rate: rate,
@@ -66,8 +67,12 @@ function Details() {
   const getDetails = async () => {
     const res = await getProductById(id)
     const commentRes = await getCommentsByProduct(id)
+    const sellerRes = await GetUserProducts(res.data.product.seller_id._id)
+    res.data.product.colors = res.data.product.colors[0].split(",")
+
     res.data.product.comments = commentRes.data
     setProduct(res.data.product)
+    setSellerProducts(sellerRes.data.products)
   }
 
   const BuyProduck = () => {
@@ -149,7 +154,21 @@ function Details() {
                 })}>({product.reviews.length} reviews) */}
               </span>
             </div>
-            <p className="product-detail__content--description">{product.productDescription}</p>
+            <div className="product-colors">
+              <h4 className="product-colors-title">Renkler</h4>
+              <div className="product-colors-list">
+                {product.colors?.map((color, index) => (
+                  <button className="product-colors-item" key={index}>
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div class="select-quantity">
+              <button onClick={() => orderSelected.produckPieces > 1 && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces - 1 })}>-</button>
+              <div class="quantity">{orderSelected.produckPieces}</div>
+              <button onClick={() => orderSelected.produckPieces < product.stock && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces + 1 })}>+</button>
+            </div>
             <p className="product-detail__content--price">{formatPrice(product.price)}</p>
             <div className="product-detail__content--buttons">
               <button className="product-detail__content--button button-favorite" onClick={() => { }}>Favorilere Ekle</button>
@@ -157,10 +176,13 @@ function Details() {
                 // dispatch(addItem(product))
               }}>Sepete Ekle</button>
             </div>
-
+            <p className="product-detail__content--description">{product.productDescription}</p>
+            <div>
+              <img src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png" alt="11"></img>
+            </div>
           </div>
         </section>
-        {/* <ProductSlider title="Related products" products={relatedProducts} /> */}
+        <ProductSlider title="Satıcıdan Diğer Ürünler" products={sellerProducts} />
         <div className="comments" id="comments">
           <h2 className="comments-title">Yorumlar</h2>
           <div className="comment-form">
