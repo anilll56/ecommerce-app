@@ -65,7 +65,15 @@ const getUserInfo = async () => {
   }
 };
 
-const SignUpEcommerce = async (name, email, password, userType, phone, address, balance) => {
+const SignUpEcommerce = async (
+  name,
+  email,
+  password,
+  userType,
+  phone,
+  address,
+  balance
+) => {
   try {
     const payload = {
       name,
@@ -119,7 +127,16 @@ const ChangePassword = async (id, password, newPassword) => {
     throw error;
   }
 };
-const AddProduckEcommerce = async (name, sellerId, stock, price, colors, productImage, productDescription, productCategory) => {
+const AddProduckEcommerce = async (
+  name,
+  sellerId,
+  stock,
+  price,
+  colors,
+  productImage,
+  productDescription,
+  productCategory
+) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -146,7 +163,10 @@ const AddProduckEcommerce = async (name, sellerId, stock, price, colors, product
     );
 
     if (res.status === 201 && res.data.success) {
-      console.log("Ürün ekleme başarılı. Ürün bilgileri:", res.data.sellerProduct);
+      console.log(
+        "Ürün ekleme başarılı. Ürün bilgileri:",
+        res.data.sellerProduct
+      );
       return res.data.sellerProduct;
     } else {
       console.log("Ürün ekleme başarısız. Hata:", res.data.message);
@@ -373,41 +393,6 @@ const GetFavorites = async () => {
     throw error;
   }
 };
-const addFavorite = async (productId) => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    toast.error("Token bulunamadı, lütfen giriş yapın.");
-    return null;
-  }
-
-  try {
-    const response = await axios.post(
-      `${url}/favorite/add`,
-      {
-        productId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.status === 201) {
-      console.log("Favori başarıyla eklendi:", response.data);
-      toast.success("Favoriye eklendi.");
-      return response.data;
-    } else {
-      console.error("Favori eklenemedi. Hata:", response.data.message);
-      toast.error(response.data.message || "Favori eklenemedi.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Favori eklerken hata oluştu:", error);
-    toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
-    throw error;
-  }
-};
 
 const removeFavorite = async (productId) => {
   const token = localStorage.getItem("token");
@@ -417,11 +402,14 @@ const removeFavorite = async (productId) => {
   }
 
   try {
-    const response = await axios.delete(`${url}/favorite/${productId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.delete(
+      `${url}/favorites/remove/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.status === 200) {
       console.log("Favori başarıyla kaldırıldı:", response.data);
@@ -583,7 +571,7 @@ const getSellers = async () => {
     console.error("Axios isteği sırasında hata:", error);
     throw error;
   }
-}
+};
 
 const createComment = async (productId, comment, rating) => {
   try {
@@ -592,15 +580,19 @@ const createComment = async (productId, comment, rating) => {
       toast.error("Token bulunamadı, lütfen giriş yapın.");
       return null;
     }
-    const res = await axios.post(`${url}/comment/create`, {
-      product: productId,
-      text: comment,
-      rate: rating
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await axios.post(
+      `${url}/comment/create`,
+      {
+        product: productId,
+        text: comment,
+        rate: rating,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (res.status === 201) {
       console.log("Yorum bağlanışı basarılı", res);
     } else {
@@ -611,7 +603,7 @@ const createComment = async (productId, comment, rating) => {
     console.error("Axios isteği sırasında hata:", error);
     throw error;
   }
-}
+};
 
 const getCommentsByProduct = async (productId) => {
   try {
@@ -621,7 +613,7 @@ const getCommentsByProduct = async (productId) => {
     console.error("Axios isteği sırasında hata:", error);
     throw error;
   }
-}
+};
 
 const getProductById = async (id) => {
   try {
@@ -629,6 +621,43 @@ const getProductById = async (id) => {
     return res;
   } catch (error) {
     console.error("Axios isteği sırasında hata:", error);
+    throw error;
+  }
+};
+
+const addFavorite = async (productId) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
+  try {
+    console.log("Sending request to add favorite:", { productId, token });
+    const response = await axios.post(
+      `${url}/favorites/add`,
+      { productId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Response received:", response);
+
+    if (response.status === 201) {
+      console.log("Favori başarıyla eklendi:", response.data);
+      toast.success("Favoriye eklendi.");
+      return response.data;
+    } else {
+      console.error("Favori eklenemedi. Hata:", response.data.message);
+      toast.error(response.data.message || "Favori eklenemedi.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Favori eklerken hata oluştu:", error);
+    toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     throw error;
   }
 };
@@ -656,5 +685,5 @@ export {
   getSellers,
   createComment,
   getCommentsByProduct,
-  getProductById
+  getProductById,
 };

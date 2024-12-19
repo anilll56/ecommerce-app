@@ -11,6 +11,8 @@ import "./App.css";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserInfo } from "./api/HandleApi";
+import { GetFavorites } from "./api/HandleApi";
+import { setFavorites } from "./redux/UserSlice";
 
 function App() {
   const navigate = useNavigate();
@@ -42,6 +44,13 @@ function App() {
           console.error("UserInfo alınırken hata oluştu:", err);
           //navigate("/login");
         });
+      GetFavorites().then((res) => {
+        if (res) {
+          console.log("Favoriler", res);
+
+          dispatch(setFavorites(res));
+        }
+      });
     } else {
       dispatch(setUser({ user: null }));
       dispatch(setAuthenticated(false));

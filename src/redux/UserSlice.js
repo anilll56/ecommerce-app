@@ -26,8 +26,10 @@ export const userSlice = createSlice({
       state.favorites.push(action.payload);
       toast.success(" Ürün Favorilere eklendi");
     },
-    removeFavorite: (state, action) => {
-      state.favorites.splice(state.favorites.findIndex((item) => item.id === action.payload));
+    removeFavoriteFromRedux: (state, action) => {
+      state.favorites.splice(
+        state.favorites.findIndex((item) => item.id === action.payload)
+      );
       toast.error(" Ürün Favorilerden çıkarıldı");
     },
     setSearchInput: (state, action) => {
@@ -36,9 +38,21 @@ export const userSlice = createSlice({
     setSearchValue: (state, action) => {
       state.searchValue = action.payload;
     },
+    setFavorites: (state, action) => {
+      state.favorites = action.payload;
+    },
   },
 });
 
-export const { setUser, logout, setAuthenticated, addFavorite, removeFavorite, setSearchInput, setSearchValue } = userSlice.actions;
+export const {
+  setUser,
+  logout,
+  setAuthenticated,
+  addFavorite,
+  removeFavoriteFromRedux,
+  setSearchInput,
+  setSearchValue,
+  setFavorites,
+} = userSlice.actions;
 
 export default userSlice.reducer;
