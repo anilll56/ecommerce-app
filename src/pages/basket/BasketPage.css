@@ -1,0 +1,66 @@
+.basket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-card h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.order-card p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.order-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.order-details li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.order-details img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.product-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.product-info p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.product-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

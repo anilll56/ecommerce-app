@@ -38,7 +38,7 @@ function RoutePage() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home/profile" element={<Profile />} />
         <Route path="/home/favorites" element={<FavoritesPage />} />
-        <Route path="/BasketPage" element={<BasketPage />} />
+        <Route path="/home/BasketPage" element={<BasketPage />} />
       </Routes>
     </div>
   );

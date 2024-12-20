@@ -165,7 +165,7 @@ function Navbar() {
                 </div>
               </div>
               <div className="ss">
-                <Link to="/BasketPage" className="hoverr1">
+                <Link to="/home/BasketPage" className="hoverr1">
                   <div>Sepetim</div>
                   <div className="hoverr11">0</div>
                 </Link>

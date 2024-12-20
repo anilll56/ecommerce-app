@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { addFavorite } from "../../redux/UserSlice";
 import { FaHeart } from "react-icons/fa";
 import { StarFilled, UserOutlined } from "@ant-design/icons";
-import Rating from 'react-rating'
+import Rating from "react-rating";
 import { toast } from "react-toastify";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 
@@ -60,20 +60,19 @@ function Details() {
   };
 
   useEffect(() => {
-    getDetails()
+    getDetails();
   }, [id]);
 
-
   const getDetails = async () => {
-    const res = await getProductById(id)
-    const commentRes = await getCommentsByProduct(id)
-    const sellerRes = await GetUserProducts(res.data.product.seller_id._id)
-    res.data.product.colors = res.data.product.colors[0].split(",")
+    const res = await getProductById(id);
+    const commentRes = await getCommentsByProduct(id);
+    const sellerRes = await GetUserProducts(res.data.product.seller_id._id);
+    res.data.product.colors = res.data.product.colors[0].split(",");
 
-    res.data.product.comments = commentRes.data
-    setProduct(res.data.product)
-    setSellerProducts(sellerRes.data.products)
-  }
+    res.data.product.comments = commentRes.data;
+    setProduct(res.data.product);
+    setSellerProducts(sellerRes.data.products);
+  };
 
   const BuyProduck = () => {
     const products = [
@@ -113,15 +112,14 @@ function Details() {
       style: "currency",
       currency: "TRY",
     }).format(price);
-  }
+  };
 
   const formatDate = (date) => {
-    return new Intl.DateTimeFormat('tr-TR').format(new Date(date));
+    return new Intl.DateTimeFormat("tr-TR").format(new Date(date));
   };
 
   const favItem = useSelector((state) => state.user.favorites);
   const isFav = favItem?.find((fav) => fav.id === product?.id);
-
 
   return (
     <div className="product-detail">
@@ -138,14 +136,11 @@ function Details() {
             <img src={product.productImage} alt={product.name} />
           </div>
           <div className="product-detail__content">
-            <h3 className="product-detail__content--title"><span>{product.seller_id?.name}</span> {product.name}</h3>
+            <h3 className="product-detail__content--title">
+              <span>{product.seller_id?.name}</span> {product.name}
+            </h3>
             <div className="product-detail__content--rating">
-              <Rating
-                initialRating={product.productRating}
-                emptySymbol={<StarFilled style={{ color: '#ccc' }} />}
-                fullSymbol={<StarFilled style={{ color: '#f39c12' }} />}
-                readonly
-              />
+              <Rating initialRating={product.productRating} emptySymbol={<StarFilled style={{ color: "#ccc" }} />} fullSymbol={<StarFilled style={{ color: "#f39c12" }} />} readonly />
               <span>({product.productRating})</span>
               <span className="product-detail__content--reviews">
                 {/* onClick={() => window.scrollTo({
@@ -171,10 +166,18 @@ function Details() {
             </div>
             <p className="product-detail__content--price">{formatPrice(product.price)}</p>
             <div className="product-detail__content--buttons">
-              <button className="product-detail__content--button button-favorite" onClick={() => { }}>Favorilere Ekle</button>
-              <button className="product-detail__content--button button-cart" onClick={() => {
-                // dispatch(addItem(product))
-              }}>Sepete Ekle</button>
+              <button className="product-detail__content--button button-favorite" onClick={() => {}}>
+                Favorilere Ekle
+              </button>
+              <button
+                className="product-detail__content--button button-cart"
+                onClick={() => {
+                  addItemToBasket();
+                  // dispatch(addItem(product))
+                }}
+              >
+                Sepete Ekle
+              </button>
             </div>
             <p className="product-detail__content--description">{product.productDescription}</p>
             <div>
@@ -193,15 +196,17 @@ function Details() {
                   <div className="rating">
                     <Rating
                       initialRating={comment.rate}
-                      emptySymbol={<StarFilled style={{ color: '#ccc' }} />}
-                      fullSymbol={<StarFilled style={{ color: '#f39c12' }} />}
+                      emptySymbol={<StarFilled style={{ color: "#ccc" }} />}
+                      fullSymbol={<StarFilled style={{ color: "#f39c12" }} />}
                       onChange={handleRatingChange}
                     />
                   </div>
                 </div>
                 <textarea id="comment" name="comment" rows="2" placeholder="Yorumunuzu buraya yazın..." value={comment.comment} onChange={handleCommentChange}></textarea>
               </div>
-              <button type="submit" className="comment-button">Yorum Yap</button>
+              <button type="submit" className="comment-button">
+                Yorum Yap
+              </button>
             </form>
           </div>
           <ul className="comments-list">
@@ -214,20 +219,19 @@ function Details() {
                   <div className="comment-info">
                     <Rating
                       initialRating={comment.rate}
-                      emptySymbol={<StarFilled icon={StarFilled} style={{ color: '#ccc' }} />}
-                      fullSymbol={<StarFilled icon={StarFilled} style={{ color: '#f39c12' }} />}
+                      emptySymbol={<StarFilled icon={StarFilled} style={{ color: "#ccc" }} />}
+                      fullSymbol={<StarFilled icon={StarFilled} style={{ color: "#f39c12" }} />}
                       readonly
                     />
-                    <p className='comment-date'>{formatDate(comment.date)}</p>
-                    <span className='comment-separator'></span>
+                    <p className="comment-date">{formatDate(comment.date)}</p>
+                    <span className="comment-separator"></span>
                     <p>{comment.user?.name}</p>
                   </div>
-                  <p className='comment-text'>{comment.text}</p>
+                  <p className="comment-text">{comment.text}</p>
                 </div>
               </li>
             ))}
           </ul>
-
         </div>
       </div>
     </div>

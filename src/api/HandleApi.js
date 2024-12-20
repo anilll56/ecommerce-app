@@ -65,15 +65,7 @@ const getUserInfo = async () => {
   }
 };
 
-const SignUpEcommerce = async (
-  name,
-  email,
-  password,
-  userType,
-  phone,
-  address,
-  balance
-) => {
+const SignUpEcommerce = async (name, email, password, userType, phone, address, balance) => {
   try {
     const payload = {
       name,
@@ -127,16 +119,7 @@ const ChangePassword = async (id, password, newPassword) => {
     throw error;
   }
 };
-const AddProduckEcommerce = async (
-  name,
-  sellerId,
-  stock,
-  price,
-  colors,
-  productImage,
-  productDescription,
-  productCategory
-) => {
+const AddProduckEcommerce = async (name, sellerId, stock, price, colors, productImage, productDescription, productCategory) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -163,10 +146,7 @@ const AddProduckEcommerce = async (
     );
 
     if (res.status === 201 && res.data.success) {
-      console.log(
-        "Ürün ekleme başarılı. Ürün bilgileri:",
-        res.data.sellerProduct
-      );
+      console.log("Ürün ekleme başarılı. Ürün bilgileri:", res.data.sellerProduct);
       return res.data.sellerProduct;
     } else {
       console.log("Ürün ekleme başarısız. Hata:", res.data.message);
@@ -402,14 +382,11 @@ const removeFavorite = async (productId) => {
   }
 
   try {
-    const response = await axios.delete(
-      `${url}/favorites/remove/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.delete(`${url}/favorites/remove/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.status === 200) {
       console.log("Favori başarıyla kaldırıldı:", response.data);
@@ -500,7 +477,7 @@ const removeItemFromBasket = async (productId) => {
       return null;
     }
 
-    const res = await axios.delete(`${url}/basket/${productId}`, {
+    const res = await axios.delete(`${url}/basket/remove/${productId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -528,9 +505,9 @@ const updateBasketItem = async (productId, quantity) => {
       toast.error("Token bulunamadı, lütfen giriş yapın.");
       return null;
     }
-
+    console.log(productId, quantity);
     const res = await axios.put(
-      `${url}/basket`,
+      `${url}/basket/update`,
       {
         productId,
         quantity,
