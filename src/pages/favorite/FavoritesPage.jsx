@@ -46,9 +46,9 @@ const FavoritesList = () => {
       <ul>
         {favorites.map((favorite) => (
           <li key={favorite.id}>
-            <h3>{favorite.product.name}</h3>
-            <p>Fiyat: {favorite.product.price} TL</p>
-            <p>Kategori: {favorite.product.category}</p>
+            <h3>{favorite.product?.name}</h3>
+            <p>Fiyat: {favorite.product?.price} TL</p>
+            <p>Kategori: {favorite.product?.category}</p>
             <button onClick={() => handleRemoveFavorite(favorite._id)}>
               <FaDeleteLeft />
             </button>

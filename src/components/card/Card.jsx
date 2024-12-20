@@ -24,7 +24,7 @@ function Card({ Item }) {
   const userFavorites = useSelector((state) => state.user.favorites);
   console.log("userFavorites", userFavorites);
 
-  const isFav = userFavorites.find((fav) => fav.product._id === Item?._id);
+  const isFav = userFavorites.find((fav) => fav.product?._id === Item?._id);
   const dispatch = useDispatch();
   const handleDelete = async () => {
     await DeleteProduck(Item?._id);

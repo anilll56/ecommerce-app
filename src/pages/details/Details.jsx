@@ -3,7 +3,14 @@ import { useParams } from "react-router-dom";
 import "./Details.css";
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
-import { addItemToBasket, AddBuyOrder, getProductById, createComment, getCommentsByProduct, GetUserProducts } from "../../api/HandleApi";
+import {
+  addItemToBasket,
+  AddBuyOrder,
+  getProductById,
+  createComment,
+  getCommentsByProduct,
+  GetUserProducts,
+} from "../../api/HandleApi";
 import { useSelector } from "react-redux";
 import { Modal, Input, Button } from "antd";
 import { RingLoader } from "react-spinners";
@@ -38,6 +45,7 @@ function Details() {
       [e.target.name]: e.target.value,
     });
   };
+  console.log(121212, product);
 
   const handleRatingChange = (rate) => {
     setComment({
@@ -65,10 +73,11 @@ function Details() {
 
   const getDetails = async () => {
     const res = await getProductById(id);
+    console.log(res, "res1111");
+
     const commentRes = await getCommentsByProduct(id);
     const sellerRes = await GetUserProducts(res.data.product.seller_id._id);
     res.data.product.colors = res.data.product.colors[0].split(",");
-
     res.data.product.comments = commentRes.data;
     setProduct(res.data.product);
     setSellerProducts(sellerRes.data.products);
@@ -140,7 +149,12 @@ function Details() {
               <span>{product.seller_id?.name}</span> {product.name}
             </h3>
             <div className="product-detail__content--rating">
-              <Rating initialRating={product.productRating} emptySymbol={<StarFilled style={{ color: "#ccc" }} />} fullSymbol={<StarFilled style={{ color: "#f39c12" }} />} readonly />
+              <Rating
+                initialRating={product.productRating}
+                emptySymbol={<StarFilled style={{ color: "#ccc" }} />}
+                fullSymbol={<StarFilled style={{ color: "#f39c12" }} />}
+                readonly
+              />
               <span>({product.productRating})</span>
               <span className="product-detail__content--reviews">
                 {/* onClick={() => window.scrollTo({
@@ -160,32 +174,65 @@ function Details() {
               </div>
             </div>
             <div className="select-quantity">
-              <button onClick={() => orderSelected.produckPieces > 1 && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces - 1 })}>-</button>
+              <button
+                onClick={() =>
+                  orderSelected.produckPieces > 1 &&
+                  setOrderSelected({
+                    ...orderSelected,
+                    produckPieces: orderSelected.produckPieces - 1,
+                  })
+                }
+              >
+                -
+              </button>
               <div>{orderSelected.produckPieces}</div>
-              <button onClick={() => orderSelected.produckPieces < product.stock && setOrderSelected({ ...orderSelected, produckPieces: orderSelected.produckPieces + 1 })}>+</button>
+              <button
+                onClick={() =>
+                  orderSelected.produckPieces < product.stock &&
+                  setOrderSelected({
+                    ...orderSelected,
+                    produckPieces: orderSelected.produckPieces + 1,
+                  })
+                }
+              >
+                +
+              </button>
             </div>
-            <p className="product-detail__content--price">{formatPrice(product.price)}</p>
+            <p className="product-detail__content--price">
+              {formatPrice(product.price)}
+            </p>
             <div className="product-detail__content--buttons">
-              <button className="product-detail__content--button button-favorite" onClick={() => {}}>
+              <button
+                className="product-detail__content--button button-favorite"
+                onClick={() => {}}
+              >
                 Favorilere Ekle
               </button>
               <button
                 className="product-detail__content--button button-cart"
                 onClick={() => {
-                  addItemToBasket();
+                  addItemToBasket(product._id, 1);
                   // dispatch(addItem(product))
                 }}
               >
                 Sepete Ekle
               </button>
             </div>
-            <p className="product-detail__content--description">{product.productDescription}</p>
+            <p className="product-detail__content--description">
+              {product.productDescription}
+            </p>
             <div>
-              <img src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png" alt="11"></img>
+              <img
+                src="https://cdn.dsmcdn.com/web/web-installment-campaigns/3mv3.png"
+                alt="11"
+              ></img>
             </div>
           </div>
         </section>
-        <ProductSlider title="Satıcıdan Diğer Ürünler" products={sellerProducts} />
+        <ProductSlider
+          title="Satıcıdan Diğer Ürünler"
+          products={sellerProducts}
+        />
         <div className="comments" id="comments">
           <h2 className="comments-title">Yorumlar</h2>
           <div className="comment-form">
@@ -202,7 +249,14 @@ function Details() {
                     />
                   </div>
                 </div>
-                <textarea id="comment" name="comment" rows="2" placeholder="Yorumunuzu buraya yazın..." value={comment.comment} onChange={handleCommentChange}></textarea>
+                <textarea
+                  id="comment"
+                  name="comment"
+                  rows="2"
+                  placeholder="Yorumunuzu buraya yazın..."
+                  value={comment.comment}
+                  onChange={handleCommentChange}
+                ></textarea>
               </div>
               <button type="submit" className="comment-button">
                 Yorum Yap
@@ -219,8 +273,18 @@ function Details() {
                   <div className="comment-info">
                     <Rating
                       initialRating={comment.rate}
-                      emptySymbol={<StarFilled icon={StarFilled} style={{ color: "#ccc" }} />}
-                      fullSymbol={<StarFilled icon={StarFilled} style={{ color: "#f39c12" }} />}
+                      emptySymbol={
+                        <StarFilled
+                          icon={StarFilled}
+                          style={{ color: "#ccc" }}
+                        />
+                      }
+                      fullSymbol={
+                        <StarFilled
+                          icon={StarFilled}
+                          style={{ color: "#f39c12" }}
+                        />
+                      }
                       readonly
                     />
                     <p className="comment-date">{formatDate(comment.date)}</p>

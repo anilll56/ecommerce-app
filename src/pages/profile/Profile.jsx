@@ -313,7 +313,9 @@ function MyProducks(params) {
   const [producks, setProducks] = useState([]);
   const reduxUser = useSelector((state) => state.user.info);
   useEffect(() => {
-    GetUserProducts().then((res) => {
+    console.log(reduxUser?.user?._id, "reduxUser?.user?.id");
+
+    GetUserProducts(reduxUser?.user?._id).then((res) => {
       setProducks(res.data.products);
       console.log(res.data.products, "res.products");
     });
@@ -492,6 +494,7 @@ function MyOrders(params) {
       <div className="my-orders-title">Siparişlerim</div>
       <div className="waiting-orders-items">
         {myOrders?.map((item) => {
+          console.log("item", item);
           return (
             <div className="waiting-orders-item">
               <div className="waiting-orders-item-cont">
@@ -514,13 +517,11 @@ function MyOrders(params) {
                 <div className="waiting-orders-item-pieces">
                   {item.produckPieces}
                 </div>
-                <div className="waiting-orders-item-status">
-                  {item.status}
-                </div>
+                <div className="waiting-orders-item-status">{item.status}</div>
                 <div className="waiting-orders-item-buttons">
                   <Button
                     onClick={() => {
-                      UpdateOrderStatus(item.id, "Cancelled");
+                      UpdateOrderStatus(item._id, "Cancelled");
                     }}
                   >
                     İptal Et
@@ -593,28 +594,26 @@ function WaitingOrders() {
                         onClick={() => {
                           UpdateOrderStatus(item._id, "Delivered").then(
                             (res) => {
-                              GetSellerOrders(reduxUser.user.id).then(
-                                (res) => {
-                                  let data = res
-                                    .map((order) =>
-                                      order.products.map((product) => ({
-                                        ...product,
-                                        orderId: order._id,
-                                        customer_id: order.customer_id,
-                                        orderDate: order.orderDate,
-                                        totalPrice: order.totalPrice,
-                                        status: order.status,
-                                      }))
-                                    )
-                                    .flat()
-                                    .filter(
-                                      (item) =>
-                                        item.status !== "Cancelled" &&
-                                        item.status !== "Delivered"
-                                    );
-                                  setWaitingHistory(data);
-                                }
-                              );
+                              GetSellerOrders(reduxUser.user.id).then((res) => {
+                                let data = res
+                                  .map((order) =>
+                                    order.products.map((product) => ({
+                                      ...product,
+                                      orderId: order._id,
+                                      customer_id: order.customer_id,
+                                      orderDate: order.orderDate,
+                                      totalPrice: order.totalPrice,
+                                      status: order.status,
+                                    }))
+                                  )
+                                  .flat()
+                                  .filter(
+                                    (item) =>
+                                      item.status !== "Cancelled" &&
+                                      item.status !== "Delivered"
+                                  );
+                                setWaitingHistory(data);
+                              });
                             }
                           );
                         }}
@@ -624,43 +623,7 @@ function WaitingOrders() {
                     ) : (
                       <Button
                         onClick={() => {
-                          console.log("item.orderId", item._id);
-
-                          UpdateOrderStatus(item._id, "Shipped").then(
-                            (res) => {
-                              GetSellerOrders(reduxUser.user.id).then(
-                                (res) => {
-                                  let data = res
-                                    .map((order) =>
-                                      order.products.map((product) => ({
-                                        ...product,
-                                        orderId: order._id,
-                                        customer_id: order.customer_id,
-                                        orderDate: order.orderDate,
-                                        totalPrice: order.totalPrice,
-                                        status: order.status,
-                                      }))
-                                    )
-                                    .flat()
-                                    .filter(
-                                      (item) =>
-                                        item.status !== "Cancelled" &&
-                                        item.status !== "Delivered"
-                                    );
-                                  setWaitingHistory(data);
-                                }
-                              );
-                            }
-                          );
-                        }}
-                      >
-                        Kargoya ver
-                      </Button>
-                    )}
-                    <Button
-                      onClick={() => {
-                        UpdateOrderStatus(item.orderId, "Cancelled").then(
-                          (res) => {
+                          UpdateOrderStatus(item._id, "Shipped").then((res) => {
                             GetSellerOrders(reduxUser.user.id).then((res) => {
                               let data = res
                                 .map((order) =>
@@ -681,8 +644,36 @@ function WaitingOrders() {
                                 );
                               setWaitingHistory(data);
                             });
-                          }
-                        );
+                          });
+                        }}
+                      >
+                        Kargoya ver
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => {
+                        UpdateOrderStatus(item._id, "Cancelled").then((res) => {
+                          GetSellerOrders(reduxUser.user.id).then((res) => {
+                            let data = res
+                              .map((order) =>
+                                order.products.map((product) => ({
+                                  ...product,
+                                  orderId: order._id,
+                                  customer_id: order.customer_id,
+                                  orderDate: order.orderDate,
+                                  totalPrice: order.totalPrice,
+                                  status: order.status,
+                                }))
+                              )
+                              .flat()
+                              .filter(
+                                (item) =>
+                                  item.status !== "Cancelled" &&
+                                  item.status !== "Delivered"
+                              );
+                            setWaitingHistory(data);
+                          });
+                        });
                       }}
                     >
                       İptal Et
@@ -734,9 +725,7 @@ function OrderHistory(params) {
                 <div className="waiting-orders-item-pieces">
                   {item.produckPieces}
                 </div>
-                <div className="waiting-orders-item-status">
-                  {item.status}
-                </div>
+                <div className="waiting-orders-item-status">{item.status}</div>
                 <div className="waiting-orders-item-buttons">
                   <Button>Tekrar Satın Al</Button>
                 </div>
