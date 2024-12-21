@@ -93,7 +93,7 @@ function Navbar() {
         <nav className="sticky">
           <div className="navbarTop">
             <Link to="/signup"><li className="liNoBullets">Trendyolda Satış yap</li></Link>
-            <Link to="/about"><li className="liNoBullets">Hakkımızda</li></Link>
+            <Link to="/home/about"><li className="liNoBullets">Hakkımızda</li></Link>
           </div>
           <div className="navbarMain">
             <div className="imgcss">
