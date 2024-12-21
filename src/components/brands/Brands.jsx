@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { getSellers } from "../../api/HandleApi";
 import { Link } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
+import { FaStore } from "react-icons/fa";
 
 
 function Brands() {
@@ -33,7 +33,7 @@ function Brands() {
             <SwiperSlide key={seller._id}>
               <Link to={`/seller/${seller._id}`}>
                 <div className="brand">
-                  <UserOutlined className="brand-icon" />
+                  <FaStore className="brand-icon" />
                   <p>{seller.name}</p>
                 </div>
               </Link>

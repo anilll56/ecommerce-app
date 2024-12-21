@@ -12,6 +12,7 @@ import BasketPage from "../pages/basket/BasketPage";
 import Footer from "../components/Footer/Footer";
 import About from "../pages/About/About";
 import CategoriesPage from "../pages/CategoriesPage/CategoriesPage";
+import SellerDetail from "../pages/SellerDetail/SellerDetail";
 
 function RoutePage() {
   return (
@@ -41,6 +42,7 @@ function RoutePage() {
         <Route path="/home/BasketPage" element={<BasketPage />} />
         <Route path="/home/about" element={<About />} />
         <Route path="/categories/:category" element={<CategoriesPage />} />
+        <Route path="/seller/:sellerId" element={<SellerDetail />} />
       </Routes>
 
       <Footer />

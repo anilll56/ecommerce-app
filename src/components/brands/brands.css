@@ -35,7 +35,7 @@
 .brand-icon {
   font-size: 1.5rem;
   transition: all .2s ease;
-  color: #333;
+  color: #555;
 }
 
 .brand:hover .brand-icon,
