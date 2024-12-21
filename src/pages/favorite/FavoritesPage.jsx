@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { GetFavorites } from "../../api/HandleApi"; // API fonksiyonunuzu doğru dosyadan içe aktarın
 import { removeFavorite } from "../../api/HandleApi";
 import { FaDeleteLeft } from "react-icons/fa6";
+import './FavoritesPage.css';
+import CardList from "../../components/CardList/CardList";
 
 const FavoritesList = () => {
   const [favorites, setFavorites] = useState([]);
@@ -37,25 +39,18 @@ const FavoritesList = () => {
   }
 
   if (!favorites || favorites.length === 0) {
-    return <p>Favori ürününüz bulunmamaktadır.</p>;
+    return <div className="container">
+      <p className="no-favorites">Favorilerde ürün bulunamadı.</p>
+    </div>
   }
 
   return (
-    <div>
-      <h2>Favorilerim</h2>
-      <ul>
-        {favorites.map((favorite) => (
-          <li key={favorite.id}>
-            <h3>{favorite.product?.name}</h3>
-            <p>Fiyat: {favorite.product?.price} TL</p>
-            <p>Kategori: {favorite.product?.category}</p>
-            <button onClick={() => handleRemoveFavorite(favorite._id)}>
-              <FaDeleteLeft />
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section className="favorites">
+      <div className="container">
+        <h2 className="favorites-title">Favorilerim</h2>
+        <CardList products={favorites} />
+      </div>
+    </section>
   );
 };
 

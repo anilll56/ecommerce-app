@@ -9,14 +9,12 @@ import HomePage from "../pages/home/HomePage";
 import Details from "../pages/details/Details";
 import FavoritesPage from "../pages/favorite/FavoritesPage";
 import BasketPage from "../pages/basket/BasketPage";
+import Footer from "../components/Footer/Footer";
 
 function RoutePage() {
   return (
     <div>
-      <Routes>
-        <Route path="/home/*" element={<Navbar />} />
-        <Route path="/" element={<Navbar />} />
-      </Routes>
+      <Navbar />
       <Routes>
         <Route path="/home" element={<Brands />} />
         <Route path="/" element={<Brands />} />
@@ -40,6 +38,8 @@ function RoutePage() {
         <Route path="/home/favorites" element={<FavoritesPage />} />
         <Route path="/home/BasketPage" element={<BasketPage />} />
       </Routes>
+
+      <Footer />
     </div>
   );
 }

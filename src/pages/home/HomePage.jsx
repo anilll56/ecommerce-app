@@ -4,6 +4,9 @@ import { getAllProducks } from "../../api/HandleApi";
 import "./HomePage.css";
 import Card from "../../components/card/Card";
 import { useSelector } from "react-redux";
+import CardList from "../../components/CardList/CardList";
+import Slider from "../../components/Slider/Slider";
+import ProductSlider from "../../components/productSlider/ProductSlider";
 
 function Home() {
   const searchInput = useSelector((state) => state.user.searchInput);
@@ -40,20 +43,17 @@ function Home() {
   return (
     <div className="home-page">
       <div className="container">
-        <div>
-          <h1>Ürünler</h1>
-        </div>
+        <Slider />
         <div className="home-card-cont">
           {searchInputValue && producks.length === 0 ? (
-            <div>
+            <div className="not-found">
               Aradığınız ürün bulunamadı. Lütfen farklı bir ürün arayınız.
             </div>
           ) : (
-            <div className="product-cards">
-              {producks.map((product, index) => (
-                <Card key={index} Item={product} />
-              ))}
-            </div>
+            <>
+              <ProductSlider title="Son Eklenen Ürünler" products={producks} />
+              <ProductSlider title="Çok Satanlar" products={producks} />
+            </>
           )
           }
         </div>

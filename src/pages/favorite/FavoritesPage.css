@@ -1,0 +1,15 @@
+.favorites {
+    margin-block: 5rem;
+}
+
+.no-favorites {
+    text-align: center;
+    margin-block: 5rem;
+    font-size: 20px;
+}
+
+.favorites-title {
+    text-align: center;
+    margin-block: 5rem;
+    font-size: 2rem;
+}

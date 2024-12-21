@@ -92,9 +92,8 @@ function Navbar() {
       <div className="container navbar-container">
         <nav className="sticky">
           <div className="navbarTop">
-            <li className="liNoBullets">İndirim Kuponlarım </li>
-            <li className="liNoBullets">Trendyolda Satış yap</li>
-            <li className="liNoBullets">Yardım&Destek </li>
+            <Link to="/signup"><li className="liNoBullets">Trendyolda Satış yap</li></Link>
+            <Link to="/about"><li className="liNoBullets">Hakkımızda</li></Link>
           </div>
           <div className="navbarMain">
             <div className="imgcss">
