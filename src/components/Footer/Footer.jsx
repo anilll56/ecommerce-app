@@ -60,7 +60,7 @@ const Footer = () => {
       icon: true,
       links: [
         { icon: PhoneOutlined, path: 'tel:1234567890' },
-        { icon: MailOutlined, path: 'mailto: memetmemetemin@outlook.com' },
+        { icon: MailOutlined, path: 'mailto: memeteminozturk@outlook.com' },
       ]
     },
   ]

@@ -197,10 +197,12 @@ const GetUserProducts = async (sellerId) => {
     throw error;
   }
 };
-const getAllProducks = async () => {
+const getAllProducks = async (category) => {
   try {
+    console.log("category:", category);
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${url}/product/all`, {
+    const urlParam = category ? `?category=${category}` : "";
+    const res = await axios.get(`${url}/product/all${urlParam}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

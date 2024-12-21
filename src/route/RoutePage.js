@@ -11,6 +11,7 @@ import FavoritesPage from "../pages/favorite/FavoritesPage";
 import BasketPage from "../pages/basket/BasketPage";
 import Footer from "../components/Footer/Footer";
 import About from "../pages/About/About";
+import CategoriesPage from "../pages/CategoriesPage/CategoriesPage";
 
 function RoutePage() {
   return (
@@ -39,6 +40,7 @@ function RoutePage() {
         <Route path="/home/favorites" element={<FavoritesPage />} />
         <Route path="/home/BasketPage" element={<BasketPage />} />
         <Route path="/home/about" element={<About />} />
+        <Route path="/categories/:category" element={<CategoriesPage />} />
       </Routes>
 
       <Footer />

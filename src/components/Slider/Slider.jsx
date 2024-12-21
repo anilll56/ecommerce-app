@@ -14,6 +14,7 @@ const Slider = () => {
         "https://gokpinargolu.com/depo/galeri/09.jpg",
         "https://gurunaktasotel.com/depo/gorseller2/10.jpg",
         "https://i.ytimg.com/vi/RlxjH4SgYi8/maxresdefault.jpg",
+        "https://pbs.twimg.com/media/Bu1aMb-IEAAPngQ.jpg:large"
     ]
 
     const slides = images.map((image, index) => (
