@@ -45,9 +45,11 @@
 .navbarMain {
   display: flex;
   width: 100%;
-  height: 64px;
+  height: 5rem;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
+  padding: .5rem 0;
 }
 
 .leftMain {
@@ -62,25 +64,18 @@
   user-select: none;
 }
 
-.imgcss {
-  width: 146px;
+.nav-logo {
+  width: 200px;
+  height: 100%;
 }
 
-.imgcss1 {
-  width: 20px;
-  height: 20px;
-  margin-top: auto;
-  margin-right: 4px;
+.nav-logo img {
+  width: 100%;
+  height: 100%;
 }
 
 .inputcss1:hover {
   color: #f27a1a;
-}
-
-.inputdiv {
-  width: 598px;
-  position: relative;
-  display: flex;
 }
 
 .inputcss {
@@ -273,7 +268,7 @@ h3 span {
 
 .navbar-search-input {
   width: 100%;
-  height: 100%;
+  max-width: 500px;
   padding: 0 10px;
   font-size: 14px;
   color: #333;
@@ -329,4 +324,78 @@ h3 span {
 
 .categories a:hover {
   color: #f27a1a;
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-menu-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    padding: 0.5rem;
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .mobile-search {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .mobile-links {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .mobile-links a {
+    color: #333;
+    padding: 0.5rem 0;
+    font-size: 14px;
+  }
+
+  .mobile-categories {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  .mobile-categories a {
+    color: #333;
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 14px;
+  }
+
+  .search-container,
+  .leftMain,
+  .navbarTop,
+  .navbarBottom {
+    display: none;
+  }
+}
+
+/* Additional responsive adjustments for medium screens */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .ss {
+    margin-left: 20px;
+  }
+
+  .categories ul {
+    gap: 1rem;
+    font-size: 14px;
+  }
 }
