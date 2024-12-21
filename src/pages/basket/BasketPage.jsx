@@ -7,6 +7,7 @@ import {
 } from "../../api/HandleApi";
 import "./BasketPage.css";
 import { useSelector } from "react-redux";
+import { MinusOutlined, PlusOutlined, DeleteOutlined, TruckOutlined } from "@ant-design/icons";
 
 const BasketPage = () => {
   const [basket, setBasket] = useState([]);
@@ -21,7 +22,6 @@ const BasketPage = () => {
     setLoading(true);
     try {
       const basketData = await getBasketItems();
-
       if (!basketData.basket || basketData.basket.length === 0) {
         console.log("Sepet boş.");
         setMessage("Sepetinizde ürün bulunmamaktadır.");
@@ -131,72 +131,80 @@ const BasketPage = () => {
 
   return (
     <section className="basket">
-      <div className="container">
-        <h2>Your Basket</h2>
+      <div className="container basket-container">
+        <h2>Sepetim ({basket[0]?.products?.length || 0})</h2>
         {basket.length > 0 ? (
-          <div className="basket-grid">
+          <div className="basket-content">
             {basket.map((order) => (
-              <div key={order._id} className="order-card">
-                <h3>Order ID: {order._id}</h3>
-                <p>Total Price: ${order.totalPrice || "N/A"}</p>
-                <p>
-                  Created At: {new Date(order.createdAt).toLocaleDateString()}
-                </p>
-                <div className="order-details">
-                  <ul>
-                    {order.products &&
-                      order.products.map((product) => (
-                        <li key={product._id}>
-                          <img
-                            src={
-                              product.product.productImage || "placeholder.jpg"
-                            }
-                            alt={product.product.name || "Product Image"}
-                          />
-                          <div className="product-info">
-                            <p>Product Name: {product.product.name || "N/A"}</p>
-                            <p>Price: ${product.product.price || "N/A"}</p>
-                            <p>Quantity: {product.quantity}</p>
-                          </div>
-                          <div className="product-buttons">
-                            <button
-                              onClick={() =>
-                                addBasket(product.product._id, product.quantity)
-                              }
-                            >
-                              Add
-                            </button>
-                            <button
-                              onClick={() =>
-                                subBasket(product.product._id, product.quantity)
-                              }
-                            >
-                              Subtract
-                            </button>
-                            <button
-                              onClick={() => removeBasket(product.product._id)}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
+              <div key={order._id} className="basket-item-list">
+                {order.products?.map((product) => (
+                  <div key={product._id} className="basket-item">
+                    <img
+                      className="product-image"
+                      src={product.product.productImage}
+                      alt={product.product.name || "Product Image"}
+                    />
+                    <div className="product-details">
+                      <h4 className="product-name">{product.product.name || "N/A"}</h4>
+                      <p className="product-price">Fiyat: {product.product.price || "N/A"} TL</p>
+                      <p className="product-quantity">Adet: {product.quantity}</p>
+                    </div>
+                    <div className="product-actions">
+                      <button
+                        className="action-button"
+                        onClick={() => subBasket(product.product._id, product.quantity)}
+                        aria-label="Decrease Quantity"
+                      >
+                        <MinusOutlined />
+                      </button>
+                      <button
+                        className="action-button"
+                        onClick={() => addBasket(product.product._id, product.quantity)}
+                        aria-label="Increase Quantity"
+                      >
+                        <PlusOutlined />
+                      </button>
+                      <button
+                        className="action-button remove"
+                        onClick={() => removeBasket(product.product._id)}
+                        aria-label="Remove Item"
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
+            <div className="basket-summary">
+              <h2 className="summary-title">Sipariş Özeti</h2>
+              <ul className="summary-list">
+                <li className="summary-item">
+                  <span className="summary-label">Ara Toplam</span>
+                  <span className="summary-value">{basket[0]?.totalPrice || "N/A"} TL</span>
+                </li>
+                <li className="summary-item">
+                  <span className="summary-label">Kargo</span>
+                  <span className="summary-value">Ücretsiz</span>
+                </li>
+                <li className="summary-item">
+                  <span className="summary-label">Toplam</span>
+                  <span className="summary-value">{basket[0]?.totalPrice || "N/A"} TL</span>
+                </li>
+              </ul>
+              <button className="summary-button" onClick={handleBuyOrder}>
+                Siparişi Tamamla
+              </button>
+              <div className="summary-free-shipping">
+                <TruckOutlined />
+                <span>Ücretsiz kargo fırsatını kaçırmayın!</span>
+              </div>
+            </div>
           </div>
         ) : (
           <p>{message}</p>
         )}
 
-        <div>
-          {basket.length > 0 && (
-            <button onClick={handleBuyOrder} className="buy-button">
-              Satın Al
-            </button>
-          )}
-        </div>
       </div>
     </section>
   );
