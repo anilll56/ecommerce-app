@@ -1,4 +1,6 @@
 .signUp-page {
+  /* there will be navbar so we dont want it to be 100vh */
+  padding-block: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,5 +72,4 @@
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  margin-top: 1rem;
 }
