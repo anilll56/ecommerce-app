@@ -3,8 +3,13 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import "./loginPage.css";
 import { useNavigate } from "react-router-dom";
-import { getUserInfo, Login } from "../../api/HandleApi";
-import { setUser } from "../../redux/UserSlice";
+import {
+  getUserInfo,
+  Login,
+  getBasketItems,
+  GetFavorites,
+} from "../../api/HandleApi";
+import { setUser, setBasket, setFavorites } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
 
 const LoginPage = () => {
@@ -33,6 +38,10 @@ const LoginPage = () => {
           dispatch(setUser({ user }));
           navigate("/home");
         }
+        const basketData = await getBasketItems();
+        dispatch(setBasket(basketData));
+        const favorites = await GetFavorites();
+        dispatch(setFavorites(favorites));
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -104,7 +113,13 @@ const LoginPage = () => {
                   type="primary"
                   size="large"
                   htmlType="submit"
-                  disabled={!clientReady || !form.isFieldsTouched(true) || !!form.getFieldsError().filter(({ errors }) => errors.length).length}
+                  disabled={
+                    !clientReady ||
+                    !form.isFieldsTouched(true) ||
+                    !!form
+                      .getFieldsError()
+                      .filter(({ errors }) => errors.length).length
+                  }
                   onClick={() => {
                     login();
                   }}

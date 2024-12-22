@@ -25,6 +25,7 @@ import {
 } from "@ant-design/icons";
 import { logout } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
+import { getUserInfo } from "../../api/HandleApi";
 
 function Navbar() {
   const dispath = useDispatch();
@@ -34,6 +35,7 @@ function Navbar() {
   const info = useSelector((state) => state.user?.info);
   const favItems = useSelector((state) => state.user?.favorites);
   const basketItems = useSelector((state) => state.user?.basket);
+
   const options = [
     {
       value: "Ürün Adı",
@@ -48,33 +50,47 @@ function Navbar() {
       label: "Fiyat",
     },
   ];
-  const items = [
-    {
-      key: "1",
-      label: <Link to="/home/profile">Profile</Link>,
-      icon: <ProfileOutlined />,
-    },
-    {
-      key: "2",
-      label: <Link to="/home/settings">Settings</Link>,
-      icon: <SettingOutlined />,
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          onClick={() => {
-            localStorage.removeItem("token");
-            dispath(logout());
-            window.location.reload();
-          }}
-        >
-          Log out
-        </a>
-      ),
-      icon: <LogoutOutlined />,
-    },
-  ];
+
+  const items = info?.user
+    ? [
+        {
+          key: "1",
+          label: <Link to="/home/profile">Profile</Link>,
+          icon: <ProfileOutlined />,
+        },
+        {
+          key: "2",
+          label: <Link to="/home/settings">Settings</Link>,
+          icon: <SettingOutlined />,
+        },
+        {
+          key: "3",
+          label: (
+            <a
+              onClick={() => {
+                localStorage.removeItem("token");
+
+                window.location.reload();
+              }}
+            >
+              Log out
+            </a>
+          ),
+          icon: <LogoutOutlined />,
+        },
+      ]
+    : [
+        {
+          key: "1",
+          label: <Link to="/login">Login</Link>,
+          icon: <UserOutlined />,
+        },
+        {
+          key: "2",
+          label: <Link to="/signup">Sign Up</Link>,
+          icon: <UserOutlined />,
+        },
+      ];
 
   const categories = [
     {
