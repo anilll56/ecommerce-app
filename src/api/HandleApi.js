@@ -343,6 +343,7 @@ const GetBuyerOrders = async () => {
 };
 
 const UpdateOrderStatus = async (id, status) => {
+  console.log("id:", id, "status:", status);
   const token = localStorage.getItem("token");
   if (!token) {
     console.error("Token bulunamadı, lütfen giriş yapın.");
@@ -576,7 +577,6 @@ const updateBasketItem = async (productId, quantity) => {
     );
 
     if (res.status === 200) {
-      console.log("Sepet öğesi güncellendi:", res.data);
       toast.success("Sepet güncellendi.");
       return res.data;
     } else {

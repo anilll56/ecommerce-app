@@ -12,8 +12,13 @@ import {
 } from "@ant-design/icons";
 import { HeartFilled } from "@ant-design/icons";
 import Rating from "react-rating";
-import { addFavorite, removeFavorite } from "../../api/HandleApi";
-import { removeFavoriteFromRedux } from "../../redux/UserSlice";
+import {
+  addFavorite,
+  addItemToBasket,
+  getBasketItems,
+  removeFavorite,
+} from "../../api/HandleApi";
+import { removeFavoriteFromRedux, setBasket } from "../../redux/UserSlice";
 
 import "swiper/swiper-bundle.css";
 import { DeleteProduck } from "../../api/HandleApi";
@@ -22,14 +27,17 @@ function Card({ Item }) {
   console.log("Item", Item);
   const userRedux = useSelector((state) => state.user.info);
   const userFavorites = useSelector((state) => state.user.favorites);
-  console.log("userFavorites", userFavorites);
+  console.log("userFavorite11s", userFavorites);
+  console.log("userId", Item._id);
 
-  const isFav = userFavorites.find((fav) => fav.product?._id === Item?._id);
+  const isFav = userFavorites.find((fav) => fav._id === Item?._id);
   const dispatch = useDispatch();
   const handleDelete = async () => {
     await DeleteProduck(Item?._id);
     window.location.reload();
   };
+  console.log("isFav", isFav);
+
   const handleAddFavorite = async () => {
     try {
       await addFavorite(Item?._id);
@@ -49,7 +57,16 @@ function Card({ Item }) {
       console.error("Favorilerden silinirken hata:", error);
     }
   };
-  console.log("isFav", isFav);
+
+  const HandleBasketItems = async () => {
+    try {
+      await addItemToBasket(Item?._id, 1);
+      const res = await getBasketItems();
+      dispatch(setBasket(res));
+    } catch (error) {
+      console.error("Sepete eklenirken hata:", error);
+    }
+  };
 
   useEffect(() => {
     console.log("Item", Item);
@@ -112,7 +129,7 @@ function Card({ Item }) {
       <button
         className="product-card__add-to-cart"
         onClick={() => {
-          // dispatch(addItem(Item))
+          HandleBasketItems();
         }}
       >
         Sepete Ekle

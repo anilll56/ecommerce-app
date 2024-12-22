@@ -5,6 +5,7 @@ const initialState = {
   authenticated: false,
   info: null,
   favorites: [],
+  basket: [],
   searchValue: "Ürün Adı",
   searchInput: "",
 };
@@ -41,6 +42,9 @@ export const userSlice = createSlice({
     setFavorites: (state, action) => {
       state.favorites = action.payload;
     },
+    setBasket: (state, action) => {
+      state.basket = action.payload;
+    },
   },
 });
 
@@ -53,6 +57,7 @@ export const {
   setSearchInput,
   setSearchValue,
   setFavorites,
+  setBasket,
 } = userSlice.actions;
 
 export default userSlice.reducer;

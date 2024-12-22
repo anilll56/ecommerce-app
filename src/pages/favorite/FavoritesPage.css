@@ -1,7 +1,3 @@
-.favorites {
-    margin-block: 5rem;
-}
-
 .no-favorites {
     text-align: center;
     margin-block: 5rem;
@@ -10,6 +6,6 @@
 
 .favorites-title {
     text-align: center;
-    margin-block: 5rem;
+    margin-block: 2rem;
     font-size: 2rem;
 }
