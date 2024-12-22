@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { GetFavorites } from "../../api/HandleApi"; // API fonksiyonunuzu doğru dosyadan içe aktarın
+import { GetFavorites } from "../../api/HandleApi";
 import { removeFavorite } from "../../api/HandleApi";
 import { FaDeleteLeft } from "react-icons/fa6";
-import './FavoritesPage.css';
+import "./FavoritesPage.css";
 import CardList from "../../components/CardList/CardList";
 
 const FavoritesList = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Favorileri getir ve state'e kaydet
   const fetchFavorites = async () => {
     try {
       const favoritesData = await GetFavorites();
-      setFavorites(favoritesData); // API'den dönen favorileri state'e kaydet
-      console.log(favorites);
+      setFavorites(favoritesData);
     } catch (error) {
       console.error("Favoriler yüklenirken hata:", error);
     } finally {
@@ -39,9 +37,11 @@ const FavoritesList = () => {
   }
 
   if (!favorites || favorites.length === 0) {
-    return <div className="container">
-      <p className="no-favorites">Favorilerde ürün bulunamadı.</p>
-    </div>
+    return (
+      <div className="container">
+        <p className="no-favorites">Favorilerde ürün bulunamadı.</p>
+      </div>
+    );
   }
 
   return (

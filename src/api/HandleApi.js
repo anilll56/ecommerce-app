@@ -37,7 +37,6 @@ const Login = async (email, password) => {
 const getUserInfo = async () => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Token:", token);
 
     if (!token) {
       console.error("Token bulunamadı, lütfen giriş yapın.");
@@ -52,11 +51,9 @@ const getUserInfo = async () => {
 
     if (res.status === 200) {
       const userInfo = res.data;
-      console.log("Kullanıcı bilgileri alındı:", userInfo);
       return userInfo;
     } else {
       toast.error("Tekrar giriş yapınız");
-      console.log("Kullanıcı bilgileri alınamadı:", res.data.message);
       return null;
     }
   } catch (error) {
@@ -117,7 +114,7 @@ const ChangePassword = async (id, password, newPassword) => {
     });
 
     if (res.data.success) {
-      console.log("Şifre değiştirme başarılı. Kullanıcı bilgileri:", res);
+      toast.success("Şifre değiştirme başarılı.");
     } else {
       console.log("Şifre değiştirme başarısız. Hata:", res.data.message);
     }
@@ -163,10 +160,6 @@ const AddProduckEcommerce = async (
     );
 
     if (res.status === 201 && res.data.success) {
-      console.log(
-        "Ürün ekleme başarılı. Ürün bilgileri:",
-        res.data.sellerProduct
-      );
       return res.data.sellerProduct;
     } else {
       console.log("Ürün ekleme başarısız. Hata:", res.data.message);
@@ -187,7 +180,6 @@ const GetUserProducts = async (sellerId) => {
       },
     });
     if (res.status === 200) {
-      console.log("Ürünler getirildi", res);
     } else {
       console.log("Ürünler getirilemedi. Hata:", res);
     }
@@ -199,7 +191,6 @@ const GetUserProducts = async (sellerId) => {
 };
 const getAllProducks = async (category) => {
   try {
-    console.log("category:", category);
     const token = localStorage.getItem("token");
     const urlParam = category ? `?category=${category}` : "";
     const res = await axios.get(`${url}/product/all${urlParam}`, {
@@ -274,7 +265,6 @@ const AddBuyOrder = async () => {
     );
 
     if (res.status === 201) {
-      console.log("Ürünler getirildi", res);
       return res;
     } else {
       console.log("Ürünler getirilemedi. Hata:", res);
@@ -302,7 +292,6 @@ const GetSellerOrders = async (id) => {
 
     if (res.status === 200) {
       const orders = res.data;
-      console.log("Ürünler getirildi", orders);
       return orders;
     } else {
       console.log("Ürünler getirilemedi. Hata:", res.data.message);
@@ -329,8 +318,6 @@ const GetBuyerOrders = async () => {
 
     if (res.status === 200) {
       const orders = res.data;
-
-      console.log("Ürünler getirildi", orders);
       return orders;
     } else {
       console.log("Ürünler getirilemedi. Hata:", res.data.message);
@@ -343,7 +330,6 @@ const GetBuyerOrders = async () => {
 };
 
 const UpdateOrderStatus = async (id, status) => {
-  console.log("id:", id, "status:", status);
   const token = localStorage.getItem("token");
   if (!token) {
     console.error("Token bulunamadı, lütfen giriş yapın.");
@@ -541,7 +527,6 @@ const removeItemFromBasket = async (productId) => {
     });
 
     if (res.status === 200) {
-      console.log("Ürün sepetten kaldırıldı:", res.data);
       toast.success("Ürün sepetten kaldırıldı.");
       return res.data;
     } else {
@@ -562,7 +547,6 @@ const updateBasketItem = async (productId, quantity) => {
       toast.error("Token bulunamadı, lütfen giriş yapın.");
       return null;
     }
-    console.log(productId, quantity);
     const res = await axios.put(
       `${url}/basket/update`,
       {
@@ -666,7 +650,6 @@ const addFavorite = async (productId) => {
   }
 
   try {
-    console.log("Sending request to add favorite:", { productId, token });
     const response = await axios.post(
       `${url}/favorites/add`,
       { productId },
@@ -676,8 +659,6 @@ const addFavorite = async (productId) => {
         },
       }
     );
-
-    console.log("Response received:", response);
 
     if (response.status === 201) {
       console.log("Favori başarıyla eklendi:", response.data);

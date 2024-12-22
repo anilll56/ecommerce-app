@@ -17,11 +17,7 @@ import { setFavorites } from "./redux/UserSlice";
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const user = localStorage.getItem("user");
-  //const userEmail = JSON.parse(user)?.email;
-  //const userRole = JSON.parse(user)?.role;
   const authenticated = useSelector((state) => state.user.authenticated);
-  console.log(authenticated, "authenticated");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,13 +42,9 @@ function App() {
         });
       GetFavorites().then((res) => {
         if (res) {
-          console.log("Favoriler", res);
-
           dispatch(setFavorites(res));
         }
         getBasketItems().then((res) => {
-          console.log("Sepet", res);
-
           if (res) {
             dispatch(setBasket(res));
           }

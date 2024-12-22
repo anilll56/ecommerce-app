@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Details.css";
-import { Link } from "react-router-dom";
-import { FiHeart } from "react-icons/fi";
 import {
   addItemToBasket,
-  AddBuyOrder,
   getProductById,
   createComment,
   getCommentsByProduct,
   GetUserProducts,
 } from "../../api/HandleApi";
-import { useSelector } from "react-redux";
-import { Modal, Input, Button } from "antd";
-import { RingLoader } from "react-spinners";
-import { useDispatch } from "react-redux";
-import { addFavorite } from "../../redux/UserSlice";
-import { FaHeart } from "react-icons/fa";
 import { StarFilled, UserOutlined } from "@ant-design/icons";
 import Rating from "react-rating";
-import { toast } from "react-toastify";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 
 function Details() {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  const userRedux = useSelector((state) => state.user.info);
   const [orderSelected, setOrderSelected] = useState({
     produckColor: "",
     produckPieces: 1,
   });
   const [sellerProducts, setSellerProducts] = useState([]);
   const [product, setProduct] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState({
     comment: "",
@@ -45,7 +32,6 @@ function Details() {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(121212, product);
 
   const handleRatingChange = (rate) => {
     setComment({
@@ -58,7 +44,6 @@ function Details() {
       const response = await createComment(id, comment.comment, comment.rate);
 
       if (response.status === 201) {
-        console.log("Yorum bağlanışı basarılı", response);
       } else {
         console.log("Yorum bağlanışı baise", response);
       }
@@ -74,8 +59,6 @@ function Details() {
 
   const getDetails = async () => {
     const res = await getProductById(id);
-    console.log(res, "res1111");
-
     const commentRes = await getCommentsByProduct(id);
     const sellerRes = await GetUserProducts(res.data.product.seller_id._id);
     res.data.product.colors = res.data.product.colors[0].split(",");
@@ -84,38 +67,20 @@ function Details() {
     setSellerProducts(sellerRes.data.products);
   };
 
-  const BuyProduck = () => {
-    const products = [
-      {
-        product: id,
-        name: product.name,
-        price: product.price,
-        image: product.productImage,
-        color: orderSelected.produckColor,
-        quantity: orderSelected.produckPieces,
-      },
-    ];
+  // const addToBasket = () => {
+  //   const quantity = 1;
+  //   const productId = id;
 
-    AddBuyOrder(userRedux.user._id, product.seller_id, products).then((res) => {
-      setOpenModal(false);
-      console.log(res, "res");
-    });
-  };
-
-  const addToBasket = () => {
-    const quantity = 1;
-    const productId = id;
-
-    addItemToBasket(productId, quantity)
-      .then((res) => {
-        console.log("Ürün sepete eklendi:", res);
-        alert("Ürün sepete başarıyla eklendi!");
-      })
-      .catch((error) => {
-        console.error("Sepete ekleme hatası:", error);
-        alert("Bir hata oluştu, lütfen tekrar deneyin.");
-      });
-  };
+  //   addItemToBasket(productId, quantity)
+  //     .then((res) => {
+  //       console.log("Ürün sepete eklendi:", res);
+  //       alert("Ürün sepete başarıyla eklendi!");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Sepete ekleme hatası:", error);
+  //       alert("Bir hata oluştu, lütfen tekrar deneyin.");
+  //     });
+  // };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("tr-TR", {
@@ -127,9 +92,6 @@ function Details() {
   const formatDate = (date) => {
     return new Intl.DateTimeFormat("tr-TR").format(new Date(date));
   };
-
-  const favItem = useSelector((state) => state.user.favorites);
-  const isFav = favItem?.find((fav) => fav.id === product?.id);
 
   return (
     <div className="product-detail">
@@ -212,8 +174,7 @@ function Details() {
               <button
                 className="product-detail__content--button button-cart"
                 onClick={() => {
-                  addItemToBasket(product._id, 1);
-                  // dispatch(addItem(product))
+                  addItemToBasket(product._id, orderSelected.produckPieces);
                 }}
               >
                 Sepete Ekle

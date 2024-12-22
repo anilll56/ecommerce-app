@@ -24,11 +24,8 @@ import "swiper/swiper-bundle.css";
 import { DeleteProduck } from "../../api/HandleApi";
 
 function Card({ Item }) {
-  console.log("Item", Item);
   const userRedux = useSelector((state) => state.user.info);
   const userFavorites = useSelector((state) => state.user.favorites);
-  console.log("userFavorite11s", userFavorites);
-  console.log("userId", Item._id);
 
   const isFav = userFavorites.find((fav) => fav._id === Item?._id);
   const dispatch = useDispatch();
@@ -36,7 +33,6 @@ function Card({ Item }) {
     await DeleteProduck(Item?._id);
     window.location.reload();
   };
-  console.log("isFav", isFav);
 
   const handleAddFavorite = async () => {
     try {
@@ -67,10 +63,6 @@ function Card({ Item }) {
       console.error("Sepete eklenirken hata:", error);
     }
   };
-
-  useEffect(() => {
-    console.log("Item", Item);
-  }, [Item]);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("tr-TR", {

@@ -313,11 +313,8 @@ function MyProducks(params) {
   const [producks, setProducks] = useState([]);
   const reduxUser = useSelector((state) => state.user.info);
   useEffect(() => {
-    console.log(reduxUser?.user?._id, "reduxUser?.user?.id");
-
     GetUserProducts(reduxUser?.user?._id).then((res) => {
       setProducks(res.data.products);
-      console.log(res.data.products, "res.products");
     });
   }, [reduxUser?.user?.id]);
   return (
@@ -475,8 +472,6 @@ function MyOrders(params) {
   useEffect(() => {
     GetBuyerOrders()
       .then((orders) => {
-        console.log("orders", orders);
-
         if (orders) {
           let data = orders.filter((item) => item.status !== "cancelled");
           setMyOrders(data);
@@ -539,13 +534,11 @@ function WaitingOrders() {
   useEffect(() => {
     GetSellerOrders(reduxUser.user.id)
       .then((res) => {
-        console.log(res, "eewew");
         let data = res;
         let filteredData = data.filter(
           (item) => item.status !== "Cancelled" && item.status !== "Delivered"
         );
         setWaitingHistory(filteredData);
-        console.log("filteredData", filteredData);
       })
       .catch((error) => {
         console.error("Error fetching seller orders:", error);
@@ -557,132 +550,119 @@ function WaitingOrders() {
     <div className="waiting-orders-container">
       <div className="waiting-orders-title">Bekleyen Siparişler</div>
       <div className="waiting-orders-items">
-        {waitingOrders?.map(
-          (item) => (
-            console.log("item", item),
-            (
-              <div className="waiting-orders-item" key={item.orderId}>
-                <div className="waiting-orders-item-cont">
-                  <div className="waiting-orders-item-img-cont">
-                    <img
-                      className="waiting-orders-item-img"
-                      src={item.productImage}
-                      alt="s"
-                    />
-                  </div>
-                  <div className="waiting-orders-item-name">
-                    {item.produckName}
-                  </div>
-                  <div className="waiting-orders-item-price">
-                    {item.produckPrice} TL
-                  </div>
-                  <div className="waiting-orders-item-color">
-                    {item.produckColor}
-                  </div>
-                  <div className="waiting-orders-item-pieces">
-                    {item.produckPieces}
-                  </div>
-                  <div className="waiting-orders-item-status">
-                    {item.status}
-                  </div>
-                  <div className="waiting-orders-item-buttons">
-                    {item.status === "Shipped" ? (
-                      <Button
-                        onClick={() => {
-                          UpdateOrderStatus(item._id, "Delivered").then(
-                            (res) => {
-                              GetSellerOrders(reduxUser.user.id).then((res) => {
-                                let data = res
-                                  .map((order) =>
-                                    order.products.map((product) => ({
-                                      ...product,
-                                      orderId: order._id,
-                                      customer_id: order.customer_id,
-                                      orderDate: order.orderDate,
-                                      totalPrice: order.totalPrice,
-                                      status: order.status,
-                                    }))
-                                  )
-                                  .flat()
-                                  .filter(
-                                    (item) =>
-                                      item.status !== "Cancelled" &&
-                                      item.status !== "Delivered"
-                                  );
-                                setWaitingHistory(data);
-                              });
-                            }
-                          );
-                        }}
-                      >
-                        Teslim Et
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          UpdateOrderStatus(item._id, "Shipped").then((res) => {
-                            GetSellerOrders(reduxUser.user.id).then((res) => {
-                              let data = res
-                                .map((order) =>
-                                  order.products.map((product) => ({
-                                    ...product,
-                                    orderId: order._id,
-                                    customer_id: order.customer_id,
-                                    orderDate: order.orderDate,
-                                    totalPrice: order.totalPrice,
-                                    status: order.status,
-                                  }))
-                                )
-                                .flat()
-                                .filter(
-                                  (item) =>
-                                    item.status !== "Cancelled" &&
-                                    item.status !== "Delivered"
-                                );
-                              setWaitingHistory(data);
-                            });
-                          });
-                        }}
-                      >
-                        Kargoya ver
-                      </Button>
-                    )}
-                    <Button
-                      onClick={() => {
-                        console.log("item._id1111111111111111111", item._id);
-
-                        UpdateOrderStatus(item._id, "Cancelled").then((res) => {
-                          GetSellerOrders(reduxUser.user.id).then((res) => {
-                            let data = res
-                              .map((order) =>
-                                order.products.map((product) => ({
-                                  ...product,
-                                  orderId: order._id,
-                                  customer_id: order.customer_id,
-                                  orderDate: order.orderDate,
-                                  totalPrice: order.totalPrice,
-                                  status: order.status,
-                                }))
-                              )
-                              .flat()
-                              .filter(
-                                (item) =>
-                                  item.status !== "Cancelled" &&
-                                  item.status !== "Delivered"
-                              );
-                            setWaitingHistory(data);
-                          });
-                        });
-                      }}
-                    >
-                      İptal Et
-                    </Button>
-                  </div>
-                </div>
+        {waitingOrders?.map((item) => (
+          <div className="waiting-orders-item" key={item.orderId}>
+            <div className="waiting-orders-item-cont">
+              <div className="waiting-orders-item-img-cont">
+                <img
+                  className="waiting-orders-item-img"
+                  src={item.productImage}
+                  alt="s"
+                />
               </div>
-            )
-          )
-        )}
+              <div className="waiting-orders-item-name">{item.produckName}</div>
+              <div className="waiting-orders-item-price">
+                {item.produckPrice} TL
+              </div>
+              <div className="waiting-orders-item-color">
+                {item.produckColor}
+              </div>
+              <div className="waiting-orders-item-pieces">
+                {item.produckPieces}
+              </div>
+              <div className="waiting-orders-item-status">{item.status}</div>
+              <div className="waiting-orders-item-buttons">
+                {item.status === "Shipped" ? (
+                  <Button
+                    onClick={() => {
+                      UpdateOrderStatus(item._id, "Delivered").then((res) => {
+                        GetSellerOrders(reduxUser.user.id).then((res) => {
+                          let data = res
+                            .map((order) =>
+                              order.products.map((product) => ({
+                                ...product,
+                                orderId: order._id,
+                                customer_id: order.customer_id,
+                                orderDate: order.orderDate,
+                                totalPrice: order.totalPrice,
+                                status: order.status,
+                              }))
+                            )
+                            .flat()
+                            .filter(
+                              (item) =>
+                                item.status !== "Cancelled" &&
+                                item.status !== "Delivered"
+                            );
+                          setWaitingHistory(data);
+                        });
+                      });
+                    }}
+                  >
+                    Teslim Et
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      UpdateOrderStatus(item._id, "Shipped").then((res) => {
+                        GetSellerOrders(reduxUser.user.id).then((res) => {
+                          let data = res
+                            .map((order) =>
+                              order.products.map((product) => ({
+                                ...product,
+                                orderId: order._id,
+                                customer_id: order.customer_id,
+                                orderDate: order.orderDate,
+                                totalPrice: order.totalPrice,
+                                status: order.status,
+                              }))
+                            )
+                            .flat()
+                            .filter(
+                              (item) =>
+                                item.status !== "Cancelled" &&
+                                item.status !== "Delivered"
+                            );
+                          setWaitingHistory(data);
+                        });
+                      });
+                    }}
+                  >
+                    Kargoya ver
+                  </Button>
+                )}
+                <Button
+                  onClick={() => {
+                    UpdateOrderStatus(item._id, "Cancelled").then((res) => {
+                      GetSellerOrders(reduxUser.user.id).then((res) => {
+                        let data = res
+                          .map((order) =>
+                            order.products.map((product) => ({
+                              ...product,
+                              orderId: order._id,
+                              customer_id: order.customer_id,
+                              orderDate: order.orderDate,
+                              totalPrice: order.totalPrice,
+                              status: order.status,
+                            }))
+                          )
+                          .flat()
+                          .filter(
+                            (item) =>
+                              item.status !== "Cancelled" &&
+                              item.status !== "Delivered"
+                          );
+                        setWaitingHistory(data);
+                      });
+                    });
+                  }}
+                >
+                  İptal Et
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
