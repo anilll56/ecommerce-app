@@ -136,7 +136,11 @@ const BasketPage = () => {
   }
 
   if (!basket || basket.length === 0) {
-    return <p className="empty">Your basket is empty.</p>;
+    return (
+      <div className="container">
+        <p className="loading">Sepetinizde ürün bulunmamaktadır.</p>
+      </div>
+    );
   }
 
   return (

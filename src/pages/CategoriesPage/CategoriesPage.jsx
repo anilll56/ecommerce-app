@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllProducks } from "../../api/HandleApi"; // API fonksiyonunuzu doğru dosyadan içe aktarın
 import { removeFavorite } from "../../api/HandleApi";
 import { FaDeleteLeft } from "react-icons/fa6";
-import './CategoriesPage.css';
+import "./CategoriesPage.css";
 import CardList from "../../components/CardList/CardList";
 import { useParams } from "react-router-dom";
 
@@ -44,13 +44,19 @@ const CategoriesPage = () => {
   }, [category]);
 
   if (loading) {
-    return <p>Ürünler yükleniyor...</p>;
+    return (
+      <div className="container">
+        <p className="loading">Yükleniyor...</p>
+      </div>
+    );
   }
 
   if (!products || products.length === 0) {
-    return <div className="container">
-      <p className="no-favorites">Bu kategoride ürün bulunamadı.</p>
-    </div>
+    return (
+      <div className="container">
+        <p className="no-favorites">Bu kategoride ürün bulunamadı.</p>
+      </div>
+    );
   }
 
   return (

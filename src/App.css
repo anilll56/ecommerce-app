@@ -37,10 +37,17 @@
   }
 }
 
-
 .container-lg {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 2rem;
+  font-size: 2rem;
 }
