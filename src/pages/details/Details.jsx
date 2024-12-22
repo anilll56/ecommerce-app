@@ -69,6 +69,7 @@ function Details() {
 
   useEffect(() => {
     getDetails();
+    window.scrollTo(0, 0);
   }, [id]);
 
   const getDetails = async () => {
