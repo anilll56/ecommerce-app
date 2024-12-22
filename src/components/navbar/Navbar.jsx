@@ -6,8 +6,23 @@ import "./Navbar.css";
 import { Dropdown, Input, Select, Space } from "antd";
 import { setSearchInput, setSearchValue } from "../../redux/UserSlice";
 import { Tooltip } from "antd";
-import { AppstoreOutlined, BookOutlined, HomeOutlined, LaptopOutlined, SearchOutlined, SkinOutlined, CloseOutlined, MenuOutlined } from "@ant-design/icons";
-import { SettingOutlined, LogoutOutlined, ProfileOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  BookOutlined,
+  HomeOutlined,
+  LaptopOutlined,
+  SearchOutlined,
+  SkinOutlined,
+  CloseOutlined,
+  MenuOutlined,
+} from "@ant-design/icons";
+import {
+  SettingOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+  UserOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 import { logout } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
 
@@ -18,6 +33,7 @@ function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const info = useSelector((state) => state.user?.info);
   const favItems = useSelector((state) => state.user?.favorites);
+  const basketItems = useSelector((state) => state.user?.basket);
   const options = [
     {
       value: "Ürün Adı",
@@ -94,10 +110,9 @@ function Navbar() {
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   return (
     <div className="navbar">
@@ -105,15 +120,22 @@ function Navbar() {
         <nav className="sticky">
           {!isMobile && (
             <div className="navbarTop">
-              <Link to="/signup"><li className="liNoBullets">Trendyolda Satış yap</li></Link>
-              <Link to="/home/about"><li className="liNoBullets">Hakkımızda</li></Link>
+              <Link to="/signup">
+                <li className="liNoBullets">Trendyolda Satış yap</li>
+              </Link>
+              <Link to="/home/about">
+                <li className="liNoBullets">Hakkımızda</li>
+              </Link>
             </div>
           )}
 
           <div className="navbarMain">
             <div className="nav-logo">
               <Link to="/home">
-                <img alt="logo" src="https://cdn.dsmcdn.com/web/logo/ty-web.svg" />
+                <img
+                  alt="logo"
+                  src="https://cdn.dsmcdn.com/web/logo/ty-web.svg"
+                />
               </Link>
             </div>
 
@@ -153,7 +175,14 @@ function Navbar() {
                     </Dropdown>
                   </div>
                   <div className="ss">
-                    <Link to={localStorage.getItem("token") ? "/home/favorites" : "/login"} className="hoverr1">
+                    <Link
+                      to={
+                        localStorage.getItem("token")
+                          ? "/home/favorites"
+                          : "/login"
+                      }
+                      className="hoverr1"
+                    >
                       <div>Favorilerim</div>
                       <div className="hoverr11">{favItems.length}</div>
                     </Link>
@@ -161,7 +190,9 @@ function Navbar() {
                   <div className="ss">
                     <Link to="/home/BasketPage" className="hoverr1">
                       <div>Sepetim</div>
-                      <div className="hoverr11">0</div>
+                      <div className="hoverr11">
+                        {basketItems[0]?.products?.length}
+                      </div>
                     </Link>
                   </div>
                 </div>
@@ -180,13 +211,19 @@ function Navbar() {
                   onChange={(e) => {
                     dispath(setSearchInput(e.target.value));
                   }}
-                  suffix={<SearchOutlined className="navbar-search-input-icon" />}
+                  suffix={
+                    <SearchOutlined className="navbar-search-input-icon" />
+                  }
                 />
               </div>
               <div className="mobile-links">
                 <Link to="/signup">Trendyolda Satış yap</Link>
                 <Link to="/home/about">Hakkımızda</Link>
-                <Link to={localStorage.getItem("token") ? "/home/favorites" : "/login"}>
+                <Link
+                  to={
+                    localStorage.getItem("token") ? "/home/favorites" : "/login"
+                  }
+                >
                   Favorilerim ({favItems.length})
                 </Link>
                 <Link to="/home/BasketPage">Sepetim (0)</Link>

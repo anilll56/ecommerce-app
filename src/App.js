@@ -1,7 +1,7 @@
 import RoutePage from "./route/RoutePage";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, setMyJobs } from "./redux/UserSlice";
+import { setUser, setBasket } from "./redux/UserSlice";
 import { setAuthenticated } from "./redux/UserSlice";
 import { ToastContainer } from "react-toastify";
 
@@ -10,7 +10,7 @@ import "./App.css";
 
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserInfo } from "./api/HandleApi";
+import { getBasketItems, getUserInfo } from "./api/HandleApi";
 import { GetFavorites } from "./api/HandleApi";
 import { setFavorites } from "./redux/UserSlice";
 
@@ -50,6 +50,13 @@ function App() {
 
           dispatch(setFavorites(res));
         }
+        getBasketItems().then((res) => {
+          console.log("Sepet", res);
+
+          if (res) {
+            dispatch(setBasket(res));
+          }
+        });
       });
     } else {
       dispatch(setUser({ user: null }));

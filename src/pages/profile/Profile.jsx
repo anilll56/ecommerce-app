@@ -364,9 +364,6 @@ function AddProduck() {
     });
   };
 
-  console.log(reduxUser?.user?._id, "reduxUser");
-  console.log(AddProduckInputs, "AddProduckInputs");
-
   return (
     <div className="add-product-container">
       <div className="add-product-form">
@@ -652,6 +649,8 @@ function WaitingOrders() {
                     )}
                     <Button
                       onClick={() => {
+                        console.log("item._id1111111111111111111", item._id);
+
                         UpdateOrderStatus(item._id, "Cancelled").then((res) => {
                           GetSellerOrders(reduxUser.user.id).then((res) => {
                             let data = res

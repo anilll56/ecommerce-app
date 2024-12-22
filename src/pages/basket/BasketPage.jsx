@@ -6,13 +6,20 @@ import {
   AddBuyOrder,
 } from "../../api/HandleApi";
 import "./BasketPage.css";
-import { useSelector } from "react-redux";
-import { MinusOutlined, PlusOutlined, DeleteOutlined, TruckOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  MinusOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  TruckOutlined,
+} from "@ant-design/icons";
+import { setBasket } from "../../redux/UserSlice";
 
 const BasketPage = () => {
-  const [basket, setBasket] = useState([]);
+  const [basket, setLocalBasket] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
 
   const userRedux = useSelector((state) => state.user.info);
 
@@ -26,7 +33,7 @@ const BasketPage = () => {
         console.log("Sepet boş.");
         setMessage("Sepetinizde ürün bulunmamaktadır.");
       }
-      setBasket(basketData || []);
+      setLocalBasket(basketData || []);
     } catch (error) {
       console.error("Sepet verileri alınırken hata oluştu:", error);
     } finally {
@@ -47,6 +54,8 @@ const BasketPage = () => {
     try {
       await removeItemFromBasket(productId);
       fetchBasket();
+      const basketData = await getBasketItems();
+      dispatch(setBasket(basketData));
     } catch (error) {
       console.error("Failed to remove item from basket:", error);
     }
@@ -105,6 +114,7 @@ const BasketPage = () => {
   //     console.error("Failed to create buy order:", error);
   //   }
   // };
+
   const handleBuyOrder = async () => {
     AddBuyOrder()
       .then((res) => {
@@ -145,21 +155,31 @@ const BasketPage = () => {
                       alt={product.product.name || "Product Image"}
                     />
                     <div className="product-details">
-                      <h4 className="product-name">{product.product.name || "N/A"}</h4>
-                      <p className="product-price">Fiyat: {product.product.price || "N/A"} TL</p>
-                      <p className="product-quantity">Adet: {product.quantity}</p>
+                      <h4 className="product-name">
+                        {product.product.name || "N/A"}
+                      </h4>
+                      <p className="product-price">
+                        Fiyat: {product.product.price || "N/A"} TL
+                      </p>
+                      <p className="product-quantity">
+                        Adet: {product.quantity}
+                      </p>
                     </div>
                     <div className="product-actions">
                       <button
                         className="action-button"
-                        onClick={() => subBasket(product.product._id, product.quantity)}
+                        onClick={() =>
+                          subBasket(product.product._id, product.quantity)
+                        }
                         aria-label="Decrease Quantity"
                       >
                         <MinusOutlined />
                       </button>
                       <button
                         className="action-button"
-                        onClick={() => addBasket(product.product._id, product.quantity)}
+                        onClick={() =>
+                          addBasket(product.product._id, product.quantity)
+                        }
                         aria-label="Increase Quantity"
                       >
                         <PlusOutlined />
@@ -181,7 +201,9 @@ const BasketPage = () => {
               <ul className="summary-list">
                 <li className="summary-item">
                   <span className="summary-label">Ara Toplam</span>
-                  <span className="summary-value">{basket[0]?.totalPrice || "N/A"} TL</span>
+                  <span className="summary-value">
+                    {basket[0]?.totalPrice || "N/A"} TL
+                  </span>
                 </li>
                 <li className="summary-item">
                   <span className="summary-label">Kargo</span>
@@ -189,7 +211,9 @@ const BasketPage = () => {
                 </li>
                 <li className="summary-item">
                   <span className="summary-label">Toplam</span>
-                  <span className="summary-value">{basket[0]?.totalPrice || "N/A"} TL</span>
+                  <span className="summary-value">
+                    {basket[0]?.totalPrice || "N/A"} TL
+                  </span>
                 </li>
               </ul>
               <button className="summary-button" onClick={handleBuyOrder}>
@@ -204,7 +228,6 @@ const BasketPage = () => {
         ) : (
           <p>{message}</p>
         )}
-
       </div>
     </section>
   );
