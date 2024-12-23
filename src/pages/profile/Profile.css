@@ -233,6 +233,7 @@
 }
 
 .waiting-orders-item-cont {
+  cursor: pointer;
   display: flex;
   height: 100%;
   align-items: center;
@@ -242,8 +243,8 @@
 }
 
 .waiting-orders-item-img-cont {
-  width: 150px;
-  height: 100%;
+  width: 50px;
+
   border: 1px solid #e6e6e6;
 }
 

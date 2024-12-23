@@ -62,15 +62,7 @@ const getUserInfo = async () => {
   }
 };
 
-const SignUpEcommerce = async (
-  name,
-  email,
-  password,
-  userType,
-  phone,
-  address,
-  balance
-) => {
+const SignUpEcommerce = async (name, email, password, userType, phone, address, balance) => {
   try {
     const payload = {
       name,
@@ -124,16 +116,7 @@ const ChangePassword = async (id, password, newPassword) => {
     throw error;
   }
 };
-const AddProduckEcommerce = async (
-  name,
-  sellerId,
-  stock,
-  price,
-  colors,
-  productImage,
-  productDescription,
-  productCategory
-) => {
+const AddProduckEcommerce = async (name, sellerId, stock, price, colors, productImage, productDescription, productCategory) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -329,6 +312,33 @@ const GetBuyerOrders = async () => {
   }
 };
 
+// const GetShippedOrders = async () => {
+//   try {
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//       console.error("Token bulunamadı, lütfen giriş yapın.");
+//       return null;
+//     }
+
+//     const res = await axios.get(`${url}/order/shipped`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     if (res.status === 200) {
+//       const orders = res.data;
+//       return orders;
+//     } else {
+//       console.log("Ürünler getirilemedi. Hata:", res.data.message);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("Axios isteği sırasında hata:", error);
+//     throw error;
+//   }
+// };
+
 const UpdateOrderStatus = async (id, status) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -422,14 +432,11 @@ const removeFavorite = async (productId) => {
   }
 
   try {
-    const response = await axios.delete(
-      `${url}/favorites/remove/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.delete(`${url}/favorites/remove/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.status === 200) {
       console.log("Favori başarıyla kaldırıldı:", response.data);
