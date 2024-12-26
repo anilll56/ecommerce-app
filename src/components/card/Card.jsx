@@ -9,6 +9,7 @@ import {
   HeartOutlined,
   StarOutlined,
   StarFilled,
+  DeleteFilled,
 } from "@ant-design/icons";
 import { HeartFilled } from "@ant-design/icons";
 import Rating from "react-rating";
@@ -27,7 +28,7 @@ function Card({ Item }) {
   const userRedux = useSelector((state) => state.user.info);
   const userFavorites = useSelector((state) => state.user.favorites);
 
-  const isFav = userFavorites.find((fav) => fav._id === Item?._id);
+  const isFav = userFavorites.find((fav) => fav?._id === Item?._id);
   const dispatch = useDispatch();
   const handleDelete = async () => {
     await DeleteProduct(Item?._id);
@@ -76,21 +77,13 @@ function Card({ Item }) {
       <div className="product-card__wishlist">
         {userRedux?.user?.userType === "seller" &&
         userRedux?.user?._id === Item.seller_id?._id ? (
-          <div>
-            <button onClick={handleDelete}>
-              <DeleteOutlined />
-            </button>
-          </div>
+          <DeleteFilled onClick={handleDelete} />
         ) : (
-          <div
-            className={`product-card__favorite ${
-              isFav ? "product-card__favorite--active" : ""
-            }`}
-          >
-            <button onClick={isFav ? handleRemoveFavorite : handleAddFavorite}>
-              {isFav ? <HeartFilled /> : <HeartOutlined />}
-            </button>
-          </div>
+          <HeartFilled
+            onClick={() => {
+              isFav ? handleRemoveFavorite() : handleAddFavorite();
+            }}
+          />
         )}
       </div>
       <div className="product-card__img">
