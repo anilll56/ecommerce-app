@@ -20,7 +20,7 @@ const About = () => {
           </p>
         </div>
         <div className="about__img">
-          <img crossOrigin=" anonymous" src="https://www.kurumsalkiraci.com/upload/trendyola-kiralik-yerim-var-yerinizi-trendyola-kurumsalkiraci.com-farki-ile-ulastirin.jpg" alt="about" />
+          <img src="https://www.kurumsalkiraci.com/upload/trendyola-kiralik-yerim-var-yerinizi-trendyola-kurumsalkiraci.com-farki-ile-ulastirin.jpg" alt="about" />
         </div>
       </div>
     </div>
