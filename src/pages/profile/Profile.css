@@ -120,6 +120,7 @@
   padding: 1rem;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
 .personel-info-title {
@@ -174,7 +175,7 @@
 }
 
 .add-product-input {
-  width: 90%;
+  max-width: 20rem;
 }
 
 .add-product-input:hover {

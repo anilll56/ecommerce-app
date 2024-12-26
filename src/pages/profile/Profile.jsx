@@ -412,6 +412,7 @@ function AddProduck() {
                   colors: e.target.value,
                 })
               }
+              placeholder="Örn: Kırmızı, Mavi, Yeşil"
             />
           </Form.Item>
           <Form.Item label="Ürün Stok">
@@ -424,6 +425,7 @@ function AddProduck() {
                   stock: e.target.value,
                 })
               }
+              min={1}
             />
           </Form.Item>
           <Form.Item label="Ürün Açıklaması">
@@ -438,15 +440,21 @@ function AddProduck() {
             />
           </Form.Item>
           <Form.Item label="Ürün Kategorisi">
-            <Input
+            <Select
               className="add-product-input"
               onChange={(e) =>
                 setAddProduckInputs({
                   ...AddProduckInputs,
-                  productCategory: e.target.value,
+                  productCategory: e,
                 })
               }
-            />
+            >
+              <Select.Option value="electronics">Elektronik</Select.Option>
+              <Select.Option value="clothing">Giyim</Select.Option>
+              <Select.Option value="furniture">Mobilya</Select.Option>
+              <Select.Option value="books">Kitap</Select.Option>
+              <Select.Option value="other">Diğer</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item>
             <Button
@@ -474,9 +482,7 @@ function MyOrders(params) {
     GetBuyerOrders()
       .then((orders) => {
         if (orders) {
-          let data = orders.filter(
-            (item) => item.status !== "Cancelled" && item.status !== "Shipped"
-          );
+          let data = orders.filter((item) => item.status !== "Cancelled");
           setMyOrders(data);
         }
       })
