@@ -52,7 +52,7 @@ function Home() {
           ) : (
             <>
               <ProductSlider title="Son Eklenen Ürünler" products={producks} />
-              <ProductSlider title="Çok Satanlar" products={producks} />
+              <ProductSlider title="Çok Satanlar" products={[...producks].reverse()} />
             </>
           )
           }
