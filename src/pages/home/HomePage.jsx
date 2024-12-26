@@ -51,8 +51,8 @@ function Home() {
             </div>
           ) : (
             <>
-              <ProductSlider title="Son Eklenen Ürünler" products={producks} />
-              <ProductSlider title="Çok Satanlar" products={[...producks].reverse()} />
+              <ProductSlider title="Son Eklenen Ürünler" products={[...producks].reverse()} />
+              <ProductSlider title="Çok Satanlar" products={producks} />
             </>
           )
           }
