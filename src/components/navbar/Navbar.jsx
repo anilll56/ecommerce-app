@@ -56,14 +56,14 @@ function Navbar() {
     ? [
         {
           key: "1",
-          label: <Link to="/home/profile">Profile</Link>,
+          label: <Link to="/home/profile">Profil</Link>,
           icon: <ProfileOutlined />,
         },
-        {
-          key: "2",
-          label: <Link to="/home/settings">Settings</Link>,
-          icon: <SettingOutlined />,
-        },
+        // {
+        //   key: "2",
+        //   label: <Link to="/home/settings">Settings</Link>,
+        //   icon: <SettingOutlined />,
+        // },
         {
           key: "3",
           label: (
@@ -74,7 +74,7 @@ function Navbar() {
                 navigate("/home");
               }}
             >
-              Log out
+              Çıkış Yap
             </a>
           ),
           icon: <LogoutOutlined />,
@@ -83,12 +83,12 @@ function Navbar() {
     : [
         {
           key: "1",
-          label: <Link to="/login">Login</Link>,
+          label: <Link to="/login">Giriş Yap</Link>,
           icon: <UserOutlined />,
         },
         {
           key: "2",
-          label: <Link to="/signup">Sign Up</Link>,
+          label: <Link to="/signup">Kaydol</Link>,
           icon: <UserOutlined />,
         },
       ];
