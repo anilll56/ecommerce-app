@@ -3,6 +3,7 @@ import "./SignUp.css";
 import { Form, Input, Button, Radio, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SignUpEcommerce } from "../../api/HandleApi";
+import InputMask from "react-input-mask";
 import {
   UserOutlined,
   LockOutlined,
@@ -159,14 +160,28 @@ function SignUp() {
                   required: true,
                   message: "Please input your phone number!",
                 },
+                {
+                  pattern: /^90 \d{3} \d{3} \d{4}$/,
+                  message:
+                    "Please enter a valid phone number in the format 90 XXX XXX XXXX",
+                },
               ]}
             >
-              <Input
-                prefix={<PhoneOutlined />}
-                placeholder="Phone"
-                size="large"
+              <InputMask
+                mask="90 999 999 9999"
+                maskChar={null}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-              />
+              >
+                {(inputProps) => (
+                  <Input
+                    {...inputProps}
+                    prefix={<PhoneOutlined />}
+                    placeholder="Phone"
+                    size="large"
+                    type="tel"
+                  />
+                )}
+              </InputMask>
             </Form.Item>
 
             {signUpInputs.userType === "customer" && (
