@@ -74,7 +74,7 @@ function Card({ Item }) {
 
   return (
     <div className="product-card">
-      <div className="product-card__wishlist">
+      <div className={`product-card__wishlist ${isFav ? "active" : ""}`}>
         {userRedux?.user?.userType === "seller" &&
         userRedux?.user?._id === Item.seller_id?._id ? (
           <DeleteFilled onClick={handleDelete} />
