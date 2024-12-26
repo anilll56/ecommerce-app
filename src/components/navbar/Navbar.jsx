@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import "./Navbar.css";
@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import { getUserInfo } from "../../api/HandleApi";
 
 function Navbar() {
+  const navigate = useNavigate();
   const dispath = useDispatch();
   const [search, setSearch] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -69,8 +70,8 @@ function Navbar() {
             <a
               onClick={() => {
                 localStorage.removeItem("token");
-
                 window.location.reload();
+                navigate("/home");
               }}
             >
               Log out

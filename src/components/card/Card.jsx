@@ -21,7 +21,7 @@ import {
 import { removeFavoriteFromRedux, setBasket } from "../../redux/UserSlice";
 
 import "swiper/swiper-bundle.css";
-import { DeleteProduck } from "../../api/HandleApi";
+import { DeleteProduct } from "../../api/HandleApi";
 
 function Card({ Item }) {
   const userRedux = useSelector((state) => state.user.info);
@@ -30,7 +30,7 @@ function Card({ Item }) {
   const isFav = userFavorites.find((fav) => fav._id === Item?._id);
   const dispatch = useDispatch();
   const handleDelete = async () => {
-    await DeleteProduck(Item?._id);
+    await DeleteProduct(Item?._id);
     window.location.reload();
   };
 
@@ -73,12 +73,25 @@ function Card({ Item }) {
 
   return (
     <div className="product-card">
-      <div className={`product-card__wishlist ${isFav ? "active" : ""}`}>
-        <HeartFilled
-          onClick={() => {
-            isFav ? handleRemoveFavorite() : handleAddFavorite();
-          }}
-        />
+      <div className="product-card__wishlist">
+        {userRedux?.user?.userType === "seller" &&
+        userRedux?.user?._id === Item.seller_id?._id ? (
+          <div>
+            <button onClick={handleDelete}>
+              <DeleteOutlined />
+            </button>
+          </div>
+        ) : (
+          <div
+            className={`product-card__favorite ${
+              isFav ? "product-card__favorite--active" : ""
+            }`}
+          >
+            <button onClick={isFav ? handleRemoveFavorite : handleAddFavorite}>
+              {isFav ? <HeartFilled /> : <HeartOutlined />}
+            </button>
+          </div>
+        )}
       </div>
       <div className="product-card__img">
         <Link
@@ -119,7 +132,9 @@ function Card({ Item }) {
         </div>
       </Link>
       <button
-        className={`product-card__add-to-cart ${userRedux?.user?.userType === "seller" ? "hidden" : ""}`}
+        className={`product-card__add-to-cart ${
+          userRedux?.user?.userType === "seller" ? "hidden" : ""
+        }`}
         onClick={() => {
           HandleBasketItems();
         }}

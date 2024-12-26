@@ -596,28 +596,30 @@ function WaitingOrders() {
                 {item.status === "Shipped" ? (
                   <Button
                     onClick={() => {
-                      UpdateOrderStatus(item.orderId, "Delivered").then((res) => {
-                        GetSellerOrders(reduxUser.user.id).then((res) => {
-                          let data = res
-                            .map((order) =>
-                              order.products.map((product) => ({
-                                ...product,
-                                orderId: order._id,
-                                customer_id: order.customer_id,
-                                orderDate: order.orderDate,
-                                totalPrice: order.totalPrice,
-                                status: order.status,
-                              }))
-                            )
-                            .flat()
-                            .filter(
-                              (item) =>
-                                item.status !== "Cancelled" &&
-                                item.status !== "Delivered"
-                            );
-                          setWaitingHistory(data);
-                        });
-                      });
+                      UpdateOrderStatus(item.orderId, "Delivered").then(
+                        (res) => {
+                          GetSellerOrders(reduxUser.user.id).then((res) => {
+                            let data = res
+                              .map((order) =>
+                                order.products.map((product) => ({
+                                  ...product,
+                                  orderId: order._id,
+                                  customer_id: order.customer_id,
+                                  orderDate: order.orderDate,
+                                  totalPrice: order.totalPrice,
+                                  status: order.status,
+                                }))
+                              )
+                              .flat()
+                              .filter(
+                                (item) =>
+                                  item.status !== "Cancelled" &&
+                                  item.status !== "Delivered"
+                              );
+                            setWaitingHistory(data);
+                          });
+                        }
+                      );
                     }}
                   >
                     Teslim Et
@@ -699,7 +701,7 @@ function OrderHistory(params) {
       .then((orders) => {
         if (orders) {
           let data = orders.filter(
-            (item) => item.status === "Cancelled" || item.status === "Shipped"
+            (item) => item.status === "Cancelled" || item.status === "Delivered"
           );
           setOrderHistory(data);
         }
@@ -772,7 +774,7 @@ function Reorder(params) {
     GetBuyerOrders()
       .then((orders) => {
         if (orders) {
-          let data = orders.filter((item) => item.status === "Shipped");
+          let data = orders.filter((item) => item.status === "Delivered");
           setOrderHistory(data);
         }
       })

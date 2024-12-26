@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const ignoredRoutes = ["/login", "/signup", "/home", "/product"];
+    const ignoredRoutes = ["/login", "/signup", "/product"];
 
     if (ignoredRoutes.includes(window.location.pathname)) return;
 

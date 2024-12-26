@@ -62,7 +62,15 @@ const getUserInfo = async () => {
   }
 };
 
-const SignUpEcommerce = async (name, email, password, userType, phone, address, balance) => {
+const SignUpEcommerce = async (
+  name,
+  email,
+  password,
+  userType,
+  phone,
+  address,
+  balance
+) => {
   try {
     const payload = {
       name,
@@ -116,7 +124,16 @@ const ChangePassword = async (id, password, newPassword) => {
     throw error;
   }
 };
-const AddProduckEcommerce = async (name, sellerId, stock, price, colors, productImage, productDescription, productCategory) => {
+const AddProduckEcommerce = async (
+  name,
+  sellerId,
+  stock,
+  price,
+  colors,
+  productImage,
+  productDescription,
+  productCategory
+) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -370,25 +387,20 @@ const UpdateOrderStatus = async (id, status) => {
   }
 };
 
-const DeleteProduck = async (id) => {
+const DeleteProduct = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const res = await axios.post(
-      `${url}/product/delete`,
-      {
-        id: id,
+    const res = await axios.delete(`${url}/product/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    });
+
     if (res.status === 200) {
-      console.log("başarıyla silindi", res);
+      console.log("Başarıyla silindi", res);
       toast.success("Ürün başarıyla silindi.");
     } else {
-      console.log("silinemedi. Hata:", res);
+      console.log("Silinemedi. Hata:", res);
     }
     return res;
   } catch (error) {
@@ -432,11 +444,14 @@ const removeFavorite = async (productId) => {
   }
 
   try {
-    const response = await axios.delete(`${url}/favorites/remove/${productId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.delete(
+      `${url}/favorites/remove/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.status === 200) {
       console.log("Favori başarıyla kaldırıldı:", response.data);
@@ -695,7 +710,7 @@ export {
   GetSellerOrders,
   GetBuyerOrders,
   UpdateOrderStatus,
-  DeleteProduck,
+  DeleteProduct,
   GetFavorites,
   addFavorite,
   removeFavorite,
