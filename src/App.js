@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const ignoredRoutes = ["/login", "/signup"];
+    const ignoredRoutes = ["/login", "/signup", "/home", "/product"];
 
     if (ignoredRoutes.includes(window.location.pathname)) return;
 
@@ -32,8 +32,6 @@ function App() {
             const user = res;
             dispatch(setUser({ user }));
             dispatch(setAuthenticated(true));
-          } else {
-            navigate("/login");
           }
         })
         .catch((err) => {

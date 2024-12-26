@@ -4,8 +4,16 @@ import { Avatar, Form, Input, Button, Select, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { AddProduckEcommerce, GetUserProducts, GetSellerOrders, GetBuyerOrders, UpdateOrderStatus, addItemToBasket } from "../../api/HandleApi";
+import {
+  AddProduckEcommerce,
+  GetUserProducts,
+  GetSellerOrders,
+  GetBuyerOrders,
+  UpdateOrderStatus,
+  addItemToBasket,
+} from "../../api/HandleApi";
 import Card from "../../components/card/Card";
+import CardList from "../../components/CardList/CardList";
 
 function Profile() {
   const navigate = useNavigate();
@@ -18,7 +26,10 @@ function Profile() {
     confirmPassword: "",
   });
   const changePassword = () => {
-    if (modalInputValue.newPassword === modalInputValue.confirmPassword && modalInputValue.newPassword.length > 5) {
+    if (
+      modalInputValue.newPassword === modalInputValue.confirmPassword &&
+      modalInputValue.newPassword.length > 5
+    ) {
       console.log("changePassword");
     }
   };
@@ -34,8 +45,13 @@ function Profile() {
           <div className="profile-name-cont">
             <div className="profile-name">{reduxUser?.user?.name}</div>
           </div>
-          <div onClick={() => handleTabClick("userInfo")} className="profile-left-side-settings">
-            <div className="profile-left-side-settings-item">Kullanıcı Bilgilerim</div>
+          <div
+            onClick={() => handleTabClick("userInfo")}
+            className="profile-left-side-settings"
+          >
+            <div className="profile-left-side-settings-item">
+              Kullanıcı Bilgilerim
+            </div>
             <div
               className="profile-left-side-settings-item"
               onClick={() => {
@@ -47,29 +63,47 @@ function Profile() {
           </div>
           <div className="profile-left-side-settings">
             {reduxUser?.user?.userType === "seller" ? (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("MyProducts")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("MyProducts")}
+              >
                 Ürünlerim
               </div>
             ) : (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("orders")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("orders")}
+              >
                 Siparişlerim
               </div>
             )}
             {reduxUser?.user?.userType === "seller" ? (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("waitingOrders")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("waitingOrders")}
+              >
                 Bekleyen Siparişler
               </div>
             ) : (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("orderHistory")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("orderHistory")}
+              >
                 Geçmiş Siparişlerim
               </div>
             )}
             {reduxUser?.user?.userType === "seller" ? (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("addProduct")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("addProduct")}
+              >
                 Ürün Ekle
               </div>
             ) : (
-              <div className="profile-left-side-settings-item" onClick={() => handleTabClick("reorder")}>
+              <div
+                className="profile-left-side-settings-item"
+                onClick={() => handleTabClick("reorder")}
+              >
                 Tekrar Satın Al
               </div>
             )}
@@ -173,25 +207,35 @@ function ProfileInfo(params) {
         <div className="profile-info-items">
           <div className="profile-info-item">
             <div className="profile-info-item-title">Name</div>
-            <div className="profile-info-item-value">{reduxUser?.user?.name}</div>
+            <div className="profile-info-item-value">
+              {reduxUser?.user?.name}
+            </div>
           </div>
           <div className="profile-info-item">
             <div className="profile-info-item-title">Email</div>
-            <div className="profile-info-item-value">{reduxUser?.user?.email}</div>
+            <div className="profile-info-item-value">
+              {reduxUser?.user?.email}
+            </div>
           </div>
           {reduxUser?.user?.userType === "buyer" && (
             <>
               <div className="profile-info-item">
                 <div className="profile-info-item-title">Balance</div>
-                <div className="profile-info-item-value">{reduxUser?.user?.balance}</div>
+                <div className="profile-info-item-value">
+                  {reduxUser?.user?.balance}
+                </div>
               </div>
               <div className="profile-info-item">
                 <div className="profile-info-item-title">Address</div>
-                <div className="profile-info-item-value">{reduxUser?.user?.address}</div>
+                <div className="profile-info-item-value">
+                  {reduxUser?.user?.address}
+                </div>
               </div>
               <div className="profile-info-item">
                 <div className="profile-info-item-title">Phone</div>
-                <div className="profile-info-item-value">{reduxUser?.user?.phone}</div>
+                <div className="profile-info-item-value">
+                  {reduxUser?.user?.phone}
+                </div>
               </div>
             </>
           )}
@@ -279,11 +323,7 @@ function MyProducks(params) {
   return (
     <div className="my-products-container">
       <div className="my-producks-title">Ürünlerim</div>
-      <div className="my-producks-items">
-        {producks?.map((item) => {
-          return <Card Item={item} key={item.id} />;
-        })}
-      </div>
+      <CardList products={producks} />
     </div>
   );
 }
@@ -434,7 +474,9 @@ function MyOrders(params) {
     GetBuyerOrders()
       .then((orders) => {
         if (orders) {
-          let data = orders.filter((item) => item.status !== "Cancelled" && item.status !== "Shipped");
+          let data = orders.filter(
+            (item) => item.status !== "Cancelled" && item.status !== "Shipped"
+          );
           setMyOrders(data);
         }
       })
@@ -451,13 +493,31 @@ function MyOrders(params) {
           return (
             <div className="waiting-orders-item">
               <div className="waiting-orders-item-cont">
-                <div className="waiting-orders-item-img-cont" onClick={() => navigate(`/home/details/${item.products[0].product._id}`)}>
-                  <img className="waiting-orders-item-img" src={item.products[0].product.productImage} alt="s" />
+                <div
+                  className="waiting-orders-item-img-cont"
+                  onClick={() =>
+                    navigate(`/home/details/${item.products[0].product._id}`)
+                  }
+                >
+                  <img
+                    className="waiting-orders-item-img"
+                    src={item?.products[0]?.product?.productImage}
+                    alt="s"
+                  />
                 </div>
-                <div className="waiting-orders-item-name">{item.products[0].product.name}</div>
-                <div className="waiting-orders-item-price">{item.products[0].quantity * item.products[0].product.price} TL</div>
-                <div className="waiting-orders-item-color">{item.products[0].product.colors}</div>
-                <div className="waiting-orders-item-pieces">{item.products[0].product.price}</div>
+                <div className="waiting-orders-item-name">
+                  {item.products[0].product.name}
+                </div>
+                <div className="waiting-orders-item-price">
+                  {item.products[0].quantity * item.products[0].product.price}{" "}
+                  TL
+                </div>
+                <div className="waiting-orders-item-color">
+                  {item.products[0].product.colors}
+                </div>
+                <div className="waiting-orders-item-pieces">
+                  {item.products[0].product.price}
+                </div>
                 <div className="waiting-orders-item-status">{item.status}</div>
                 <div className="waiting-orders-item-buttons">
                   <Button
@@ -480,17 +540,29 @@ function WaitingOrders() {
   const reduxUser = useSelector((state) => state.user.info);
   const [waitingOrders, setWaitingHistory] = useState([]);
 
+  const handleGetSellerOrders = () => {
+    GetSellerOrders(reduxUser.user.id).then((res) => {
+      let data = res
+        .map((order) =>
+          order.products.map((product) => ({
+            ...product,
+            orderId: order._id,
+            customer_id: order.customer_id,
+            orderDate: order.orderDate,
+            totalPrice: order.totalPrice,
+            status: order.status,
+          }))
+        )
+        .flat()
+        .filter(
+          (item) => item.status !== "Cancelled" && item.status !== "Delivered"
+        );
+      setWaitingHistory(data);
+    });
+  };
+
   useEffect(() => {
-    GetSellerOrders(reduxUser.user.id)
-      .then((res) => {
-        let data = res;
-        let filteredData = data.filter((item) => item.status !== "Cancelled" && item.status !== "Delivered");
-        setWaitingHistory(filteredData);
-      })
-      .catch((error) => {
-        console.error("Error fetching seller orders:", error);
-        setWaitingHistory([]);
-      });
+    handleGetSellerOrders();
   }, [reduxUser.user.id]);
 
   return (
@@ -498,21 +570,33 @@ function WaitingOrders() {
       <div className="waiting-orders-title">Bekleyen Siparişler</div>
       <div className="waiting-orders-items">
         {waitingOrders?.map((item) => (
-          <div className="waiting-orders-item" key={item.orderId}>
+          <div className="waiting-orders-item" key={item._id}>
             <div className="waiting-orders-item-cont">
               <div className="waiting-orders-item-img-cont">
-                <img className="waiting-orders-item-img" src={item.products[0].product.productImage} alt="s" />
+                <img
+                  className="waiting-orders-item-img"
+                  src={item?.product?.productImage}
+                  alt="s"
+                />
               </div>
-              <div className="waiting-orders-item-name">{item.products[0].product.name}</div>
-              <div className="waiting-orders-item-price">{item.products[0].quantity * item.products[0].product.price} TL</div>
-              <div className="waiting-orders-item-color">{item.products[0].product.colors}</div>
-              <div className="waiting-orders-item-pieces">{item.products[0].product.price}</div>
+              <div className="waiting-orders-item-name">
+                {item.product.name}
+              </div>
+              <div className="waiting-orders-item-price">
+                {item.quantity * item.product.price} TL
+              </div>
+              <div className="waiting-orders-item-color">
+                {item.product.colors}
+              </div>
+              <div className="waiting-orders-item-pieces">
+                {item.product.price}
+              </div>
               <div className="waiting-orders-item-status">{item.status}</div>
               <div className="waiting-orders-item-buttons">
                 {item.status === "Shipped" ? (
                   <Button
                     onClick={() => {
-                      UpdateOrderStatus(item._id, "Delivered").then((res) => {
+                      UpdateOrderStatus(item.orderId, "Delivered").then((res) => {
                         GetSellerOrders(reduxUser.user.id).then((res) => {
                           let data = res
                             .map((order) =>
@@ -526,7 +610,11 @@ function WaitingOrders() {
                               }))
                             )
                             .flat()
-                            .filter((item) => item.status !== "Cancelled" && item.status !== "Delivered");
+                            .filter(
+                              (item) =>
+                                item.status !== "Cancelled" &&
+                                item.status !== "Delivered"
+                            );
                           setWaitingHistory(data);
                         });
                       });
@@ -537,7 +625,7 @@ function WaitingOrders() {
                 ) : (
                   <Button
                     onClick={() => {
-                      UpdateOrderStatus(item._id, "Shipped").then((res) => {
+                      UpdateOrderStatus(item.orderId, "Shipped").then((res) => {
                         GetSellerOrders(reduxUser.user.id).then((res) => {
                           let data = res
                             .map((order) =>
@@ -551,7 +639,11 @@ function WaitingOrders() {
                               }))
                             )
                             .flat()
-                            .filter((item) => item.status !== "Cancelled" && item.status !== "Delivered");
+                            .filter(
+                              (item) =>
+                                item.status !== "Cancelled" &&
+                                item.status !== "Delivered"
+                            );
                           setWaitingHistory(data);
                         });
                       });
@@ -562,8 +654,8 @@ function WaitingOrders() {
                 )}
                 <Button
                   onClick={() => {
-                    UpdateOrderStatus(item._id, "Cancelled").then((res) => {
-                      GetSellerOrders(reduxUser.user.id).then((res) => {
+                    UpdateOrderStatus(item.orderId, "Cancelled").then((res) => {
+                      GetSellerOrders(reduxUser.user._id).then((res) => {
                         let data = res
                           .map((order) =>
                             order.products.map((product) => ({
@@ -576,7 +668,11 @@ function WaitingOrders() {
                             }))
                           )
                           .flat()
-                          .filter((item) => item.status !== "Cancelled" && item.status !== "Delivered");
+                          .filter(
+                            (item) =>
+                              item.status !== "Cancelled" &&
+                              item.status !== "Delivered"
+                          );
                         setWaitingHistory(data);
                       });
                     });
@@ -602,7 +698,9 @@ function OrderHistory(params) {
     GetBuyerOrders()
       .then((orders) => {
         if (orders) {
-          let data = orders.filter((item) => item.status === "Cancelled" || item.status === "Shipped");
+          let data = orders.filter(
+            (item) => item.status === "Cancelled" || item.status === "Shipped"
+          );
           setOrderHistory(data);
         }
       })
@@ -619,16 +717,40 @@ function OrderHistory(params) {
           return (
             <div className="waiting-orders-item">
               <div className="waiting-orders-item-cont">
-                <div className="waiting-orders-item-img-cont" onClick={() => navigate(`/home/details/${item.products[0].product._id}`)}>
-                  <img className="waiting-orders-item-img" src={item.products[0].product.productImage} alt="s" />
+                <div
+                  className="waiting-orders-item-img-cont"
+                  onClick={() =>
+                    navigate(`/home/details/${item.products[0].product._id}`)
+                  }
+                >
+                  <img
+                    className="waiting-orders-item-img"
+                    src={item?.products[0]?.product?.productImage}
+                    alt="s"
+                  />
                 </div>
-                <div className="waiting-orders-item-name">{item.products[0].product.name}</div>
-                <div className="waiting-orders-item-price">{item.products[0].quantity * item.products[0].product.price} TL</div>
-                <div className="waiting-orders-item-color">{item.products[0].product.colors}</div>
-                <div className="waiting-orders-item-pieces">{item.products[0].product.price}</div>
+                <div className="waiting-orders-item-name">
+                  {item.products[0].product.name}
+                </div>
+                <div className="waiting-orders-item-price">
+                  {item.products[0].quantity * item.products[0].product.price}{" "}
+                  TL
+                </div>
+                <div className="waiting-orders-item-color">
+                  {item.products[0].product.colors}
+                </div>
+                <div className="waiting-orders-item-pieces">
+                  {item.products[0].product.price}
+                </div>
                 <div className="waiting-orders-item-status">{item.status}</div>
                 <div className="waiting-orders-item-buttons">
-                  <Button onClick={() => addItemToBasket(item.products[0].product._id, 1)}>Tekrar Satın Al</Button>
+                  <Button
+                    onClick={() =>
+                      addItemToBasket(item.products[0].product._id, 1)
+                    }
+                  >
+                    Tekrar Satın Al
+                  </Button>
                 </div>
               </div>
             </div>
@@ -669,16 +791,40 @@ function Reorder(params) {
           return (
             <div className="waiting-orders-item">
               <div className="waiting-orders-item-cont">
-                <div className="waiting-orders-item-img-cont" onClick={() => navigate(`/home/details/${item.products[0].product._id}`)}>
-                  <img className="waiting-orders-item-img" src={item.products[0].product.productImage} alt="s" />
+                <div
+                  className="waiting-orders-item-img-cont"
+                  onClick={() =>
+                    navigate(`/home/details/${item.products[0].product._id}`)
+                  }
+                >
+                  <img
+                    className="waiting-orders-item-img"
+                    src={item.products[0].product.productImage}
+                    alt="s"
+                  />
                 </div>
-                <div className="waiting-orders-item-name">{item.products[0].product.name}</div>
-                <div className="waiting-orders-item-price">{item.products[0].quantity * item.products[0].product.price} TL</div>
-                <div className="waiting-orders-item-color">{item.products[0].product.colors}</div>
-                <div className="waiting-orders-item-pieces">{item.products[0].product.price}</div>
+                <div className="waiting-orders-item-name">
+                  {item.products[0].product.name}
+                </div>
+                <div className="waiting-orders-item-price">
+                  {item.products[0].quantity * item.products[0].product.price}{" "}
+                  TL
+                </div>
+                <div className="waiting-orders-item-color">
+                  {item.products[0].product.colors}
+                </div>
+                <div className="waiting-orders-item-pieces">
+                  {item.products[0].product.price}
+                </div>
                 <div className="waiting-orders-item-status">{item.status}</div>
                 <div className="waiting-orders-item-buttons">
-                  <Button onClick={() => addItemToBasket(item.products[0].product._id, 1)}>Tekrar Satın Al</Button>
+                  <Button
+                    onClick={() =>
+                      addItemToBasket(item.products[0].product._id, 1)
+                    }
+                  >
+                    Tekrar Satın Al
+                  </Button>
                 </div>
               </div>
             </div>

@@ -119,7 +119,7 @@ function Card({ Item }) {
         </div>
       </Link>
       <button
-        className="product-card__add-to-cart"
+        className={`product-card__add-to-cart ${userRedux?.user?.userType === "seller" ? "hidden" : ""}`}
         onClick={() => {
           HandleBasketItems();
         }}
