@@ -105,25 +105,42 @@ const SignUpEcommerce = async (
   }
 };
 
-const ChangePassword = async (id, password, newPassword) => {
+const ChangePassword = async (oldPassword, newPassword) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Token bulunamadı, lütfen giriş yapın.");
+    return null;
+  }
+
   try {
-    const res = await axios.post(`${url}/auth/changePassword`, {
-      id: id,
-      password: password,
-      newPassword: newPassword,
-    });
+    const res = await axios.post(
+      `${url}/auth/change-password`,
+      { oldPassword, newPassword },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.data.success) {
-      toast.success("Şifre değiştirme başarılı.");
+      toast.success("Şifre başarıyla değiştirildi.");
     } else {
-      console.log("Şifre değiştirme başarısız. Hata:", res.data.message);
+      toast.error(`Şifre değiştirilemedi: ${res.data.message}`);
     }
+
     return res;
   } catch (error) {
-    console.error("Axios isteği sırasında hata:", error);
+    if (error?.response?.data?.message) {
+      toast.error(`Şifre değiştirilemedi: ${error.response.data.message}`);
+    } else {
+      toast.error("Şifre değiştirilemedi.");
+    }
+    console.error("Error during password change:", error);
     throw error;
   }
 };
+
 const AddProduckEcommerce = async (
   name,
   sellerId,

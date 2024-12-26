@@ -11,6 +11,7 @@ import {
   GetBuyerOrders,
   UpdateOrderStatus,
   addItemToBasket,
+  ChangePassword,
 } from "../../api/HandleApi";
 import Card from "../../components/card/Card";
 import CardList from "../../components/CardList/CardList";
@@ -28,9 +29,14 @@ function Profile() {
   const changePassword = () => {
     if (
       modalInputValue.newPassword === modalInputValue.confirmPassword &&
-      modalInputValue.newPassword.length > 5
+      modalInputValue.newPassword.length > 3
     ) {
-      console.log("changePassword");
+      ChangePassword(
+        modalInputValue.oldPassword,
+        modalInputValue.newPassword
+      ).then((res) => {
+        setOpenModal(false);
+      });
     }
   };
 
