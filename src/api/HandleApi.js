@@ -1,4 +1,4 @@
-import axios from "axios";
+const axios = require("axios");
 import { toast } from "react-toastify";
 const url = "http://localhost:5858";
 
